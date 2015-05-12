@@ -1,0 +1,86 @@
+<extend name="Base/common"/>
+<block name="HeaderScript">
+	<style>
+		.login-content
+		{
+			width:100%;
+			}
+		.bodymiddle{
+			border:0px;
+			}
+			.form-horizontal
+			{
+				width:350px;
+				}
+				.reg-bottom
+				{
+					text-align:center;
+					}
+					.prompt{
+						color:#666666;
+						}
+	</style>
+
+<div id="img" style="z-index: 200000; position: absolute; visibility: visible; top: 120px; left: 300px; border=5px" onmouseover="" onmouseout="" align="right">
+<img border="0" src="__STATIC__/img/tishi.gif"><br><span style="CURSOR:hand;color:red;font-weight:bold" onclick="img.style.visibility = 'hidden'">关闭窗口</span>
+</div>
+
+
+
+</block>
+<block name="body">
+<div style="min-height:500px;">
+            <div class="login-title">
+                <h2>用 户 登 录</h2>
+            </div>
+            <div class="login-content">
+            	
+                	<h3>请登录</h3>
+                	<hr />
+                	<p class="prompt">如果您在本站已拥有账号，请使用已有的账号信息直接进行登录即可，不需要重复注册</p>
+                	
+                	<form class=" form-horizontal" action="__SELF__" method="post">
+                		
+                    <div class="control-group">
+                        <label class="control-label" for="input01">用户名</label>
+                        <div class="controls">
+                            <input type="text" name="uname" class="input-medium" id="uname" placeholder="请输入登录名称">
+                            
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input01">密码</label>
+                        <div class="controls">
+                            <input type="password" name="pwd" class="input-medium" id="pwd" placeholder="请输入密码">
+                            
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input01">验证码</label>
+                        <div class="controls">
+                            <input type="text" autocomplete="off"  name="code" class="input-medium" id="code" placeholder="" datatype="*5-5" nullmsg="请填写验证码" >
+                            <img style="width:150px;height:50px;cursor:pointer;" alt="点击切换" onclick="this.src='{:U('verify')}'" src="{:U('verify')}">
+                        </div>
+                    </div>
+                    <div class="reg-bottom">
+                        <label class="control-label" for="input01">&nbsp;</label>
+						<button type="submit" class="btn btn-primary btn-block btn-large input-medium">登 录</button>             &nbsp;
+
+                        <br />
+                        <div style="padding:30px;"/>
+                        <a href="__STATIC__/document/2014天使投资项目申报系统操作说明.doc" >下载2014天使投资项目申报系统操作说明</a>
+ 						</div>
+                </form>
+                </div> 
+                <h3>还没有注册吗？</h3>
+                <hr />
+                <p class="prompt">如果还没有本站的通行证账号，请先注册一个属于自己的账号吧。</p>
+                <a href="{:U('Home/User/Reg1')}" class="btn btn-block btn-large">注册新用户</a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="{:U('Home/User/Findpwd')}" class="btn btn-large input-small">忘记密码</a>
+                        
+
+				 
+
+            </div>
+        </div>
+         </div> 
+</block>

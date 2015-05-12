@@ -1,0 +1,103 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
+	<script>
+	 function moveLeftToRight()
+	 {
+	 	$("#right").append($("#left option:selected"));
+	 	$("#left").remove($("#left option:selected"));
+	 	
+	 	}
+	 function moveRightToLeft()
+	 {
+	 	$("#left").append($("#right option:selected"));
+	 	$("#right").remove($("#right option:selected"));
+	 	}
+	 	function onSend()
+	 	{
+	 		num=$('#right')[0].options.length
+	 		if($("#mobile").val().length==11) 
+	 		{
+	 			num += 1;
+	 		}else if($("#mobile").val().length>11 &&$("#mobile").val().indexOf(',')>-1)
+	 		{
+	 			num += $("#mobile").val().split(',').length;
+	 		}
+	 		msg="您将要发送内容："+$("#msg").val() +"\n";
+	 		msg+="给"+num+"个手机号，请确认内容和数量正确"
+	 		if(confirm(msg))
+	 		{
+	 			saveContact();
+	 			return true;
+	 		}	
+	 		return false;
+	 		
+	 	}
+	 	function saveContact()
+	 	{
+	 		$('#right option').attr("selected","true")
+	 		$("#contact").val();
+	 	}
+  </script>
+    
+</block>
+
+
+<block name="body">
+
+<div class="modal hide fade" id='prg'>
+	<div class="modal-body">
+		加载中... 请稍候...
+	</div>
+</div>
+
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<!--start-->
+		<form action="__SELF__" method="post" onsubmit="return onSend()">
+		<fieldset>
+			<legend>发送短信</legend>
+			<dl>
+				<dt>短信类型</dt>
+					<dd><input type="text" id="type" name="type" value="通知" maxlength="40"/></dd>
+				<dt>短信内容</dt>
+					<dd>
+						<input type="text" id="msg" name="msg" maxlength="190" value="天使投资项目申报系统提醒您：您已通过资质审核，请尽快进行后续填报，并提交商业计划书。【科创天使】" style="width:100%" >
+				<dt>手机号码</dt>
+					<dd><input type="text" id="mobile" name="mobile"/></dd>
+				<dd>
+					<p style="padding:10px;"><input type="submit" value=" 发 送 短 信" class="btn btn-primary" />	</p>
+				</dd>
+				<dt>选择发送人</dt>
+				<dd>
+					<div style="float:left;">
+						<select name="left" id="left" style="height:300px;width:300px;" multiple="multiple">
+						  <foreach name="contact" item="vo">
+						  <option value="{$vo.mobile}">{$vo.company}[{$vo.comDirector}]</option>
+						  </foreach>
+						</select>
+					</div>
+					<div style="float:left;height:350px;">
+						<input type="button" onclick="moveLeftToRight()" value="&gt;&gt;&gt;"/> <br/><br/>
+						<input type="button" onclick="moveRightToLeft()" value="&lt;&lt;&lt;"/>
+					</div>
+					<div style="float:left;">
+						<select name="right[]" id="right" style="height:300px;width:300px;" multiple="multiple">
+						  
+						</select>
+					</div>
+					<input name="contact" value="" id="contact" type="hidden"/>
+				</dd>
+			</dl>
+		
+		</fieldset>
+		</form>
+		<!--end-->
+	</div>
+</div>
+</block>
+

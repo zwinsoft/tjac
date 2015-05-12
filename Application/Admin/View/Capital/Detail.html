@@ -1,0 +1,151 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/jsAddress.js" charset="UTF-8"></script>
+	<script>
+	function pass(id)
+    {
+    	if(confirm('确定审核通过？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Capital/pass')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+							success: function(data, textStatus){
+								
+								alert("审核通过成功");
+								location.reload();
+								
+								
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+							},
+							error: function(){
+								alert('审核通过错误，请刷新页面之后重试');
+							}
+						});
+
+
+    		}
+    	
+    	}
+    function refuse(id)
+    {
+    	if(confirm('确定审核不通过？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Capital/refuse')}",
+							data:{id: id,content:encodeURI($('#rcontent'+id).val())},
+							beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+							success: function(data, textStatus){
+								
+								alert("审核不通过");
+								location.reload();
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+							},
+							error: function(){
+								alert('审核不通过错误，请刷新页面之后重试');
+							}
+						});
+
+    		}
+    	}
+	</script>
+   
+</block>
+
+
+<block name="body">
+<div class="modal hide fade" id='prg'>
+	<div class="modal-body">
+		加载中... 请稍候...
+	</div>
+</div>
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<!--start-->
+		<fieldset>
+			<legend>[{$companyName}]资金使用</legend> <br />
+		<input type="button" value="返回" class="btn-inverse btn" onclick="history.go(-1)" />
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td>编号</td>
+				<td>申请金额</td>
+				<td>申请理由</td>
+				<td>投资前</td>
+				<td>投资款</td>				
+				<td>投资后</td>
+				<td>状态</td>
+				<td>操作</td>
+			</tr>
+			
+			<?php $n=0;?>
+			<foreach name="data" item="vo" >
+			<?php $n=$n+1;?>
+			<tr>
+				<td>{$n}</td>
+				<td>{$vo.money}</td>
+				<td>{$vo.reason}</td>
+				<td>{$before}</td>
+				<td>{$invest}</td>	
+				<td>{$after}</td>	
+				<td>{$vo.status|getInvestStatus}{$vo.FailedMsg}</td>	
+				<td>
+					<input type="button" value="通过" onclick="pass({$vo.id})" class="btn-primary btn"/>
+					<a href="#failed{$vo.id}" data-toggle="modal" class="btn btn-danger" >拒绝</a>
+					<div id="failed{$vo.id}" class="modal hide fade" style="display:none;">
+						<div class="modal-header">
+					      <a class="close" data-dismiss="modal">×</a>
+					      <h3>审核失败</h3>
+					    </div>
+					    <div class="modal-body">
+							<form class="form-horizontal">
+								<div class="control-group">
+
+						            <label class="control-label" for="input01">失败原因(限200字内)</label>
+						            <div class="controls">
+						            	<textarea id="rcontent{$vo.id}" onKeyup="if(this.value.length>200){this.value=this.value.substr(0,200);}">
+						            	</textarea>
+						            </div>
+						        </div>
+							</form>
+						</div>
+						<div class="modal-footer">
+					      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+					      <a href="#" class="btn btn-primary" onclick="refuse({$vo.id})"  data-dismiss="modal">保存</a>
+					    </div>
+					</div>
+				</td>
+			</tr>
+			</foreach>
+			
+			
+		</table>
+		<div style="width:100%;text-align:right;">
+		<?php?>
+		
+		<!--end-->
+	</div>
+</div>
+</block>
+

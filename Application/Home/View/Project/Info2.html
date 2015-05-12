@@ -1,0 +1,174 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script>
+		function checkfile(id,obj)
+		{
+			var filename = $("#fileInput"+id).val();
+			if(filename=="")
+			{
+				alert("请先选择一个文件");
+				return false;
+			}else
+			{
+				var ext=filename.substring(filename.lastIndexOf(".")+1).toLowerCase();
+				
+				if(id == 14)   /*商业计划书只能word文档 */
+				{
+					if(!(ext=="doc" || ext=="docx"))
+					{
+						alert("商业计划书只能word文档,请上传word文档.");
+						return false;
+					}
+
+				}
+
+				if(!(ext=="doc" || ext=="docx"||ext=="zip" ||ext=="rar"))
+				{
+					alert("请上传office文档或压缩文件");
+					return false;
+				}
+			}
+			obj.value="上传中......"
+			obj.id="upbtn"+id;
+			setTimeout("checkuploadFinish("+id+")",1000);
+			return true;
+		}
+
+		var i=1;
+		function checkuploadFinish(id)
+		{
+			s="";
+			i=i+1;
+			if(i>4)
+			{
+				i=1;	
+			}
+			for(var j=1;j<=i;j++)
+			{
+				s=s+"......";
+			 }
+			//console.log($("#frm"+id)[0].contentWindow.document.innerHTML)
+			//console.log($("#fileInput"+id).val());
+			var frmsrc=$("#frm"+id)[0].contentWindow.location.href.toString();
+			if(frmsrc.indexOf("sucess")>-1)
+			{
+				 $("#frm"+id)[0].contentWindow.location.href=frmsrc.replace("sucess","");
+				 $("#upbtn"+id).val("上传");
+				
+			}else
+			{
+				 $("#upbtn"+id).val("上传中"+s);
+					setTimeout("checkuploadFinish("+id+")",1000);
+			}
+		}
+
+		function submit(msg)
+		{
+			if(confirm(msg))
+			{
+				var uid='{$Think.session.user_id}';
+				$.ajax({
+					type: "post",
+					url: "{:U('Project/Submit')}",
+					data:{uid: uid},
+					beforeSend: function(XMLHttpRequest){
+						$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+					},
+					success: function(data, textStatus){
+						if(data.status=="OK")
+						{
+							alert("项目提交审核成功，请等待审核结果");
+							location.reload();
+						}else
+						{
+							alert(data.status);	
+						}
+					},
+					complete: function(XMLHttpRequest, textStatus){
+						$("#prg").modal('hide');
+					},
+					error: function(){
+						alert('发生错误，请刷新页面之后重试');
+					}
+				});	
+			}	
+		}
+	</script>
+</block>
+
+<block name="body">
+<div class="progress" style="display:none;position:absolute;" id='prg'>
+  <div class="bar"
+       style="width: 100%;"></div>
+</div>
+<div class="row mainContent">
+<include file="Public/left"/>
+	<div class="span7">
+	
+
+		<fieldset>
+		<legend><br>商业计划书模板</legend>
+			<h2> <a href="__STATIC__/document/2014申报天使投资计划书模板.doc" >请点击下载商业计划书模板，按要求填写后，上传Word文档。</a> <br></h2>
+        </fieldset>
+
+		
+
+		<fieldset>
+			<legend><br>上传商业计划书（必须为word版）</legend>			
+		<div class="control-group">
+        <div class="controls">
+            <if condition="($data.status eq 4) OR ($data.status eq 5) ">
+            <form action="{:U('Company/upload')}" method="post" target="frm14" enctype="multipart/form-data">
+						    <input class="input-file" name="file14" id="fileInput14" type="file">
+						    
+						    <input type="submit" value="上传" onclick="return checkfile(14,this)" class="btn" />
+						  	
+						</form>
+						</if>
+            <iframe src="{:U('Company/Filedetail',array('type'=>14))}" name="frm14" id="frm14" style="width:100%;height:40px;boder:0px solid #ffffff;"></iframe>
+        </div>
+    </div>
+
+
+
+    <div class="control-group">
+    		<legend><br>上传其他附件</legend>
+        <div class="controls">
+            <if condition="($data.status eq 4) OR ($data.status eq 5) ">
+            <form action="{:U('Company/upload')}" method="post" target="frm15" enctype="multipart/form-data">
+						    <input class="input-file" name="file15" id="fileInput15" type="file">
+						    
+						    <input type="submit" value="上传" onclick="return checkfile(15,this)" class="btn"/>
+						  	
+						</form>
+						</if>
+            <iframe src="{:U('Company/Filesdetails',array('type'=>15))}" name="frm15" id="frm15" style="width:100%;height:160px;boder:0px solid #ffffff;"></iframe>
+        </div>
+    </div>
+    <if condition="($data.status eq 4) OR ($data.status eq 5) ">
+
+		<input type="submit" class="btn btn-large btn-success btn-block" value="提交项目申请" onclick="return submit('请确定项目申报所必填项目准确\n1、企业基本资料填写完成 \n2、企业知识产权填写完成 \n3、项目基本情况填写完成 \n4、商业计划书已上传 \n点击［确定］提交等待审核，点击［取消］继续修改资料信息')"><br>
+	</if>
+			
+		</fieldset>
+
+
+		<if condition="($data.status eq 7) ">
+		<fieldset>
+		<legend><br>下载审核后的商业计划书（PDF）</legend>
+			<h2> <a href="__STATIC__/document/2014申报天使投资计划书模板.doc" >请点击下载审核后的商业计划书并打印装订后交受理部门。</a> <br><br><br><br><br</h2>
+        </fieldset>
+
+        </if>
+		<p></p>
+		<p></p>
+		<p></p>
+		<p></p>
+	</div>
+</div>
+</block>

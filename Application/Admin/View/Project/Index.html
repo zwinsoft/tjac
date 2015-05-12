@@ -1,0 +1,430 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/jsAddress.js" charset="UTF-8"></script>
+	<script>
+		 $(function(){
+		 	$('.form_date').datetimepicker({
+	        language:  'fr',
+	        weekStart: 1,
+	        todayBtn:  1,
+					autoclose: 1,
+					todayHighlight: 1,
+					startView: 2,
+					minView: 2,
+					forceParse: 0
+	    	});
+		 });
+		 function getDate(id)
+		{
+			$.ajax({
+					type: "get",
+					url: "{:U('Index/Project')}",
+					data:{uid: id},
+					beforeSend: function(XMLHttpRequest){
+						$('#pctn').html("加载中... 请稍候...");
+					},
+					success: function(data, textStatus){
+						$('#pctn').html(data);
+						
+					},
+					complete: function(XMLHttpRequest, textStatus){
+						
+					},
+					error: function(){
+						alert('错误，请刷新页面之后重试');
+					}
+				});
+		}
+	function EditToMyTask(id)
+	{
+			if(confirm('确定修改?'))
+			{
+				$("#assign"+id).modal('show');
+			}
+	}
+	function saveassign(id)
+    {
+    		if(confirm('确定指派？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Admin/Index/saveassign')}",
+							data:{id: id,uid:$('#admin'+id).val()},
+							beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+							success: function(data, textStatus){
+								$('#assignBtn'+id).html('已经分配给['+data.username+']');
+								$('#assignBtn'+id).attr('disabled',true);
+								alert("分配成功");
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+							},
+							error: function(){
+								alert('分配错误，请刷新页面之后重试');
+							}
+						});
+
+    		}
+    }
+    function addToMyTask(id)
+    {
+    		if(confirm('确定添加？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Project/assignuser')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+							
+							},
+							success: function(data, textStatus){
+								$('#assignBtn'+id).html('已经分配给['+data.username+']');
+								$('#assignBtn'+id).attr('disabled',true);
+							},
+							complete: function(XMLHttpRequest, textStatus){
+							
+							
+							},
+							error: function(){
+								alert('分配错误，请刷新页面之后重试');
+							}
+						});
+
+    		}
+    }
+    </script>
+    <script>
+    	function imgShow(outerdiv, innerdiv, bigimg, _this){
+				var src = _this.attr("src");//获取当前点击的pimg元素中的src属性
+				$(bigimg).attr("src", src);//设置#bigimg元素的src属性
+			
+			   /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+				$("<img/>").attr("src", src).load(function(){
+					var windowW = $(window).width();//获取当前窗口宽度
+					var windowH = $(window).height();//获取当前窗口高度
+					var realWidth = this.width;//
+					var realHeight = this.height;//
+					var imgWidth, imgHeight;
+					var scale = 0.8;//
+					
+					if(realHeight>windowH*scale) {
+						imgHeight = windowH*scale;
+						imgWidth = imgHeight/realHeight*realWidth;
+						if(imgWidth>windowW*scale) {
+							imgWidth = windowW*scale;
+						}
+					} else if(realWidth>windowW*scale) {
+						imgWidth = windowW*scale;
+			      imgHeight = imgWidth/realWidth*realHeight;
+					} else {
+						imgWidth = realWidth;
+						imgHeight = realHeight;
+					}
+			    $(bigimg).css("width",imgWidth);
+					
+					var w = (windowW-imgWidth)/2;
+					var h = (windowH-imgHeight)/2;
+					//$(btnRo).css({"top":h+imgHeight/2, "left":w+imgWidth/2});
+					$(innerdiv).css({"top":h, "left":w});
+					$(outerdiv).fadeIn("fast");
+				});
+				
+				$(outerdiv).click(function(){
+					
+					$(this).fadeOut("fast");
+				});
+				
+			}
+			
+			
+			function rotate(id,angle,whence) {
+				var p = document.getElementById(id);
+				// we store the angle inside the image tag for persistence
+				if (!whence) {
+					p.angle = ((p.angle==undefined?0:p.angle) + angle) % 360;
+				} else {
+					p.angle = angle;
+				}return;
+				if (p.angle >= 0) {
+					var rotation = Math.PI * p.angle / 180;
+				} else {
+					var rotation = Math.PI * (360+p.angle) / 180;
+				}
+				var costheta = Math.cos(rotation);
+				var sintheta = Math.sin(rotation);
+				if (document.all && !window.opera) {
+					var canvas = document.createElement('img');
+					canvas.id=p.id;
+					canvas.src = p.src;
+					canvas.height = p.height;
+					canvas.width = p.width;
+					canvas.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11="+costheta+",M12="+(-sintheta)+",M21="+sintheta+",M22="+costheta+",SizingMethod='auto expand')";
+				} else {
+					var canvas = document.createElement('canvas');
+					if (!p.oImage) {
+						canvas.oImage = new Image();
+						canvas.oImage.src = p.src;
+					} else {
+						canvas.oImage = p.oImage;
+					}
+					canvas.id=p.id;
+					canvas.style.width = canvas.width = Math.abs(costheta*canvas.oImage.width) + Math.abs(sintheta*canvas.oImage.height);
+					canvas.style.height = canvas.height = Math.abs(costheta*canvas.oImage.height) + Math.abs(sintheta*canvas.oImage.width);
+					var context = canvas.getContext('2d');
+					context.save();
+					if (rotation <= Math.PI/2) {
+						context.translate(sintheta*canvas.oImage.height,0);
+					} else if (rotation <= Math.PI) {
+						context.translate(canvas.width,-costheta*canvas.oImage.height);
+					} else if (rotation <= 1.5*Math.PI) {
+						context.translate(-costheta*canvas.oImage.width,canvas.height);
+					} else {
+						context.translate(0,-sintheta*canvas.oImage.width);
+					}
+					context.rotate(rotation);
+					context.drawImage(canvas.oImage, 0, 0, canvas.oImage.width, canvas.oImage.height);
+					context.restore();
+				}
+				canvas.id = p.id;
+				canvas.angle = p.angle;
+				p.style.width='0px';
+				p.style.height='0px';
+				//p.parentNode.replaceChild(canvas, p);
+				p.parentNode.appendChild(canvas);
+			}
+			function rotateRight(id,angle) {
+				rotate(id,angle==undefined?90:angle);
+			}
+			function rotateLeft(id,angle) {
+				rotate(id,angle==undefined?-90:-angle);
+			}
+    </script>
+    
+</block>
+
+<block name="body">
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:9999;width:100%;height:100%;display:none;">
+	<div id="innerdiv" style="position:absolute;z-index:99999;pointer-event:none">
+		<img id="bigimg" style="border:5px solid #fff;" src="" />
+	</div>
+	
+</div>
+<div class="modal hide fade" id='prg'>
+	<div class="progress" style="display:none;position:absolute;" >
+	  <div class="bar"
+		   style="width: 100%;"></div>
+	</div>
+</div>
+<div id="popupproject" class="modal hide fade" style="display:none;width:800px;left:40%">
+	<div class="modal-header">
+	  <a class="close" data-dismiss="modal">×</a>
+	  <h3>项目资料</h3>
+	</div>
+	<div class="modal-body" id="pctn">
+	加载中... 请稍候...
+	</div>
+	<div class="modal-footer">
+	  <a href="#" class="btn" data-dismiss="modal">关闭</a>
+	</div>
+</div>
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<fieldset>
+			<legend>项目管理</legend>
+		<form class="well  form-inline" method="get" action="?"/>
+				<input type="hidden" name="m" value="Admin">
+				<input type="hidden" name="c" value="Project">
+				<input type="hidden" name="a" value="Index">
+		<div class="control-group">
+            <label class="control-label" for="input01"></label>
+            
+            <div class="controls">
+            	<div class="controls input-append date form_date " data-date="" data-date-format="yyyy-mm-dd" data-link-field="startTime" data-link-format="yyyy-mm-dd">
+	                    <input size="16"  type="text" value="{$Think.get.st}" placeholder="申报起始时间" readonly>
+	                    <span class="add-on"><i class="icon-remove"></i></span>
+						<span class="add-on"><i class="icon-th"></i></span>
+						
+	                </div>
+					<input type="hidden" id="startTime" name="st" value="{$Think.get.st}" />
+				-
+				<div class="controls input-append date form_date " data-date="" data-date-format="yyyy-mm-dd" data-link-field="endTime" data-link-format="yyyy-mm-dd">
+	                    <input size="16"  type="text" value="{$Think.get.et}" placeholder="申报结束时间"  readonly>
+	                    <span class="add-on"><i class="icon-remove"></i></span>
+						<span class="add-on"><i class="icon-th"></i></span>
+						
+	                </div>
+					<input type="hidden" id="endTime" name='et' value="{$Think.get.et}" />
+            	
+            </div>
+        </div>
+        <div class="control-group">
+            
+            <div class="controls">
+            	<input type="text" class="input-xlarge" placeholder="企业名称" id="name" name='comp' value="{$Think.get.comp}">
+        
+            	<select name='status' id="status">
+            		<option value="">－请选择申报状态－</option>
+							<option value="0">新注册</option>
+							<option value="3">提交资质待审核</option>
+								<option value="1">资质审核未通过</option>								
+								<option value="4">资质审核通过</option>
+								<option value="5">项目审核未通过</option>
+								<option value="6">提交项目待审核</option>
+								<option value="7">项目审核通过</option>
+								
+            	</select>
+            	<notempty name="Think.get.status">
+            	<script>
+            		$("#status").val('{$Think.get.status}');
+            	</script>
+            	</notempty>
+            	<button  class="btn btn-primary btn-block"><i class="icon-search"></i> 查 找 </button>
+            </div>
+        </div>
+    </form>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td>编号</td>
+				<td>企业名称</td>
+				<td>项目名称</td>
+				<td>申报时间</td>
+				<td>联系人</td>
+				<td>申报状态</td>
+				<td>操作</td>
+			</tr>
+			
+			<?php $n=0;?>
+			<foreach name="data" item="vo" >
+			<?php $n=$n+1;?>
+			<tr>
+				<td>{$all-$n-(($page-1)*$pagenumber)+1}</td>
+				<td><a href="#popupcompany{$vo.id}" data-toggle="modal">{$vo.company}</a>
+					<div id="popupcompany{$vo.id}" class="modal hide fade" style="display:none;width:800px;left:40%">
+						<div class="modal-header">
+					      <a class="close" data-dismiss="modal">×</a>
+					      <h3>公司基本资料</h3>
+					    </div>
+					    <div class="modal-body">
+					    <include file="./Application/Home/View/Company/Base2.html"
+					    	user="{$vo.user.username}"
+								id="{$vo.id}"
+								where="{$vo.where}" 
+								subWhere="{$vo.subWhere}" 
+								company="{$vo.company}" 
+								licence="{$vo.bLicence}" 
+								organization="{$vo.orgID}" 
+								build="{$vo.buildTime|substr=0,10}" 
+								capital="{$vo.regCapital}" 
+								paid="{$vo.paidUpCapital}" 
+								director="{$vo.comDirector}" 
+								mobile="{$vo.mobile}" 
+								email="{$vo.email}" 
+								business="{$vo.mainBusiness}" 
+								regconition="{$vo.passRegconition}" 
+								all="{$vo.allCapital}" 
+								assets="{$vo.netAssets}" 
+								income="{$vo.salesIncome}" 
+								profit="{$vo.netProfit}" />
+							</div>
+							<div class="modal-footer">
+					      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+					      
+					    </div>
+					</div>
+				</td>
+			
+				<td><a href="#popupproject" onclick="getDate({$vo.id});" data-toggle="modal"> {$vo.project.name}</a>
+					
+				</td>
+				<td>{$vo.sbTime}</td>
+				<td>{$vo.comDirector}</td>
+				<td><span class="label {$vo.status|companyStatusCss}">{$vo.status|companyStatus}</span></td>
+				<td>
+					<empty name="vo['assignUser']['username']">
+						<a href="#assign" id="assignBtn{$vo.id}" onclick="addToMyTask({$vo.id})"  class="btn btn-small btn-primary btn-block">添加到我的任务</a>
+					<else /> 
+						<a href="#assign{$vo.id}" id="assignBtn{$vo.id}" onclick="EditToMyTask({$vo.id})"  class="btn btn-small btn-primary btn-block" disabled>已分配给[{$vo.assignUser.username}]</a>
+						<div id="assign{$vo.id}" class="modal hide fade" style="display:none;">
+							<div class="modal-header">
+						      <a class="close" data-dismiss="modal">×</a>
+						      <h3>请将此任务重新分配给</h3>
+						    </div>
+						    <div class="modal-body">
+								<select id="admin{$vo.id}">
+									<foreach name="admin" item="a">
+									<option value="{$a.id}" <?php if($vo["assignUser"]["username"]==$a["username"]){echo "selected";}?>>{$a.username}</option>
+									</foreach>
+									
+								</select><br />
+	
+	
+							</div>
+							<div class="modal-footer">
+	
+						      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+						      <a href="#" class="btn btn-primary" onclick="saveassign({$vo.id})"  data-dismiss="modal">保存</a>
+						    </div>
+						</div>
+					</empty>
+					<!--<input type="submit" class="btn btn-small btn-success btn-block" value="修改">-->
+					<a href="#history{$vo.id}" data-toggle="modal" class="btn btn-small btn-warning" >查看历史</a>
+					
+					<div id="history{$vo.id}" class="modal hide fade" style="display:none;">
+						<div class="modal-header">
+					      <a class="close" data-dismiss="modal">×</a>
+					      <h3>操作历史记录</h3>
+					    </div>
+					    <div class="modal-body">
+							<ul>
+								<foreach name="vo.history" item="history">
+								<li>{$history.createTime} {$history.message}</li>
+								</foreach>
+							</ul>
+						</div>
+						<div class="modal-footer">
+					      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+					      
+					   </div>
+					</div>
+				</td>
+			</tr>
+			</foreach>
+			
+		</table>
+		<div style="width:100%;text-align:right;">
+			<div class="pagination pagination-right">
+            <ul>
+                <li><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page=1"><i class="icon-fast-backward"></i></a></li>
+                <li class="<?php echo $page==1?"disabled":"";?>"><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page={$page-1}">前一页</a></li>
+				
+                
+                <li class="<?php echo $page==($maxpage-1)?"disabled":"";?>"><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page={$page+1}">下一页</a></li>
+                <li><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page={$maxpage-1}"><i class="icon-fast-forward"></i></a></li>
+                <li>
+					<select class="input-small" style="line-height:34px;height:36px;" onchange="location.href='__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page='+this.value">
+					<for start="1" end="$maxpage" step="1" name="n">
+						<if condition="$page eq $n ">
+							<option value="{$n}" selected>第{$n}页</option>
+						<else />
+						  <option value="{$n}" >第{$n}页</option>
+						</if>
+					
+					</for>
+					</select>
+				</li>
+            </ul>
+        </div>
+		</div>
+	</div>
+</div>
+</block>

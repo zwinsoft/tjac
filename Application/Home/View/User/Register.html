@@ -1,0 +1,578 @@
+<extend name="Base/common"/>
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/jsAddress.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+	 $(function(){
+	 	$('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0
+    	});
+	 	addressInit('cmbProvince', 'cmbCity', 'cmbArea', '天津', '天津市', '南开区');
+
+
+	 });
+
+	 var test = {
+       node:null,
+       count:180,
+       start:function(){
+          console.log(this.count);
+          if(this.count > 0){
+             //this.node.innerHTML = this.count--;
+			 this.node.value = this.count--;
+             var _this = this;
+             setTimeout(function(){
+                _this.start();
+             },1000);
+          }else{
+             this.node.removeAttribute("disabled");
+             this.node.value = "再次发送";
+             this.count = 180;
+          }
+       },
+       //初始化
+       init:function(node){
+          this.node = node;
+          this.node.setAttribute("disabled",true);
+          this.start();
+		  console.log('count--');
+       }
+    };
+
+  $(document).ready(function(){
+	  $("#sendMobileVerify").click(function get_mobile(){
+        
+
+		var mobile = $("#mobile").val();
+
+		var btn = document.getElementById('sendMobileVerify');
+        test.init(btn);
+        
+
+		$.ajax({
+				type: "post",
+				url: "{:U('user/SendMobileVerify')}",
+				data:{mobile: mobile},
+				beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+
+				success: function(data, textStatus){
+				
+					alert("验证码已发送到:"+mobile);
+				
+					
+				},
+				complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+				},
+				error: function(){
+					alert('发送验证码错误，请刷新页面之后重试');
+				}
+			});
+       
+        });
+       
+      $("#yanzheng").click(function get_code(){
+
+		  var mcode = $("#code").val();
+			//alert(mcode);
+
+		    //var s="<%=session("mcode")%>";
+			//var s="$Think.session.mcode";
+
+			//alert(s);
+
+			$.ajax({
+					type: "post",
+					url: "{:U('user/MobileVerify')}",
+					data:{mcode: mcode},
+					beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+
+					success: function(data){
+                        
+                        //console.log(data);
+                        data=eval(data);
+                        //alert(data.res);
+
+                        if(data.res == 1)
+                        {
+							alert(data.msg);						
+                        }
+                        else
+                        {
+                            alert(data.msg);
+                        }                        
+						
+					},
+					complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+					},
+					error: function(){
+						alert('验证码错误，请重试');
+					}
+				});
+			});
+    });
+ 
+    
+	 //检测电话号码是否正确
+	function check_mobile(tel){
+
+		//var tel=mobile.replace(/^\s*|\s*$/g,'');
+		var tel = $("#mobile").val();
+		var length=tel.length;
+		if (length==0)
+		{
+			alert('手机号码不能为空...');
+			$('#sendMobileVerify').attr('disabled',true);
+			return;
+		}
+		//$a=preg_match('/^((1[3|4|5|8])[0-9]{9})$/',tel);
+		if (tel)
+		{
+			//alert(tel);
+			$('#sendMobileVerify').attr('disabled',false);
+			return;
+		}
+		else{
+			alert('手机号码格式不正确请重新输入...');
+			$('#sendMobileVerify').attr('disabled',true);
+			return;
+		}
+
+	}
+
+
+	function MobileVerify()
+	{
+		$.ajax({
+				type: "get",
+				url: "{:U('user/MobileVarify')}",
+				data:{mobile: mobile},
+				beforeSend: function(XMLHttpRequest){
+					$("#prg").modal({
+						backdrop:true,
+						keyboard:true,
+						show:true
+					});
+				},
+				success: function(data, textStatus){
+					
+					alert("验证码正确");
+					location.reload();
+					
+					
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					$("#prg").modal('hide');
+				},
+				error: function(){
+					alert('验证码错误，请重试');
+				}
+			});
+
+	}
+       
+
+	 function checkThreeYear()
+	 {
+		 
+
+
+		 var str1 = "2011-3-1";
+		var arr1 = str1.split("-");   
+		var date1 = new Date(arr1[0],parseInt(arr1[1]*1)-1,arr1[2]);   
+		  
+		var str2 = $("#createTime").val();   
+		var arr2 = str2.split("-");
+		var date2 = new Date(arr2[0],parseInt(arr2[1]*1)-1,arr2[2]); 
+		if(date2 >= date1)
+		{
+			return true;
+		}
+		else
+		{
+			alert("成立时间不得早于："+str1 +"\n你填写的成立时间是："+str2 );
+			
+			$("#buildTime")[0].focus();
+			return false;
+		}
+
+
+	 }
+	function check()
+	{
+		if( checkItem('username','用户名') 
+				&& checkItem('company','公司') 
+				&& checkItem('password','密码')
+				&& checkpwd()
+				&& checkItem('bLicence','营业执照号码')
+				&& checkItem('orgID','组织机构代码证号码')
+				&& checkoorgID()
+				&& checkItem('createTime','成立时间')
+				&& checkThreeYear()
+				&& checkItem('regCapital','注册资本')
+				&& checkregCapital()
+				&& checkItem('paidUpCapital','实收资本')
+				&& checkpaidUpCapital()
+				&& checkItem('comDirector','企业负责人')
+				&& checkItem('mobile','手机号码')
+				&& checkItem('email','联系邮箱')
+				&& checkemail()
+				&& checkItem('mainBusiness','主营业务')
+				&& checkItem('allCapital','总资产')
+				&& checkItem('netAssets','净资产')
+				&& checkItem('salesIncome','销售收入')
+				&& checkItem('netProfit','净利润')
+				
+		  )
+		  {
+				return true;
+			}else
+		  {
+				return false
+		  }
+			
+	}
+	
+	
+	function checkpwd()
+	{
+			if($("#password").val()!=$("#password2").val())
+			{
+				$("#password2").focus();
+				alert("两次密码不一致");
+				return false;
+			}
+			return true;
+	}
+	function checkemail()
+	{
+			var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+			var email_val = $("#email").val();
+			if(!search_str.test(email_val)){        
+				 alert("email 格式不正确 !");
+				 $('#email')[0].focus();
+				 return false;
+			}
+			return true;
+	}
+	function checkoorgID()
+	{
+			if(!isValidEntpCode($("#orgID").val()))
+			{
+				 alert("组织机构代码证号码 格式不正确 应该为:00000000-0 !");
+				 $('#orgID')[0].focus();
+				 return false;
+			}
+			return true;
+	}
+	function checkregCapital()
+	{
+			if($('#regCapital').val()<30 || $('#regCapital').val()>3000)
+			{
+				 alert("注册资本在30万元到3000万元之间!");
+				 $('#regCapital')[0].focus();
+				 return false;
+			}
+			return true;
+	}
+	function checkpaidUpCapital()
+	{
+		if($('#paidUpCapital').val()<30 || $('#paidUpCapital').val()>1000)
+		{
+			 alert("实收资本在30万元到1000万元之间!");
+			 $('#paidUpCapital')[0].focus();
+			 return false;
+		}
+		return true;
+	}
+	
+	
+	function isValidEntpCode(code, has){
+		var ws = [3, 7, 9, 10, 5, 8, 4, 2];
+		var str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var reg = /^([0-9A-Z]){8}-[0-9|X]$/;// /^[A-Za-z0-9]{8}-[A-Za-z0-9]{1}$/
+		if (!reg.test(code)) {
+			return false;
+		}
+		return true;
+		var sum = 0;
+		for (var i = 0; i < 8; i++) {
+		   sum += str.indexOf(code.charAt(i)) * ws[i];
+		}
+		var c9 = 11 - (sum % 11);
+		c9 = c9 == 10 ? 'X' : c9
+		return c9 == code.charAt(9);
+	}
+	function checkItem(id,str)
+	{
+		if($("#"+id).val()=="")
+		{
+			$("#"+id)[0].focus();
+			alert(str+"必填");
+			if(id=="createTime")
+			{
+				$("#buildTime")[0].focus();
+			}
+			return false;
+			
+		}
+		return true;
+	}
+	
+	function validatePwd(str) {
+		// 计算密码强度
+		var level = 0;
+		// 大写字母
+		if (/.*[A-Z].*/.test(str)) {
+			level++;
+		}
+		// 小写字母
+		if (/.*[a-z].*/.test(str)) {
+			level++;
+		}
+		// 数字
+		if (/.*[0-9].*/.test(str)) {
+			level++;
+		}
+		// 特殊字符
+		if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\\];\\:\\'\\"\\,<\\.>\\/\\?].*/.test(str)) {
+		//if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\];\:\'\"\,<\.>\/\?].*/.test(str)) {
+			level++;
+		}
+		if (str.length>8)
+		{
+			level++;
+		}
+		$("#pwd1").attr("class","pwdStrong");
+		$("#pwd2").attr("class","pwdStrong");
+		$("#pwd3").attr("class","pwdStrong");
+		if(level>0){
+			$("#pwd1").attr("class","pwdStrong pwdActive");
+		}
+		if (level>3) {
+			$("#pwd2").attr("class","pwdStrong pwdActive");
+		}
+		if(level>=5){
+			$("#pwd3").attr("class","pwdStrong pwdActive");
+		};
+	}
+	</script>
+</block>
+<block name="body">
+<div class="container table-bordered reg" style="width:1170px;">
+	<div class="regTitle">
+		<h3 class="regTitleContent">企业填写注册信息</h3>
+	</div>
+	<div class="regContent table">
+	<form class="well form-horizontal" method="post" action="{:U('Home/User/Confirm')}" onsubmit="return check()">
+		<fieldset>
+			<legend>基本信息</legend>
+			<div class="control-group">
+	            <label class="control-label" for="input01">用户名</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="username" name="username" maxlength="100" placeholder="请输入您的用户名">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+			<div class="control-group">
+	            <label class="control-label" for="input01">企业全称</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="company" name="company" maxlength="200" placeholder="请填写公司企业全称(3到50位中英文字符或数字)">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="input01">拟设定密码</label>
+	            <div class="controls">
+	            	<input type="password" class="input-xlarge" id="password" name="password" maxlength="100" placeholder="请输入密码" onkeyup="validatePwd(this.value)">
+	            	
+	            	<div>
+	            		<span>密码强度</span>
+	            		<span class="pwdStrong" id="pwd1">弱</span>
+	            		<span class="pwdStrong" id="pwd2">中</span>
+	            		<span class="pwdStrong" id="pwd3">强</span>
+	            	</div>
+	            </div>
+	        </div>
+			<div class="control-group">
+	            <label class="control-label" for="input01">确认密码</label>
+	            <div class="controls">
+	            	<input type="password" class="input-xlarge" id="password2" placeholder="请重新输入上面的密码">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="cmbProvince">所在区县</label>
+	            <div class="controls">
+	            	<select id="cmbProvince" name="cmbProvince" style="display:none;"></select>
+	            	<select id="cmbCity" name="cmbCity" style="display:none;"></select>
+						<select id="cmbArea" name="cmbArea" class="input-xlarge" style="width:280px;"  onchange="if(this.value=='滨海新区'){$('#subWhere').show();}else{$('#subWhere').hide();$('#subWhere').val('');}"></select><font color="red">* 必须填入项目</font><br />
+								
+						<select id="subWhere" class="input-xlarge" style="display:none;width:280px;" name="subWhere" >
+							<option value="其它">其它</option>		
+							<option value="开发区">开发区</option>	
+							<option value="保税区">保税区</option>	
+							<option value="高新区">高新区</option>
+							<option value="塘沽">塘沽</option>	
+							<option value="汉沽">汉沽</option>							
+							<option value="大港">大港</option>	
+							
+						</select>
+
+						<script>
+							$("#subWhere").val("{$subWhere}");
+						</script> 		
+								
+	            </div>
+
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="bLicence">营业执照号码</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="bLicence" name="bLicence" maxlength="100" placeholder="请填写营业执照号码">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="orgID">组织机构代码证号码</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="orgID" name="orgID" maxlength="100" placeholder="请填写组织机构代码证号码">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="createTime">成立时间</label>
+
+                <div class="controls input-append date form_date createTime" data-date="" data-date-format="yyyy-mm-dd" data-link-field="createTime" data-link-format="yyyy-mm-dd">
+                    <input size="16" type="text" value="" readonly id="buildTime" placeholder="单击选择时间">
+                    <span class="add-on"><i class="icon-remove"></i></span>
+										<span class="add-on"><i class="icon-th"></i></span>
+										<font color="red">* 必须填入项目</font>
+                </div>
+								<input type="hidden" id="createTime" value=""  name="buildTime"/>
+	            
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="regCapital">注册资本</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="regCapital" name="regCapital" maxlength="100" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')" >
+	            	<font color="red">* (30-3000）单位万元 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="paidUpCapital">实收资本</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="paidUpCapital" name="paidUpCapital" maxlength="100" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	<font color="red">* (30-1000）单位万元 必须填入项目</font>
+	            </div>
+	        </div>
+			<div class="control-group">
+	            <label class="control-label" for="comDirector">企业负责人</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="comDirector" name="comDirector" maxlength="100">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="mobile">手机号码</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="mobile" name="mobile" maxlength="20" onblur="check_mobile(this.value)">
+                    
+					<input type="button" id="sendMobileVerify" name="sendMobileVerify"  value="发送验证码"  >
+					
+	            </div>
+	        </div>
+			<div class="control-group">
+	            <label class="control-label" for="mobile">手机验证码</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" name="code" value="" id="code"/>
+					<input type="button" id="yanzheng"   name="yanzheng" value="验证" />
+
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="email">联系邮箱</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="email" name="email" maxlength="100">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="mainBusiness">主营业务</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="mainBusiness" name="mainBusiness" maxlength="255">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="passRegconition">
+	            是否通过天津市科技型中小企业认定
+	            </label>
+	            <div class="controls">
+	            	<input type="checkbox" name="passRegconition" value="1">
+	            </div>
+	        </div>
+        </fieldset>
+        <fieldset>
+			<legend>截止上年底财务数据</legend>
+	        <div class="control-group">
+	            <label class="control-label" for="allCapital">总资产</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="allCapital" name="allCapital" maxlength="20" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">  
+	            	<font color="red">*（单位万元）必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="netAssets">净资产</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="netAssets" name="netAssets" maxlength="20" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	<font color="red">*（单位万元）必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="salesIncome">销售收入</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="salesIncome" name="salesIncome" maxlength="20" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	<font color="red">*（单位万元）必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="netProfit">净利润</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="netProfit" name="netProfit" maxlength="20" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	<font color="red">*（单位万元）必须填入项目</font>
+	            </div>
+	        </div>
+	    </fieldset>
+	    <h3>
+	    	* 注册后，可凭注册用户名及密码登录申报系统并上传相关资质附件，我公司进行审核，审查核准后即可进行填报。
+
+	    </h3>
+
+	</div>
+	<div class="regBtn">
+    	<input type="submit" class="btn btn-large btn-primary btn-block" value=" 注 册 ">
+    </div>
+</div>
+</block>

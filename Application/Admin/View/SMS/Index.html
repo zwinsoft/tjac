@@ -1,0 +1,124 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
+	<script>
+	$(function(){
+		$('.form_date').datetimepicker({
+			language:  'zh-CN',
+			weekStart: 1,
+			todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			forceParse: 0
+			});
+			addressInit('cmbProvince', 'cmbCity', 'cmbArea', '天津', '天津市', '南开区');
+			var where = "[where]";
+			var items = where.split('-');
+			if(items.length>0)
+			{
+				addressInit('cmbProvince', 'cmbCity', 'cmbArea', items[0], items[1], items[2]);
+				
+			}
+			
+	 });
+		
+    </script>
+    
+</block>
+
+
+<block name="body">
+
+<div class="modal hide fade" id='prg'>
+	<div class="modal-body">
+		加载中... 请稍候...
+	</div>
+</div>
+
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<!--start-->
+		<fieldset>
+			<legend>短信管理</legend>   <a href="{:U('Admin/SMS/Send')}" class="btn btn-block btn-large">发送短信</a>
+			
+			<div>
+				剩余条数:{$sentSmsCount}, 账户总数{$totalSmsCount}
+			</div>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td>创建时间</td>
+				<td>发送时间</td>
+				<td>接受手机</td>
+				<td>类型</td>
+				<td>发送内容</td>
+				<td>字数</td>				
+				<td>状态</td>
+				<td>操作</td>
+			</tr>
+			
+			<?php $n=0;?>
+			<foreach name="data" item="vo" >
+			<?php $n=$n+1;?>
+			<tr>
+				<td>
+					{$vo.createTime}
+				</td>
+				<td>
+					{$vo.sendTime}
+				</td>
+				<td>
+					<a >{$vo.mobile}</a>
+				</td>
+				<td>
+					{$vo.type}
+				</td>
+				<td>
+					{$vo.msg}
+				</td>
+				<td>
+					{$vo.num}
+				</td>
+				<td>
+					{$vo.status}
+				</td>
+				<td>
+				</td>
+			</tr>
+			</foreach>
+		</table>
+		<div style="width:100%;text-align:right;">
+		<?php?>
+		<div class="pagination pagination-right">
+            <ul>
+                <li><a href="__SELF__&page=1"><i class="icon-fast-backward"></i></a></li>
+                <li class="<?php echo ($page==1 || !isset($page))?"disabled":"";?>"><a href="__SELF__&page={$page-1}">前一页</a></li>
+                <li class="<?php echo $page==($maxpage-1)?"disabled":"";?>"><a href="__SELF__&page={$page+1}">下一页</a></li>
+                <li><a href="__SELF__&page={$maxpage-1}"><i class="icon-fast-forward"></i></a></li>
+                <li>
+					<select class="input-small" style="line-height:34px;height:36px;" onchange="location.href='__SELF__&page='+this.value">
+					<for start="1" end="$maxpage" step="1" name="n">
+						<if condition="$page eq $n ">
+							<option value="{$n}" selected>第{$n}页</option>
+						<else />
+						  <option value="{$n}" >第{$n}页</option>
+						</if>
+					
+					</for>
+					</select>
+				</li>
+            </ul>
+        </div>
+			
+		</div>
+		</fieldset>
+		<!--end-->
+	</div>
+</div>
+</block>
+

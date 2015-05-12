@@ -1,0 +1,314 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script>
+		
+		function checkfile(id,obj)
+		{
+			var filename = $("#fileInput"+id).val();
+			if(filename=="")
+			{
+				alert("请先选择文件");
+				return false;
+			}else
+			{
+				var ext=filename.substring(filename.lastIndexOf(".")+1).toLowerCase();
+				
+				if(!(ext=='jpg' || ext=='png' || ext=='gif' ||ext=='jpeg' ||ext=='rar' ||ext=='zip'))
+				{
+					alert("请上传图片文件或图片文件的压缩包。")
+					return false;
+				}
+				var maxsize = 10*1024*1024;//10M  
+				var errMsg = "上传的附件文件不能超过10M！！！";
+				var files=document.getElementById("fileInput"+id).files;
+				
+				if(files[0].size>maxsize)
+				{
+					alert(errMsg);
+					return false;
+				}
+			}
+			obj.value="上传中......"
+			obj.id="upbtn"+id;
+			setTimeout("checkuploadFinish("+id+")",1000);
+			return true;
+		}
+		var i=1;
+		function checkuploadFinish(id)
+		{
+				s="";
+				i=i+1;
+				if(i>3)
+				{
+				i=1;	
+				}
+				for(var j=1;j<=i;j++)
+				{
+				 	s=s+"......";
+			  }
+					//console.log($("#frm"+id)[0].contentWindow.document.innerHTML)
+					//console.log($("#fileInput"+id).val());
+					var frmsrc=$("#frm"+id)[0].contentWindow.location.href.toString();
+					if(frmsrc.indexOf("sucess")>-1)
+					{
+						 $("#frm"+id)[0].contentWindow.location.href=frmsrc.replace("sucess","");
+						 $("#upbtn"+id).val("上传");
+						
+					}else
+					{
+						 $("#upbtn"+id).val("上传中"+s);
+							setTimeout("checkuploadFinish("+id+")",1000);
+					}
+				 
+			
+		}
+	</script>
+	<style>
+	.frmFile{
+		height:40px;
+	}
+	.form-horizontal .controls{
+		margin-left:220px;
+	}
+	.form-horizontal .control-label{
+		width:210px;
+	}
+	</style>
+</block>
+
+<block name="body">
+<img id="tempimg" dynsrc="" src="" style="display:none" />  
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<div class="regContent">
+			
+			<div class="form-horizontal">
+				<fieldset>
+					<legend>请先下载融资承诺书</legend>
+		      <h2><a href="__STATIC__/document/融资承诺书.doc">下载融资承诺书，并填写后扫描上传。</a></h2>
+		    </fieldset>
+			<fieldset>
+			<legend><br/>基本信息附件上传</legend>
+				<div class="control-group">
+		            <label class="control-label" for="input01">融资承诺书<br/><font color="blue">*上传融资承诺书扫描件(小于1M)</font></label>
+		            <div class="controls">
+		            <if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm1" enctype="multipart/form-data">
+								    <input class="input-file" name="file1" id="fileInput1" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(1,this)" class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>1))}" name="frm1" id="frm1" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">营业执照<br/><font color="blue">*最新年检盖公章的扫描件(小于1M)</font></label>
+		            <div class="controls">
+		            <if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm2" enctype="multipart/form-data">
+								    <input class="input-file" name="file2" id="fileInput2" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(2,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>2))}" name="frm2" id="frm2" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">组织结构代码证<br/><font color="blue">*盖公章的扫描件(小于1M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            	<form action="{:U('Company/upload')}" method="post" target="frm3" enctype="multipart/form-data">
+								    <input class="input-file" name="file3" id="fileInput3" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(3,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>3))}" name="frm3" id="frm3" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">国税登记证<br/><font color="blue">*盖公章的扫描件(小于1M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm4" enctype="multipart/form-data">
+								    <input class="input-file" name="file4" id="fileInput4" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(4,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>4))}" name="frm4" id="frm4" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">地税登记证<br/><font color="blue">*如果国地税合一，上传国地税扫描件(小于1M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm5" enctype="multipart/form-data">
+								    <input class="input-file" name="file5" id="fileInput5" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(5,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>5))}" name="frm5" id="frm5" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">天津市科技型中小企业认定证书<br/><font color="blue">*认定证书扫描件或认定通过屏幕截图(小于1M)</font></label>
+		            <div class="controls">
+		            <if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm6" enctype="multipart/form-data">
+								    <input class="input-file" name="file6" id="fileInput6" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(6,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>6))}" name="frm6" id="frm6" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label"  for="input01">企业章程<br/><font color="blue">*扫描件打包上传压缩包(小于5M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm7" enctype="multipart/form-data">
+								    <input class="input-file" name="file7" id="fileInput7" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(7,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>7))}" name="frm7" id="frm7" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">公司成立验资报告<br/><font color="blue">*扫描件打包上传压缩包(小于5M)</label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm8" enctype="multipart/form-data">
+								    <input class="input-file" name="file8" id="fileInput8" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(8,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>8))}" name="frm8" id="frm8" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        
+		       
+		        <div class="control-group">
+		            <label class="control-label" for="input01">最近一个月的资产负债表<br/><font color="blue">*扫描件打包上传压缩包(小于2M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm10" enctype="multipart/form-data">
+								    <input class="input-file" name="file10" id="fileInput10" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(10,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>10))}" name="frm10" id="frm10" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">损益表<br/><font color="blue">*扫描件打包上传压缩包(小于2M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm11" enctype="multipart/form-data">
+								    <input class="input-file" name="file11" id="fileInput11" type="file">
+								    
+								    <input type="submit" value="上传" onclick="return checkfile(11,this)"  class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>11))}" name="frm11" id="frm11" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+
+				 <div class="control-group">
+		            <label class="control-label" for="input01">前一年的审计报告<br/><font color="blue">*(可选)扫描件打包上传压缩包(小于5M)</font></label>
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            <form action="{:U('Company/upload')}" method="post" target="frm9" enctype="multipart/form-data">
+								    <input class="input-file" name="file9" id="fileInput9" type="file">
+								    
+								    <input type="submit" value="上传"   class="btn"/>
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>9))}" name="frm9" id="frm9" class="frmFile" style="width:100%;;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+
+		        </fieldset>
+		     <!--
+		        <fieldset>
+		     
+				<legend>非必要信息</legend>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">其他1</label>
+		            <div class="controls">
+		            	<if condition="$data.status eq 0">
+		            	<form action="{:U('Company/upload')}" method="post" target="frm12" enctype="multipart/form-data">
+								    <input class="input-file" name="file12" id="fileInput" type="file">
+								    
+								    <input type="submit" value="上传" />
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>12))}" name="frm12" id="frm12" style="width:100%;height:30px;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="input01">其他2</label>
+		            <div class="controls">
+		            	<if condition="$data.status eq 0">
+		            <form action="{:U('Company/upload')}" method="post" target="frm13" enctype="multipart/form-data">
+								    <input class="input-file" name="file13" id="fileInput" type="file">
+								    
+								    <input type="submit" value="上传" />
+								  	
+								</form>
+								</if>
+		            <iframe src="{:U('Company/Filedetail',array('type'=>13))}" name="frm13" id="frm13" style="width:100%;height:30px;boder:0px solid #ffffff;"></iframe>
+		            </div>
+		        </div>
+		        </fieldset>
+		       -->
+		        <div class="control-group">
+		            <form method="post" action="__SELF__">
+		            <div class="controls">
+		            	<if condition="$data.status elt 1">
+		            		<a name="submit"></a>
+								    <button type="submit" onclick="return check()" class="btn btn-large btn-primary">提交资料进行审查</button>
+		            	</if>
+		            </div>
+		          	</form>
+		          	<script>
+		          		function check(){
+	          				if(confirm(' 请确认资料填写完善，一旦提交不能修改资料\n 审核会有一段时间，请您耐心等候。\n 确认提交，取消继续修改'))
+	          				{
+	          					return true;	
+	          				}
+	          				return false;
+	          			}
+	          		</script>
+		        </div>
+	        </div>
+		</div>
+	</div>
+</div>
+
+</block>

@@ -1,0 +1,32 @@
+<!-- 导航条
+================================================== -->
+<!--[if lt IE 7]>
+<style>
+/*ie6提示*/
+#ie6-warning{width:100%;position:absolute;top:0;left:0;background:#ffffe1;padding:5px 0;font-size:12px}
+#ie6-warning p{width:960px;margin:0 auto;}
+</style>
+<div id="ie6-warning"><p>您正在使用 Internet Explorer 6，在本页面的显示效果可能有差异。建议您升级到 <a href="http://www.microsoft.com/china/windows/internet-explorer/" target="_blank">Internet Explorer 8</a> 或以下浏览器：
+<a href="http://www.mozillaonline.com/">Firefox</a> / <a href="http://www.google.com/chrome/?hl=zh-CN">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.operachina.com/">Opera</a></p></div>
+jQuery(function ($) {
+	if ( jQuery.browser.msie && ( jQuery.browser.version == "6.0" ) && !jQuery.support.style ){
+		jQuery('#ie6-warning').css({'top':jQuery(this).scrollTop()+'px'});
+	}
+});
+<![endif]-->
+<div id="head">
+    <div class="container" style="width:950px;">
+    		
+        <div style="float:left;"><h1 class="logoTitle" style="font-size:30px;">天津市科技型中小企业天使投资项目申报系统</h1></div>
+        <notempty name="Think.session.user_name">
+        	<div class="welcome">
+        		<div class="welcomeleft">
+        		</div>
+        		<div class="welcomemid" title="{$Think.session.company}">{$Think.session.company|substr=0,42}   | <a href="{:U('Home/User/Logout')}" >退出</a>
+        		</div>
+        		<div class="welcomeright">
+        		</div>	
+        	</div>
+      	</notempty>
+    </div>
+</div>

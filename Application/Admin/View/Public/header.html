@@ -1,0 +1,18 @@
+<!-- 导航条
+================================================== -->
+<div id="head">
+    <div class="container" style="width:1127px;">
+    		
+        <div style="float:left;"><h1 class="logoTitle" style="font-size:30px;">天津市科技型中小企业天使投资项目申报系统</h1></div>
+        <notempty name="Think.session.user_name">
+        	<div class="welcome">
+        		<div class="welcomeleft">
+        		</div>
+        		<div class="welcomemid" title="{$Think.session.user_name}">{$Think.session.user_name|substr=0,40}   | <a href="{:U('Home/User/Logout')}" >退出</a>
+        		</div>
+        		<div class="welcomeright">
+        		</div>	
+        	</div>
+      	</notempty>
+    </div>
+</div>

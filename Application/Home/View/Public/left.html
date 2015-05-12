@@ -1,0 +1,25 @@
+<div class="span2 mainContentLeft">
+		
+		<ul class="nav nav-pills nav-stacked">
+			<li class="nav-header">
+			    我的账户
+			</li>
+			<li {$m1}><a href="{:U('Home/Index/Index')}" >最新通知</a></li>
+			<li {$m2}><a href="{:U('Home/Company/Base')}" >注册信息</a></li>
+			<li {$m3}><a href="{:U('Home/Company/Files')}" >相关附件</a></li>
+			<li {$m4}><a href="{:U('Home/User/Profile')}" >密码修改</a></li>
+		</ul>
+		
+		<ul class="nav nav-pills nav-stacked">
+			<li class="nav-header">
+			    项目填报{$Think.session.company_status}
+			</li>
+			<li {$m6|isDisabled}><a href="{:U('Home/Company/Info1')}" >企业基本情况</a></li>
+			<li {$m7|isDisabled}><a href="{:U('Home/Company/Info2')}" >企业知识产权</a></li>
+			<li {$m8|isDisabled}><a href="{:U('Home/Project/Info1')}" >项目基本情况</a></li>
+			<li {$m9|isDisabled}><a href="{:U('Home/Project/Info2')}" >商业计划书</a></li>
+		</ul>
+		<script>
+			$(".nav .disabled").click(function(){return false});
+		</script>
+</div>

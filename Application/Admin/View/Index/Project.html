@@ -1,0 +1,1139 @@
+  <script type="text/javascript" src="__STATIC__/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="__STATIC__/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="__STATIC__/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="__STATIC__/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="__STATIC__/css/index.css">
+  <script>
+  	function imgShow(outerdiv, innerdiv, bigimg, _this){
+			var src = _this.attr("src");//获取当前点击的pimg元素中的src属性
+			$(bigimg).attr("src", src);//设置#bigimg元素的src属性
+		
+		   /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+			$("<img/>").attr("src", src).load(function(){
+				var windowW = $(window).width();//获取当前窗口宽度
+				var windowH = $(window).height();//获取当前窗口高度
+				var realWidth = this.width;//
+				var realHeight = this.height;//
+				var imgWidth, imgHeight;
+				var scale = 0.8;//
+				
+				if(realHeight>windowH*scale) {
+					imgHeight = windowH*scale;
+					imgWidth = imgHeight/realHeight*realWidth;
+					if(imgWidth>windowW*scale) {
+						imgWidth = windowW*scale;
+					}
+				} else if(realWidth>windowW*scale) {
+					imgWidth = windowW*scale;
+		      imgHeight = imgWidth/realWidth*realHeight;
+				} else {
+					imgWidth = realWidth;
+					imgHeight = realHeight;
+				}
+		    $(bigimg).css("width",imgWidth);
+				
+				var w = (windowW-imgWidth)/2;
+				var h = (windowH-imgHeight)/2;
+				$(innerdiv).css({"top":h, "left":w});
+				$(outerdiv).fadeIn("fast");
+			});
+			
+			$(outerdiv).click(function(){
+				$(this).fadeOut("fast");
+			});
+		}
+  </script>
+  
+ <div class="tabbable">
+	<ul class="nav nav-tabs">
+	  <li class="active">
+	    <a href="#tab1" data-toggle="tab">企业基本情况</a>
+	  </li>
+	  <li >
+	    <a href="#tab2" data-toggle="tab">企业知识产权</a>
+	  </li>
+	  <li >
+	    <a href="#tab3" data-toggle="tab">项目基本情况</a>
+	  </li>
+	  <li >
+	    <a href="#tab4" data-toggle="tab">商业计划书</a>
+	  </li>
+	</ul>
+	<div class="tab-content">
+		<!--tab1-->
+    <div class="tab-pane active" id="tab1">
+				<input type="hidden" name="id" value="{$Think.session.user_id}" readonly />
+				<legend>企业基本情况</legend>
+				<table class="table table-bordered table-condensed">
+					<tr>
+						<td>企业名称</td>
+						<td><input type="text" name="qiyemingcheng" value="{$info.qiyemingcheng}" readonly class="input-large" id="name" placeholder=""></td>
+						<td>营业执照号码</td>
+						<td><input type="text" name="yingyezhizhaohaoma" value="{$info.yingyezhizhaohaoma}"  class="input-small" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>注册地点</td>
+						<td><input type="text" name="zhucedidian" value="{$info.zhucedidian}"  class="input-large" id="name" placeholder=""><span style="color:red;">(与营业执照一致)</span></td>
+						<td>组织结构代码</td>
+						<td><input type="text" name="zuzhijigoudaima" value="{$info.zuzhijigoudaima}"  class="input-small" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>企业成立时间</td>
+						<td><input type="text" name="qiyechengliTime" value="{$info.qiyechengliTime|substr=0,10}"  class="input-large" id="name" placeholder=""></td>
+						<td>组织形式</td>
+						<td>
+						<select id="zuzhixs" name="zuzhixingshi"  class="input-small">
+							<option value="有限责任公司">有限责任公司</option>
+							<option value="股份公司">股份公司</option>	
+							<option value="中外合资">中外合资</option>
+							<option value="外商独资">外商独资</option>	
+						</select>
+						<script>
+							$("#zuzhixs").val("{$info.zuzhixingshi}");
+						</script>
+						</td>
+					</tr>
+					<tr>
+						<td>实收资本</td>
+						<td >
+							
+								<input type="text"  name="shishouziben" value="{$info.shishouziben}" class="input-small" id="name" >
+								<span style="color:red;">万元</span>
+							
+							</td>
+						<td>注册资本</td>
+						<td ><input type="text" name="zuceziben" value="{$info.zuceziben}"  class="input-small" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					<tr>
+						<td>外资占股比例</td>
+						<td ><input type="text" name="waizibili" value="{$info.waizibili}"  class="input-small" id="name" placeholder=""><span style="color:red;">%</span></td>
+						<td>办公，生产场地面积</td>
+						<td><input type="text" name="bangongmianji" value="{$info.bangongmianji}"  class="input-small" id="name" placeholder=""><span style="color:red;">平米</span></td>
+					</tr>
+					<tr>
+						<td>公司地址</td>
+						<td colspan="3">
+							<input type="text" name="gongsidizhi" value="{$info.gongsidizhi}"  class="input-xxlarge" id="name" placeholder=""></td>
+						
+					</tr>
+					<tr>
+						<td>传真号码</td>
+						<td colspan="3" ><input type="text" name="fax" value="{$info.fax}"  class="input-large" id="name" placeholder=""></td>
+						
+					</tr>
+					
+				</table>
+				<table class="table table-bordered table-condensed table-striped">
+					<tr>
+						<th>人员身份</th>
+						<th>姓名</th>
+						<th>职位</th>
+						<th>职称</th>
+						<th>办公电话</th>
+						<th>移动电话</th>
+						<th>Email</th>
+					</tr>
+					<tr>
+						<td>法定代表人</td>
+						<td><input type="text" name="faren_xingming" value="{$info.faren_xingming}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td><input type="text" name="faren_zhiwei" value="{$info.faren_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-small" name="faren_zhicheng" id="faren_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#faren_zhicheng_id").val("{$info.faren_zhicheng}");
+						</script>
+						</td>
+						<td><input type="text" name="faren_phone" value="{$info.faren_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" name="faren_mobile" value="{$info.faren_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" name="faren_email" value="{$info.faren_email}"  class="input-small" id="name" placeholder="" size="20"></td>
+					</tr>
+					<tr>
+						<td>企业负责人</td>
+						<td><input type="text" name="qiye_xingming" value="{$info.qiye_xingming}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td><input type="text" name="qiye_zhiwei" value="{$info.qiye_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-small" name="qiye_zhicheng" id="qiye_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#qiye_zhicheng_id").val("{$info.qiye_zhicheng}");
+						</script>
+						</td>
+						<td><input type="text" name="qiye_phone" value="{$info.qiye_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" name="qiye_mobile" value="{$info.qiye_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" name="qiye_email" value="{$info.qiye_email}"  class="input-small" id="name" placeholder="" size="20"></td>
+					</tr>
+					<tr>
+						<td>项目负责人</td>
+						<td><input type="text" name="xiangmu_xingming" value="{$info.xiangmu_xingming}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td><input type="text" name="xiangmu_zhiwei" value="{$info.xiangmu_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-small" name="xiangmu_zhicheng" id="xiangmu_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#xiangmu_zhicheng_id").val("{$info.xiangmu_zhicheng}");
+						</script>
+						</td>
+						<td><input type="text" name="xiangmu_phone" value="{$info.xiangmu_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" name="xiangmu_mobile" value="{$info.xiangmu_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" name="xiangmu_email" value="{$info.xiangmu_email}"  class="input-small" id="name" placeholder="" size="20"></td>
+					</tr>
+					<tr>
+						<td>联系人</td>
+						<td><input type="text" name="lianxiren_xingming" value="{$info.lianxiren_xingming}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td><input type="text" name="lianxiren_zhiwei" value="{$info.lianxiren_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td><select class="input-small" name="lianxiren_zhicheng" id="lianxiren_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#lianxiren_zhicheng_id").val("{$info.lianxiren_zhicheng}");
+						</script>
+						</td>
+						<td><input type="text" name="lianxiren_phone" value="{$info.lianxiren_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" name="lianxiren_mobile" value="{$info.lianxiren_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" name="lianxiren_email" value="{$info.lianxiren_email}"  class="input-small" id="name" placeholder="" size="20"></td>
+					</tr>
+				</table>
+				<table class="table table-bordered table-condensed table-striped">
+					<tr><th colspan="7" style="text-align:center">企业股东及股权比例</th></tr>
+					<tr>
+						<th>股东名称</th>
+						<th>国籍</th>
+						<th>投资金额<span style="color:red;">（万元）</span></th>
+						<th>所占股份<span style="color:red;">（%）</span></th>
+						<th>出资时间</th>
+						<th>股东类型</th>
+					</tr>
+					
+					<foreach name="infoGudong" item="o">
+
+					<tr id="infoGudongRow1">
+					
+						<td><input type="text" data-name="股东名称" name="gudong_name" value="{$o.gudong_name}"  class="input-small" id="gudong_name{$o.id}" placeholder=""></td>
+						<td><input type="text" data-name="国籍" name="gudong_national" value="{$o.gudong_national}"  class="input-small" id="gudong_national{$o.id}" placeholder=""></td>
+						<td><input type="text" data-name="投资金额" name="gudong_money" value="{$o.gudong_money}"  class="input-mini" id="gudong_money{$o.id}" placeholder="" ><span style="color:red;">万元</span></td>
+						<td><input type="text" data-name="所占股份" name="gudong_stocknum" value="{$o.gudong_stocknum}"  class="input-mini" id="gudong_stocknum{$o.id}" placeholder="" ><span style="color:red;">%</span></td>
+						<td><input type="text" data-name="出资时间" name="gudong_paytime" value="{$o.gudong_paytime}"  class="input-small" id="gudong_paytime{$o.id}" placeholder=""></td>
+						<td> 
+						<select style="width:100%"  name="gudong_usertype" id="gudong_usertype{$o.id}">
+							<option value="自然人">自然人</option>
+							<option value="法人">法人</option>							
+						</select>
+						<script>
+							$("#gudong_usertype<?php echo($o["id"])?>").val("{$o.gudong_usertype}");
+						</script>
+						</td>
+						
+					</tr>
+
+					</foreach>
+					
+				</table>
+				<table class="table table-bordered table-condensed">
+					<tr><th style="text-align:center" colspan="4">上一年（2013）企业相关数据</th></tr>
+					<tr>
+						<td width="20%">员工总数</td>
+						<td width="30%"><input type="text" name="lastyear_yuangongzongshu" value="{$info.lastyear_yuangongzongshu}"  class="input-medium" id="name" placeholder=""><span style="color:red;">人</span></td>
+						<td width="20%">大专以上科技人员数</td>
+						<td width="30%"><input type="text" name="lastyear_dazhuanrenshu" value="{$info.lastyear_dazhuanrenshu}"  class="input-medium" id="name" placeholder=""><span style="color:red;">人</span></td>
+					</tr>
+					<tr>
+						<td>直接从事研发科技人员数</td>
+						<td><input type="text" name="lastyear_yafarenshu" value="{$info.lastyear_yafarenshu}"  class="input-medium" id="name" placeholder=""><span style="color:red;">人</span></td>
+						<td>总资产</td>
+						<td><input type="text" name="lastyear_zongzichan" value="{$info.lastyear_zongzichan}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span></td>
+					</tr>
+					<tr>
+						<td>净资产</td>
+						<td><input type="text" name="lastyear_jingzichan" value="{$info.lastyear_jingzichan}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+						<td>销售收入</td>
+						<td><input type="text" name="lastyear_xiaoshoushouru" value="{$info.lastyear_xiaoshoushouru}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>年缴税总额</td>
+						<td><input type="text" name="lastyear_nianjiaofeizonge" value="{$info.lastyear_nianjiaofeizonge}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+						<td>税后利润</td>
+						<td><input type="text" name="lastyear_shuihoulirun" value="{$info.lastyear_shuihoulirun}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					<tr>
+						<td>年创汇额</td>
+						<td ><input type="text" name="lastyear_nianchuanghuie" value="{$info.lastyear_nianchuanghuie}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+						<td>年研发经费投入</td>
+						<td ><input type="text" name="lastyear_nianyafajingfei" value="{$info.lastyear_nianyafajingfei}"  class="input-medium" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					<tr>
+						<td>研发投入占营业总收入比例</td>
+						<td ><input type="text" name="lastyear_yafanshourubili" value="{$info.lastyear_yafanshourubili}"  class="input-medium" id="name" placeholder=""><span style="color:red;">%</span></td>
+						<td>资产负债率</td>
+						<td ><input type="text" name="lastyear_zichanfuzhailv" value="{$info.lastyear_zichanfuzhailv}"  class="input-medium" id="name" placeholder=""><span style="color:red;">%</span></td>
+					</tr>
+					<tr>
+						<td>企业所属行业领域</td>
+						<td ><select class="input-medium" id="lingyuSelect" name="lastyear_hangyelingyu1"  onchange="if(this.value=='其他'){$('#lingyu').show();}else{$('#lingyu').hide();$('#lingyu').val('');}">
+							<option value="电子信息">电子信息</option>
+							<option value="生物">生物</option>
+							<option value="医药">医药</option>
+							<option value="新材料">新材料</option>
+							<option value="光机电一体化">光机电一体化</option>
+							<option value="资源与环境">资源与环境</option>
+							<option value="新能源与高效节能">新能源与高效节能</option>
+							<option value="高技术服务">高技术服务</option>
+							<option value="其他">其他</option>
+						</select>
+						
+						<input type="text" class="input-medium hide" name="lastyear_hangyelingyu" id="lingyu" placeholder=""></td>
+						<td>核心技术来源</td>
+						<td >
+						<select style="width:100%" id="laiyuan" name="lastyear_hexinjishulaiyuan" >
+							<option value="自主开发">自主开发</option>
+							<option value="合作">合作</option>
+							<option value="授权">授权</option>
+						</select></td>
+						
+						<script>
+							if("{$info.lastyear_hangyelingyu}".substring(0,2)=="其他")
+							{
+								$("#lingyuSelect").val("其他");
+								$('#lingyu').show();
+								$('#lingyu').val("{$info.lastyear_hangyelingyu}".substring(2,"{$info.lastyear_hangyelingyu}".length));
+							}else
+							{
+								$("#lingyuSelect").val("{$info.lastyear_hangyelingyu}");
+							}
+							$("#laiyuan").val("{$info.lastyear_hexinjishulaiyuan}");
+						</script>
+					</tr>
+					
+				</table>
+    </div>
+    <!--tab2-->
+    <div class="tab-pane" id="tab2">
+      <table id="zhuanli" class="table table-bordered table-condensed table-striped">
+					<!--{$zlcnt=0}-->
+					<foreach name="vo.zhuanli" item="zl">
+					<!--{$zlcnt=$zlcnt+1}-->
+						<form action="{:U(Compan/Info2)}&act=mod" method="post" >
+							<tbody style="border:1px dashed #336699;">
+							<tr>
+								<th>专利号码</th>
+								<th>专利类型</th>
+								<th>专利名称</th>
+								<th>进展情况</th>
+								
+							</tr>
+							<tr id="zhuanliRow1">
+								<td>
+									<input type="hidden" name="id" value="{$zl.id}">
+									<input type="hidden" name="uid" value="{$zl.uid}">
+									<input type="text" name="zhuanlihaoma" value="{$zl.zhuanlihaoma}" class="input-small" id="name" placeholder=""></td>
+								<td>
+									<select class="input-small" id="zhuanlileixing{$zl.id}"  name="zhuanlileixing">
+										<option value="发明">发明</option>
+										<option value="实用新型">实用新型</option>
+										<option value="外观">外观</option>
+									</select>
+									<script>
+										$("#zhuanlileixing{$zl.id}").val("{$zl.zhuanlileixing}");
+									</script>
+								</td>
+								<td><input type="text" name="zhuanlimingcheng" value="{$zl.zhuanlimingcheng}" class="input-small" id="name" placeholder="" ></td>
+								<td>
+									<select class="input-small" id="jinzhanqingkuang{$zl.id}" name="jinzhanqingkuang">
+										<option value="递交申请">递交申请</option>
+										<option value="已受理">已受理</option>
+										<option value="已授权">已授权</option>
+									</select>
+									<script>
+										$("#jinzhanqingkuang{$zl.id}").val("{$zl.jinzhanqingkuang}");
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<th>取得方式</th>
+								<th>专利权人</th>
+								<th>专利权人与项目单位关系</th>
+								<th>操作</th>
+							</tr>
+							<tr id="zhuanliRow1">
+		
+								<td style="border-bottom:1px dashed #336699;">
+									<select class="input-small" id="qudefangshi{$zl.id}" name="qudefangshi">
+										<option value="自主开发">自主开发</option>
+										<option value="转让">转让</option>
+										<option value="授权">授权</option>
+										<option value="共享">共享</option>
+									</select>
+									<script>
+										$("#qudefangshi{$zl.id}").val("{$zl.qudefangshi}");
+									</script>
+								</td>
+								<td style="border-bottom:1px dashed #336699;"><input type="text"  name="zhuanliquanren" id="zhuanliquanren{$zl.id}" value="{$zl.zhuanliquanren}" class="input-small" id="name" placeholder="" ></td>
+								<td style="border-bottom:1px dashed #336699;"><select  class="input-medium"  name="guanxi" id="guanxi{$zl.id}">
+										<option value="同一单位">同一单位</option>
+										<option value="是申报单位的主管单位">是申报单位的主管单位</option>
+										<option value="存在股权关系">存在股权关系</option>
+										<option value="不存在股权及主管关系">不存在股权及主管关系</option>
+										<option value="合作关系">合作关系</option>
+									</select>
+									<script>
+										$("#guanxi{$zl.id}").val("{$zl.guanxi}");
+									</script>
+								</td>
+								<td style="border-bottom:1px dashed #336699;">
+								
+								</td>
+							</tr>
+							</tbody>
+							</form>
+					</foreach>
+					
+				</table>
+				</fieldset>
+				<fieldset>
+				<legend>著作权<a name="zzq"></a></legend>
+				
+				<script type="text/javascript">var i=1</script>
+				<table id="zhuzuoquan" class="table table-bordered table-condensed table-striped">
+					
+					<tr>
+						<th>登记号</th>
+						<th>软件名称</th>
+						<th>进展情况</th>
+						<th>取得方式</th>
+						<th>申请人</th>
+						<th>申请人与项目单位关系</th>
+						<th>操作</th>
+					</tr>
+					<!--{$zzqcnt=0}-->
+					<foreach name="vo.zhuzuoquan" item="zzq">
+						<form action="{:U(Company/Info2)}&act=mod2#zzq" method="post">
+						<tr>
+						<td>
+							<input type="hidden" name="uid" value="{$zzq.uid}">
+							<input type="hidden" name="id" value="{$zzq.id}">
+							<input type="text" name="dengjihao" value="{$zzq.dengjihao}" class="input-small" id="name" placeholder=""></td>
+						<td><input type="text" name="ruanjianmingcheng" value="{$zzq.ruanjianmingcheng}" class="input-small" id="name" placeholder="" ></td>
+						<td>
+							<select id="jinzhanqingkuang{$zzq.id}" name="jinzhanqingkuang" class="input-small">
+								<option value="递交申请">递交申请</option>
+								<option value="已受理">已受理</option>
+								<option value="已授权">已授权</option>
+							</select>
+							<script>
+								$("#jinzhanqingkuang{$zzq.id}").val("{$zzq.jinzhanqingkuang}");
+							</script>
+						</td>
+						<td>
+							<select name="qudefangshi" id="qudefangshi{$zzq.id}" class="input-small">
+								<option value="原始取得">原始取得</option>
+								<option value="继受取得">继受取得</option>
+							</select>
+							<script>
+								$("#qudefangshi{$zzq.id}").val("{$zzq.qudefangshi}");
+							</script>
+						</td>
+						<td><input type="text" value="{$zzq.shenqingren}" name="shenqingren" class="input-small" id="name" placeholder="" ></td>
+						<td><input type="text" value="{$zzq.guanxi}" name="guanxi" class="input-small" id="name" placeholder="" ></td>
+						<td>
+							
+						</td>
+					</tr>
+					</form>
+					<!--{$zzqcnt=$zzqcnt+1}-->
+					</foreach>
+					
+				</table>
+				
+				<form action="{:U(Company/Info2)}" method="post">
+					<input type="hidden" name="id" value="{$Think.session.user_id}">
+					<input type="hidden" name="uid" value="{$Think.session.user_id}">
+				<table class="table table-bordered table-condensed">
+					<tr><th style="text-align:center" colspan="4">与主营业务相关的知识产权情况</th></tr>
+					<tr>
+						<td>专利总数</td>
+						<td><input type="text" name="" value="{$zlcnt}" class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+						<td>软件著作权总数</td>
+						<td><input type="text" name="" value="{$zzqcnt}" class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+					</tr>
+					<tr>
+						
+						<td>发明专利</td>
+						<td><input type="text" name="famingizhuanli" value="{$vo.zscq.famingizhuanli}" class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+						<td>实用新型</td>
+						<td><input type="text" name="shiyongxinxing" value="{$vo.zscq.shiyongxinxing}" class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+					</tr>
+					<tr>
+						<td>外观</td>
+						<td><input type="text" name="waiguan" value="{$vo.zscq.waiguan}" class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+						<td>知识产权归属说明</td>
+						<td>
+							<select class="input-small" id="zhishichanquanguishu" name="zhishichanquanguishu" >
+								<option value="自主">自主</option>
+								<option value="合作">合作</option>
+								<option value="授权">授权</option>
+							</select>
+							<script>
+								$("#zhishichanquanguishu").val("{$vo.zscq.zhishichanquanguishu}");
+							</script>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>是否国家高新技术企业</td>
+						<td><select name="isgaoxinjishu" id="isgaoxinjishu" class="input-small"
+							 onchange="$('#gaoqiID').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+
+							</select>
+							
+							</td>
+						<td>高新证书编号</td>
+						<td><input name="gaoqiID"  type="text" class="input-large" id="gaoqiID" placeholder="" disabled="disabled">
+							<script>
+								$("#isgaoxinjishu").val("{$vo.zscq.isgaoxinjishu}");
+								if("{$vo.zscq.isgaoxinjishu}"=="否")
+								{
+										$("#gaoqiID").val("");
+								}else if("{$vo.zscq.isgaoxinjishu}"=="是")
+								{
+										$("#gaoqiID").val("{$vo.zscq.gaoqiID}");
+										$('#gaoqiID').attr('disabled',false)
+								}
+								
+							</script>
+							</td>
+					</tr>
+					<tr>
+						<td>是否在国家高新区</td>
+						<td ><select name="isatguojiagaoxin" id="isatguojiagaoxin"  class="input-small"
+							onchange="$('#gaoxinName').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+								
+							</select>
+							
+							</td>
+						<td>高新区名称</td>
+						<td ><input name="gaoxinName" id="gaoxinName" type="text" class="input-large" id="gaoxinqumingcheng" placeholder="" disabled="disabled">
+							<script>
+								$("#isatguojiagaoxin").val("{$vo.zscq.isatguojiagaoxin}");
+								if("{$vo.zscq.isatguojiagaoxin}"=="否")
+								{
+										$("#gaoxinName").val("");
+								}else if("{$vo.zscq.isatguojiagaoxin}"=="是")
+								{
+										$("#gaoxinName").val("{$vo.zscq.gaoxinName}");
+										$('#gaoxinName').attr('disabled',false)
+								}
+								
+							</script>
+							</td>
+					</tr>
+					<tr>
+						<td>是否曾在国家级孵化器</td>
+						<td ><select name="isfuhuaqi" id="isfuhuaqi"  class="input-small"
+							onchange="$('#fuhuaqiName').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+								
+							</select>
+							
+							</td>
+						<td>孵化器名称</td>
+						<td >
+							<input name="fuhuaqiName" id="fuhuaqiName" type="text" class="input-large" id="fuhuaqimingcheng" placeholder="" disabled="disabled">
+							<script>
+								$("#isfuhuaqi").val("{$vo.zscq.isfuhuaqi}");
+								if("{$vo.zscq.isfuhuaqi}"=="否")
+								{
+										$("#fuhuaqiName").val("");
+								}else if("{$vo.zscq.isfuhuaqi}"=="是")
+								{
+										$("#fuhuaqiName").val("{$vo.zscq.fuhuaqiName}");
+										$('#fuhuaqiName').attr('disabled',false)
+								}
+								
+							</script>
+							</td>
+					</tr>
+					
+					
+					<tr>
+						<td>企业是否获得过国家创新基金的支持</td>
+						<td>
+							<select name="isZhichi" id="isZhichi" class="input-small"
+								onchange="$('#hetongbianhao').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+							</select>
+							
+						</td>
+						<td>合同编号</td>
+						<td>
+							<input  name="hetongbianhao"  type="text" class="input-large" id="hetongbianhao" disabled="disabled">
+						<script>
+								$("#isZhichi").val("{$vo.zscq.isZhichi}");
+								if("{$vo.zscq.isZhichi}"=="否")
+								{
+										$("#hetongbianhao").val("");
+								}else if("{$vo.zscq.isZhichi}"=="是")
+								{
+										$("#hetongbianhao").val("{$vo.zscq.hetongbianhao}");
+										$('#hetongbianhao').attr('disabled',false)
+								}
+								
+							</script>
+						</td>
+					</tr>
+				</table>
+    </div>
+    <!--tab3-->
+    <div class="tab-pane" id="tab3">
+      
+				<input type="hidden" name="id" value="{$Think.session.user_id}">
+				<fieldset>
+				<legend>项目基本情况</legend>
+				<table class="table table-bordered table-condensed">
+					<tr>
+						<td>项目名称</td>
+						<td colspan="3">
+							<input type="text" name="name" value="{$project.name}" class="input-xxlarge" id="name" placeholder="">
+						</td>
+					</tr>
+					<tr>
+						<td>专项领域</td>
+						<td colspan="3">
+							<select name="zhuanXiangLingYu" id="zhuanXiangLingYu">
+								<option value="电子信息">电子信息</option>
+								<option value="生物医药">生物医药</option>
+								<option value="新材料">新材料</option>
+								<option value="光机电一体化">光机电一体化</option>
+								<option value="资源与环境">资源与环境</option>
+								<option value="新能源与高效节能">新能源与高效节能</option>
+								<option value="新能源汽车">新能源汽车</option>
+								<option value="现代农业">现代农业</option>
+							</select>
+							<script>
+										$("#zhuanXiangLingYu").val("{$project.zhuanXiangLingYu}");
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td>技术领域</td>
+						<td>
+							<select name="jiShuLingYu" id="jiShuLingYu">
+								<option value="电子与信息">电子与信息</option>
+								<option value="生物与制药">生物与制药</option>
+								<option value="先进制造与自动化">先进制造与自动化</option>
+								<option value="材料与化工">材料与化工</option>
+								<option value="农业与农村">农业与农村</option>
+								<option value="资源与环境">资源与环境</option>
+								<option value="能源与交通">能源与交通</option>
+								<option value="人口与健康">人口与健康</option>
+								<option value="城建与社会事业">城建与社会事业</option>
+								<option value="航空与航天">航空与航天</option>
+								<option value="现代服务业">现代服务业</option>
+								<option value="其他技术领域">其他技术领域</option>
+							</select>
+							<script>
+										$("#jiShuLingYu").val("{$project.jiShuLingYu}");
+							</script>
+						</td>
+						<td>应用产业领域</td>
+						<td>
+							<select name="YingYongChanYeLingYu" id="YingYongChanYeLingYu">
+								<option value="农业与养殖业">农业与养殖业</option>
+								<option value="汽车与机械">汽车与机械</option>
+								<option value="电子与信息">电子与信息</option>
+								<option value="石油化工">石油化工</option>
+								<option value="生物与医药">生物与医药</option>
+								<option value="交通运输">交通运输</option>
+								<option value="其他">其他</option>
+								<option value="能源">能源</option>
+								<option value="材料">材料</option>
+								<option value="轻工">轻工</option>
+								<option value="纺织">纺织</option>
+								<option value="建筑">建筑</option>
+								<option value="环境与资源">环境与资源</option>
+								<option value="冶金与建材">冶金与建材</option>
+
+							</select>
+							<script>
+										$("#YingYongChanYeLingYu").val("{$project.YingYongChanYeLingYu}");
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td>现处阶段</td>
+						<td>
+							<select name="xianChuJieDuan" id="xianChuJieDuan">
+								<option value="应用基础研究">应用基础研究</option>
+								<option value="小试">小试</option>
+								<option value="中试">中试</option>
+								<option value="工业性实验">工业性实验</option>
+								<option value="批量生产">批量生产</option>
+								<option value="科学发展战略研究">科学发展战略研究</option>
+								<option value="科技创新体系及平台建设">科技创新体系及平台建设</option>
+							</select>
+							<script>
+										$("#xianChuJieDuan").val("{$project.xianChuJieDuan}");
+							</script>
+						</td>
+						<td>技术来源</td>
+						<td>
+							<select name="jiShuLaiYuan" id="jiShuLaiYuan">
+								<option value="自有">自有</option>
+								<option value="产学研合作">产学研合作</option>
+								<option value="国外购买">国外购买</option>
+								<option value="国内购买">国内购买</option>
+								<option value="引进消化吸收">引进消化吸收</option>
+							</select>
+							<script>
+										$("#jiShuLaiYuan").val("{$project.jiShuLaiYuan}");
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td>成果形式</td>
+						<td><select name="chengGuoXingShi" id="chengGuoXingShi">
+								<option value="论文论著">论文论著</option>
+								<option value="研究（咨询）报告">研究（咨询）报告</option>
+								<option value="新产品（或农业新品种）">新产品（或农业新品种）</option>
+								<option value="新装置（装备）">新装置（装备）</option>
+								<option value="新材料">新材料</option>
+								<option value="新工艺（或新方法，新模式）">新工艺（或新方法，新模式）</option>
+								<option value="计算机软件">计算机软件</option>
+								<option value="人才培养">人才培养</option>
+								<option value="技术标准">技术标准</option>
+								<option value="基地建设">基地建设</option>
+								<option value="专利">专利</option>
+								<option value="商标">商标</option>
+								<option value="其它">其它</option>
+
+							</select>
+							<script>
+										$("#chengGuoXingShi").val("{$project.chengGuoXingShi}");
+							</script>
+							</td>
+						<td>前期资助情况</td>
+						<td>
+							<select class="" name="qianQiZiZhuQingKuang" id="qianQiZiZhuQingKuang">
+								<option value="国家科技部计划">国家科技部计划</option>
+								<option value="国家自然科学基金">国家自然科学基金</option>
+								<option value="国家其他部委科技计划">国家其他部委科技计划</option>
+								<option value="天津市科委计划">天津市科委计划</option>
+								<option value="天津市其它委办计划">天津市其它委办计划</option>
+								<option value="区县科技计划">区县科技计划</option>
+								<option value="其它">其它</option>
+								<option value="无">无</option>
+							</select>
+							<script>
+										$("#qianQiZiZhuQingKuang").val("{$project.qianQiZiZhuQingKuang}");
+							</script>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<td>社会经济目标</td>
+						<td colspan="3">
+							<select name="shenHuiJingJiMuBiao" id="shenHuiJingJiMuBiao">
+								<option value="环境保护、生态建设及污染防治">环境保护、生态建设及污染防治</option>
+								<option value="能源生产、分配和合理利用">能源生产、分配和合理利用</option>
+								<option value="卫生事业发展">卫生事业发展</option>
+								<option value="教育事业发展">教育事业发展</option>
+								<option value="基础设施以及城市和农村规划">基础设施以及城市和农村规划</option>
+								<option value="社会发展和社会服务">社会发展和社会服务</option>
+								<option value="地球和大气层的探索与利用">地球和大气层的探索与利用</option>
+								<option value="民用空间探测及开发">民用空间探测及开发</option>
+								<option value="农林牧渔业发展">农林牧渔业发展</option>
+								<option value="工商业发展">工商业发展</option>
+								<option value="非定向研究">非定向研究</option>
+								<option value="其他民用目标">其他民用目标</option>
+								<option value="国防">国防</option>
+							</select>
+							<script>
+										$("#shenHuiJingJiMuBiao").val("{$project.shenHuiJingJiMuBiao}");
+							</script>
+						</td>
+					</tr>
+					
+				</table>
+				</fieldset>
+				<fieldset>
+				<legend>项目组成人员情况</legend>
+				<table class="table table-bordered table-condensed">
+
+					<!--{$prjtotal=0}-->
+					<!--{$prjAbord=0}-->
+					<!--{$prjzhenggao=0}-->
+					<!--{$prjgaoji=0}-->
+					<!--{$prjzhongji=0}-->
+					<!--{$prjyanjiusheng=0}-->
+					
+					<!--{$prjdoctor=0}-->
+					<!--{$prjmaster=0}-->
+					<!--{$prjbenke=0}-->
+					<!--{$prjdazhuan=0}-->
+
+					<tr><th style="text-align:center" colspan="6">项目负责人</th></tr>
+					<tr>
+						<td>姓名</td>
+						<td><input type="text" name="fzeName" value="{$project.fzeName}" class="input-mini" id="name" placeholder="">
+							性别
+							<select class="input-mini" name="fzeSex" id="fzeSex">
+								<option>男</option>
+								<option>女</option>
+							</select>
+							<script>
+										$("#fzeSex").val("{$project.fzeSex}");
+							</script>
+							</td>
+						<td>证件类别</td>
+						<td>
+							<select class="input-medium" name="fzeIDType" id="fzeIDType">
+								<option value="身份证">身份证</option>
+								<option value="护照">护照</option>
+								<option value="军官证">军官证</option>
+								<option value="其他">其他</option>
+							</select>
+							<script>
+										$("#fzeIDType").val("{$vo.fzeIDType}");
+							</script>
+							</td>
+						<td>证件号码</td>
+						<td><input type="text" name="fzeID" value="{$project.fzeID}" class="input-medium" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>学位</td>
+						<td>
+						<select class="input-medium" name="fzeEducation" id="fzeEducationTitle">
+								<option value="无">无</option>							
+								<option value="学士">学士</option>
+								<option value="硕士">硕士</option>
+								<option value="博士">博士</option>
+								<option value="博士后">博士后</option>							
+							</select>
+							<script>
+							$("#fzeEducationTitle").val("{$project.fzeEducation}");
+							</script>
+						</td>
+						<td>职称</td>
+						<td>
+						<select class="input-medium" name="fzeTitle" id="fszDegreeTitle">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#fszDegreeTitle").val("{$project.fzeTitle}");
+						</script>
+						</td>
+
+						<td>工作单位</td>
+						<td><input type="text" name="fzeCompany" value="{$project.fzeCompany}" class="input-medium" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>毕业院校</td>
+						<td><input type="text" name="fzeSchool" value="{$project.fzeSchool}" class="input-medium" id="name" placeholder=""></td>
+						<td>专业</td>
+						<td><input type="text" name="fzeMajar" value="{$project.fzeMajar}" class="input-medium" id="name" placeholder=""></td>
+						<td>人才种类</td>
+						<td><input type="text" name="fzeRenCaiZhongLei" value="{$project.fzeRenCaiZhongLei}" class="input-medium" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>电话</td>
+						<td><input type="text" name="fzePhone" value="{$project.fzePhone}" class="input-medium" id="name" placeholder=""></td>
+						<td>手机</td>
+						<td><input type="text" name="fzeMobile" value="{$project.fzeMobile}" class="input-medium" id="name" placeholder=""></td>
+						<td>电子邮箱</td>
+						<td><input type="text" name="fzeEmail" value="{$project.fzeEmail}" class="input-medium" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>是否留学</td>
+						<td>
+							<select name="fzeIsAboard" id="fzeIsAboard" class="input-medium"
+								onchange="$('#fzeCountry').attr('disabled',this.value=='是'?false:true);
+								$('#fzeSchoolName').attr('disabled',this.value=='是'?false:true);
+								$('#fzeAboardDate').attr('disabled',this.value=='是'?false:true);
+								$('#fzeBackDate').attr('disabled',this.value=='是'?false:true);
+								$('#fzeResult').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+							</select>
+							
+							</td>
+						<td>国别</td>
+						<td><input type="text" name="fzeCountry"    id="fzeCountry" class="input-medium" id="name" placeholder="" disabled="disabled"></td>
+						<td>学校名称</td>
+						<td><input type="text" name="fzeSchoolName"  id="fzeSchoolName" class="input-medium" id="name" placeholder="" disabled="disabled"></td>
+					</tr>
+					<tr>
+						<td>出国日期</td>
+						<td><input type="text" name="fzeAboardDate"  id="fzeAboardDate" class="input-medium" id="name" placeholder="" disabled="disabled"></td>
+						<td>归国日期</td>
+						<td><input type="text" name="fzeBackDate"   id="fzeBackDate" class="input-medium" id="name" placeholder="" disabled="disabled"></td>
+						<td>所获成就</td>
+						<td><input type="text" name="fzeResult"  id="fzeResult" class="input-medium" id="name" placeholder="" disabled="disabled"></td>
+					</tr>
+					<script>
+								$("#fzeIsAboard").val("{$project.fzeIsAboard}");
+								if("{$project.fzeIsAboard}"=="否")
+								{
+										$("#fzeCountry").val("");
+										$("#fzeCountry").val("");
+								}else if("{$project.fzeIsAboard}"=="是")
+								{
+									//alert(1);
+										$("#fzeCountry").val("{$project.fzeCountry}");
+										$('#fzeCountry').attr('disabled',false)
+										$("#fzeSchoolName").val("{$project.fzeSchoolName}");
+										$('#fzeSchoolName').attr('disabled',false)
+										
+										$("#fzeAboardDate").val("{$project.fzeAboardDate}");
+										$('#fzeAboardDate').attr('disabled',false)
+										
+										$("#fzeBackDate").val("{$project.fzeBackDate}");
+										$('#fzeBackDate').attr('disabled',false)
+										
+										$("#fzeResult").val("{$project.fzeResult}");
+										$('#fzeResult').attr('disabled',false)
+								}
+								
+
+					</script>
+
+							<!--{$prjtotal=$prjtotal+1}-->
+							<if condition='$project.fzeIsAboard eq "是"'>
+								<!--{$prjAbord=$prjAbord+1}--> 
+							</if>
+							<if condition='$project.fzeTitle eq "正高级"'>
+								<!--{$prjzhenggao=$prjzhenggao+1}--> 
+							</if>
+							<if condition='$project.fzeTitle eq "高级"'>
+								<!--{$prjgaoji=$prjgaoji+1}--> 
+							</if>
+							<if condition='$project.fzeTitle eq "中级"'>
+								<!--{$prjzhongji=$prjzhongji+1}--> 
+							</if>
+							
+							<if condition='$project.fzeEducation eq "博士后"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 
+								
+							</if>
+							<if condition='$project.fzeEducation eq "博士"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 
+								
+							</if>
+							<if condition='$project.fzeEducation eq "硕士"'>
+								<!--{$prjmaster=$prjmaster+1}--> 
+							</if>
+
+							<if condition='$project.fzeXueli eq "研究生"'>
+								<!--{$prjyanjiusheng=$prjyanjiusheng+1}-->  
+							</if>
+							<if condition='$project.fzeXueli eq "大学"'>
+								<!--{$prjbenke=$prjbenke+1}--> 
+							</if>		
+							<if condition='$project.fzeXueli eq "专科"'>
+								<!--{$dazhuan=$dazhuan+1}--> 
+							</if>
+
+
+				</table>
+				<table id="otherP" class="table table-bordered table-condensed table-striped">
+					<tr><th style="text-align:center" colspan="7">其他主要成员</th></tr>
+					<tr>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>工作单位</th>
+						<th>证件类型</th>
+						<th>证件号码</th>
+						<th>学位</th>
+						<th>职称</th>
+						<th>操作</th>
+					</tr>
+					<foreach name="others" item="o">
+	
+							<!--{$prjtotal=$prjtotal+1}-->
+							
+							<if condition='$o.other_title eq "博士后"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 								
+							</if>
+							<if condition='$o.other_title eq "博士"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 								
+							</if>
+							<if condition='$o.other_title eq "硕士"'>
+								<!--{$prjmaster=$prjmaster+1}--> 
+								
+							</if>
+							<if condition='$o.other_xueli eq "研究生"'>
+								<!--{$prjyanjiusheng=$prjyanjiusheng+1}-->
+							</if>	
+							<if condition='$o.other_xueli eq "本科"'>
+								<!--{$prjbenke=$prjbenke+1}--> 
+							</if>		
+							<if condition='$o.other_xueli eq "专科"'>
+								<!--{$dazhuan=$dazhuan+1}--> 
+							</if>
+							<if condition='$o.other_degree eq "正高级"'>
+								<!--{$prjzhenggao=$prjzhenggao+1}--> 
+							</if>
+							<if condition='$o.other_degree eq "高级"'>
+								<!--{$prjgaoji=$prjgaoji+1}--> 
+							</if>
+							<if condition='$o.other_degree eq "中级"'>
+								<!--{$prjzhongji=$prjzhongji+1}--> 
+							</if>
+					
+					<tr id="otherPRow1">
+						<td><input type="text" id="other_name{$o.id}" value="{$o.other_name}" class="input-mini" placeholder=""></td>
+						<td>
+							<select class="input-mini" id="other_sex{$o.id}" >
+								<option value="男" <?php echo($o['other_sex']=="男"?"selected":"");?>>男</option>
+								<option value="女" <?php echo($o['other_sex']=="女"?"selected":"");?>>女</option>
+							</select>
+						</td>
+						<td><input type="text" id="other_company{$o.id}" value="{$o.other_company}" class="input-small" placeholder="" ></td>
+						<td>
+							<select class="input-mini" name="other_idType" id="other_idType{$o.id}">
+								<option value="身份证">身份证</option>
+								<option value="护照">护照</option>
+								<option value="军官证">军官证</option>
+								<option value="其他">其他</option>						
+							</select>
+							<script>
+										$("#other_idType<?php echo($o["id"])?>").val("{$o.other_idType}");
+							</script>
+						</td>
+						<td>
+								<input type="text" id="other_identify{$o.id}" value="{$o.other_identify}" class="input-small" placeholder="" >
+						</td>
+						<td>
+							<select class="input-mini" name="othertitleName" id="other_title{$o.id}">
+								<option value="无" <?php echo($o['other_title']=="无"?"selected":"");?>>无</option>
+								<option value="学士" <?php echo($o['other_title']=="学士"?"selected":"");?>>学士</option>
+								<option value="硕士" <?php echo($o['other_title']=="硕士"?"selected":"");?>>硕士</option>
+								<option value="博士" <?php echo($o['other_title']=="博士"?"selected":"");?>>博士</option>
+								<option value="博士后" <?php echo($o['other_title']=="博士后"?"selected":"");?>>博士后</option>							
+													
+							</select>
+							<script>
+										$("#othertitleName").val("{$o.other_title}");
+							</script>
+
+								
+						</td>
+						<td>
+							<select class="input-mini" name="otherdegreeName" id="other_degree{$o.id}">					
+						<option value="无" <?php echo($o['other_degree']=="无"?"selected":"");?>>无</option>
+						<option value="初级" <?php echo($o['other_degree']=="初级"?"selected":"");?>>初级</option>
+						<option value="中级" <?php echo($o['other_degree']=="中级"?"selected":"");?>>中级</option>
+						<option value="高级" <?php echo($o['other_degree']=="高级"?"selected":"");?>>高级</option>
+						<option value="正高级" <?php echo($o['other_degree']=="正高级"?"selected":"");?>>正高级</option>		
+						</select>
+							
+						<script>
+						$("#otherdegreeName").val("{$o.other_degree}");
+						</script>
+						</td>
+						
+						<td>
+						
+						</td>
+					</tr>
+					</foreach>
+					
+				</table>
+				<table id="otherP" class="table table-bordered table-condensed table-striped">
+					
+					<tr>
+						<th rowspan="2" style="text-align:center;">总人数</th>
+						<th rowspan="2" style="text-align:center;">留学回国</th>
+						<th colspan="3" style="text-align:center;">其中，按职称分</th>
+						<th colspan="3" style="text-align:center;">其中，按学历分</th>
+						<th colspan="2" style="text-align:center;">其中，按学位分</th>
+					</tr>
+					<tr>
+						
+						<th style="text-align:center;">正高级</th>
+						<th style="text-align:center;">副高级</th>
+						<th style="text-align:center;">中级</th>
+						<th style="text-align:center;">研究生</th>
+						<th style="text-align:center;">大学</th>
+						<th style="text-align:center;">大专</th>
+						<th style="text-align:center;">博士</th>
+						<th style="text-align:center;">硕士</th>
+					</tr>
+					<tr id="otherPRow1">
+						<td><input type="text" name="tnum" value="{$prjtotal}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tlx" value="{$prjAbord}" class="input-mini2" id="name"  readonly placeholder=""></td>
+						<td><input type="text" name="tzg" value="{$prjzhenggao}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tfg" value="{$prjgaoji}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tzj" value="{$prjzhongji}" class="input-mini2" id="name"  readonly placeholder=""></td>
+						<td><input type="text" name="tyjs" value="{$prjyanjiusheng}" class="input-mini2" id="name"  readonly placeholder=""></td>
+						<td><input type="text" name="tdx" value="{$prjbenke}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tdz" value="{$prjdazhuan}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tbs" value="{$prjdoctor}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tss" value="{$prjmaster}" class="input-mini2" id="name" readonly placeholder=""></td>					
+						
+						
+					</tr>
+				</table>
+				
+				</fieldset>
+				
+				
+    </div>
+    <!--tab4-->
+    <div class="tab-pane" id="tab4">
+      <iframe src="{:U('Home/Company/Filedetail',array('type'=>14,'userid'=>$info['id']))}" name="frm1" id="frm1" style="width:100%;height:35px;boder:0px solid #ffffff;"></iframe>
+      <iframe src="{:U('Home/Company/Filesdetails',array('type'=>15,'userid'=>$info['id']))}" name="frm1" id="frm1" style="width:100%;height:150px;boder:0px solid #ffffff;"></iframe>
+        
+    </div>
+  </div>
+ </div>
+

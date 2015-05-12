@@ -1,0 +1,222 @@
+<block name="HeaderScript">
+
+</block>
+
+<block name="body">
+<div class=" mainContent">
+		<form class=" form-horizontal">
+			<div class="regContent table">
+			<fieldset>
+						<div class="control-group">
+		            <label class="control-label" for="company">账号用户名</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="username" name="username" value="[user]" >		            	
+		            </div>
+		        </div>
+
+				<if condition="$Think.session.user_level eq 9">
+				<div class="control-group">
+		            <label class="control-label" for="company">账号密码</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="word" name="word" value="[word]" >		            	
+		            </div>
+		        </div>
+				
+				</if>
+				
+		        
+				<div class="control-group">
+		            <label class="control-label" for="company">公司全称</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="company" name="company" value="[company]" placeholder="请填写公司信息(3到50位中英文字符或数字)">
+		            	
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="where">所在区县</label>
+		            <div class="controls">
+		            
+		            	<select style="display:none;" readonly id="cmbProvince[id]" name="cmbProvince"></select>
+									
+							<select style="display:none;"  readonly id="cmbCity[id]" name="cmbCity"></select>
+							<select readonly id="cmbArea[id]" name="cmbArea"  class="input-xlarge" style="width:280px;"></select><br />
+
+							<select id="subWhere[id]" class="input-xlarge" readonly style="display:none;width:280px;" name="subWhere" >
+							<option value="开发区">开发区</option>	
+							<option value="保税区">保税区</option>	
+							<option value="高新区">高新区</option>
+							<option value="塘沽">塘沽</option>	
+							<option value="汉沽">汉沽</option>							
+							<option value="大港">大港</option>	
+							<option value="其它">其它</option>	
+							</select>
+			
+			<script>
+			//addressInit('cmbProvince', 'cmbCity', 'cmbArea', '天津', '天津市', '南开区');
+			var where = "[where]";
+			var items = where.split('-');
+			if(items.length>0)
+			{
+				addressInit('cmbProvince[id]', 'cmbCity[id]', 'cmbArea[id]', items[0], items[1], items[2]);
+				
+			}
+
+			if(items[2]=='滨海新区')
+			{
+				$('#subWhere[id]').show();						
+			}
+			else
+			{
+				$('#subWhere[id]').hide();$('#subWhere[id]').val('');					
+			}		
+		
+            var district = "[district]"
+			$("#subWhere[id]").val( district );
+							
+			</script> 
+
+				</div>
+    	    </div>
+
+
+		        <div class="control-group">
+		            <label class="control-label" for="bLicence">营业执照号码</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="Licence" name="bLicence" value="[licence]" placeholder="请填写营业执照号码">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="orgID">组织机构代码证号码</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="orgID" name="orgID" value="[organization]">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="buildTime">成立时间</label>
+
+	                <div class="controls input-append date form_date createTime" data-date="" data-date-format="yyyy-mm-dd" data-link-field="createTime" data-link-format="yyyy-mm-dd">
+	                    <input size="16" type="text" value="[build]" readonly>
+	                    <span readonly class="add-on"><i class="icon-remove"></i></span>
+											<span class="add-on"><i class="icon-th"></i></span>
+											
+	                </div>
+					<input readonly type="hidden" id="createTime" value="[build]" name="buildTime"/>
+		            
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="regCapital">注册资本</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="regCapital" name="regCapital" value="[capital]万元">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="paidUpCapital">实收资本</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="paidUpCapital" name="paidUpCapital" value="[paid]万元">
+		            	
+		            </div>
+		        </div>
+				<div class="control-group">
+		            <label class="control-label" for="comDirector">企业负责人</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="comDirector" name="comDirector" value="[director]">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="mobile">手机号码</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="mobile" name="mobile" value="[mobile]">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="email">联系邮箱</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="email" name="email" value="[email]">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="mainBusiness">主营业务</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="mainBusiness" name="mainBusiness" value="[business]">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="passRegconition">
+		            是否通过天津市科技型中小企业认定
+		            </label>
+		            <div class="controls">
+		            	<input readonly type="checkbox" <?php echo ($vo['passRegconition'] == 1?'checked':'aaaaa'); ?> name="passRegconition" value="1">
+		            </div>
+		        </div>
+	        </fieldset>
+	        <fieldset>
+						<legend>截止上年底财务数据</legend>
+		        <div class="control-group">
+		            <label class="control-label" for="allCapital">总资产</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="allCapital" name="allCapital" value="[all]万元">
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="netAssets">净资产</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="netAssets" name="netAssets" value="[assets]万元">
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="salesIncome">销售收入</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="salesIncome" name="salesIncome" value="[income]万元">
+		            	
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="netProfit">净利润</label>
+		            <div class="controls">
+		            	<input readonly type="text" class="input-xlarge" id="netProfit" name="netProfit" value="[profit]万元">
+		            </div>
+		        </div>
+		    </fieldset>
+		    <fieldset>
+		    		<legend>相关证件附件</legend>
+		    		
+		    		<foreach name="vo['file']" item='f'>
+		    			<div style="width:150px;height:250px;float:left;margin:10px;border:1px solid #eeeeee;">
+		    				<span style="height:36px;display:block;font-weight:bold">{$f.type|fileName}</span>
+		    				<div style="width:146px;height:170px;border:1px dashed #cccccc">
+		    					
+		    					
+		    						<?php if(strtolower($f['mime'])=='png' || strtolower($f['mime']) =='jpg' || strtolower($f['mime']) =='gif' || strtolower($f['mime']) =='jpeg' ){?>
+		    							
+		    							<img border="0" class="pimg" src="/Public/<?php echo($f['url']);?>" style="max-height:100%;max-width:100%" />
+		    						<?php }else{?>
+		    							<a href="/Public/<?php echo($f['url']);?>" target="_blank">
+		    							<img border="0"  src="__STATIC__/img/download_cc.jpg" style="max-height:100%;max-width:100%" />
+		    							</a>
+		    						<?php }?>
+		    					
+		    				</div>
+		    				<div>
+		    						<span style="word-WRAP:break-word;">{$f.title}</span>
+		    				</div>
+		    			</div>
+		    		</foreach>
+				</fieldset>
+		</div>
+  	</form>
+</div>
+<script>
+			$(".pimg").click(function(){
+				var _this = $(this);
+				imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+			});
+</script>
+</block>

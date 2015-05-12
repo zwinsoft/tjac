@@ -1,0 +1,951 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+    <script>
+		var gdCnt=0;
+		var action="";
+    	function save(id)
+    	{
+    		//if(confirm('确定修改？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Project/Save')}",
+							data:{id: id,
+								other_name:$("#other_name"+id).val(),
+								other_sex:$("#other_sex"+id).val(),
+								other_company:$("#other_company"+id).val(),
+								other_identify:$("#other_identify"+id).val(),
+								other_idType:$("#other_idType"+id).val(),
+								other_title:$("#other_title"+id).val(),
+								other_xueli:$("#other_xueli"+id).val(),
+								other_degree:$("#other_degree"+id).val()},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("修改成功");
+									//location.reload();
+									//$("#frmall")[0].submit();
+									gdCnt=gdCnt+1;
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								recall();
+							},
+							error: function(){
+								alert('修改发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function add()
+		{
+			gdCnt=0;
+			action=0;
+			if($("button[name=otherbtn]").length>0)
+			{
+				$("button[name=otherbtn]").each(function(){
+					$(this).click();
+				})
+			}else
+			{
+				add1();	
+			}
+		}
+    	function add1()
+    	{
+    		if(confirm('确定添加？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Project/Add')}",
+							data:{
+								other_name:$("#other_name").val(),
+								other_sex:$("#other_sex").val(),
+								other_company:$("#other_company").val(),
+								other_identify:$("#other_identify").val(),
+								other_idType:$("#other_idType").val(),
+								other_title:$("#other_title").val(),
+								other_xueli:$("#other_xueli").val(),
+								other_degree:$("#other_degree").val()},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("添加成功");
+									//location.reload();
+									$("#frmall")[0].submit();//
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								
+							},
+							error: function(){
+								alert('添加发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function delinfo(id)
+		{
+			gdCnt=0;
+			action=id;
+			$("button[name=otherbtn]").each(function(){
+				$(this).click();
+			})
+		}
+    	function delinfo1(id)
+    	{
+    		if(confirm('确定删除？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Project/Del')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("删除成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+								}else
+								{
+									alert(data.status);	
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								
+							},
+							error: function(){
+								alert('删除发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    		}
+		function check()
+		{
+			if($("#projectname").val()=="")
+			{
+				$("#projectname")[0].focus();
+				alert("项目名称必填");
+				return false;
+			}
+			if($("#zhuanXiangLingYu").val()=="")
+			{
+				$("#zhuanXiangLingYu")[0].focus();
+				alert("专项领域必选");
+				return false;
+			}
+			
+			if($("#jiShuLingYu").val()=="")
+			{
+				$("#jiShuLingYu")[0].focus();
+				alert("技术领域必填");
+				return false;
+			}
+			if($("#YingYongChanYeLingYu").val()=="")
+			{
+				$("#YingYongChanYeLingYu")[0].focus();
+				alert("应用产业领域必填");
+				return false;
+			}
+			
+			
+			if($("#xianChuJieDuan").val()=="")
+			{
+				$("#xianChuJieDuan")[0].focus();
+				alert("现处阶段必填");
+				return false;
+			}
+			if($("#jiShuLaiYuan").val()=="")
+			{
+				$("#jiShuLaiYuan")[0].focus();
+				alert("技术来源必填");
+				return false;
+			}
+			if($("#chengGuoXingShi").val()=="")
+			{
+				$("#chengGuoXingShi")[0].focus();
+				alert("成果形式必填");
+				return false;
+			}
+			if($("#qianQiZiZhuQingKuang").val()=="")
+			{
+				$("#qianQiZiZhuQingKuang")[0].focus();
+				alert("前期资助情况必填");
+				return false;
+			}
+			if($("#shenHuiJingJiMuBiao").val()=="")
+			{
+				$("#shenHuiJingJiMuBiao")[0].focus();
+				alert("社会经济目标必填");
+				return false;
+			}
+			
+			////////
+			if($("#fzeID").val()=="")
+			{
+				$("#fzeID")[0].focus();
+				alert("项目负责人证件号码必填");
+				return false;
+			}
+			if($("#fzeCompany").val()=="")
+			{
+				$("#fzeCompany")[0].focus();
+				alert("项目负责人工作单位必填");
+				return false;
+			}
+			if($("#fzeSchool").val()=="")
+			{
+				$("#fzeSchool")[0].focus();
+				alert("项目负责人毕业院校必填");
+				return false;
+			}
+			if($("#fzeMajar").val()=="")
+			{
+				$("#fzeMajar")[0].focus();
+				alert("项目负责人专业必填");
+				return false;
+			}
+			if($("#fzePhone").val()=="")
+			{
+				$("#fzePhone")[0].focus();
+				alert("项目负责人电话必填");
+				return false;
+			}
+			if($("#fzeIsAboard").val()=="是")
+			{
+				if($("#fzeCountry").val()=="")
+				{
+					$("#fzeCountry")[0].focus();
+					alert("项目负责人留学国别必填");
+					return false;
+				}
+				if($("#fzeSchoolName").val()=="")
+				{
+					$("#fzeSchoolName")[0].focus();
+					alert("项目负责人留学学校名称必填");
+					return false;
+				}
+				if($("#fzeAboardDate").val()=="")
+				{
+					$("#fzeAboardDate")[0].focus();
+					alert("项目负责人出国日期必填");
+					return false;
+				}
+				if($("#fzeBackDate").val()=="")
+				{
+					$("#fzeBackDate")[0].focus();
+					alert("项目负责人归国日期必填");
+					return false;
+				}
+				if($("#fzeResult").val()=="")
+				{
+					$("#fzeResult")[0].focus();
+					alert("项目负责人所获成就必填");
+					return false;
+				}
+			}
+			return true;
+		}
+   	</script>
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<div id="project" class="tab-pane fade  active in">
+			<form action="__SELF__" method="post" onsubmit="return check()" id="frmall">
+				<input type="hidden" name="id" value="{$Think.session.user_id}">
+				<fieldset>
+				<legend>项目基本情况</legend>
+				<table class="table table-bordered table-condensed">
+					<tr>
+						<td>项目名称</td>
+						<td colspan="3">
+							<input type="text" name="name" value="{$vo.name}" class="input-xlarge" id="projectname" placeholder="">
+							<span style="color:red;">* 必填项目</span>
+						</td>
+					</tr>
+					<tr>
+						<td>专项领域</td>
+						<td colspan="3">
+							<select name="zhuanXiangLingYu" id="zhuanXiangLingYu">
+								<option value="">请选择...</option>
+								<option value="电子信息">电子信息</option>
+								<option value="生物医药">生物医药</option>
+								<option value="新材料">新材料</option>
+								<option value="光机电一体化">光机电一体化</option>
+								<option value="资源与环境">资源与环境</option>
+								<option value="新能源与高效节能">新能源与高效节能</option>
+								<option value="新能源汽车">新能源汽车</option>
+								<option value="现代农业">现代农业</option>
+							</select>
+							<script>
+										$("#zhuanXiangLingYu").val("{$vo.zhuanXiangLingYu}");
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td>技术领域</td>
+						<td>
+							<select name="jiShuLingYu" id="jiShuLingYu">
+								<option value="">请选择...</option>
+								<option value="电子与信息">电子与信息</option>
+								<option value="生物与制药">生物与制药</option>
+								<option value="先进制造与自动化">先进制造与自动化</option>
+								<option value="材料与化工">材料与化工</option>
+								<option value="农业与农村">农业与农村</option>
+								<option value="资源与环境">资源与环境</option>
+								<option value="能源与交通">能源与交通</option>
+								<option value="人口与健康">人口与健康</option>
+								<option value="城建与社会事业">城建与社会事业</option>
+								<option value="航空与航天">航空与航天</option>
+								<option value="现代服务业">现代服务业</option>
+								<option value="其他技术领域">其他技术领域</option>
+							</select>
+							<script>
+										$("#jiShuLingYu").val("{$vo.jiShuLingYu}");
+							</script>
+						</td>
+						<td>应用产业领域</td>
+						<td>
+							<select name="YingYongChanYeLingYu" id="YingYongChanYeLingYu">
+								<option value="">请选择...</option>
+								<option value="农业与养殖业">农业与养殖业</option>
+								<option value="汽车与机械">汽车与机械</option>
+								<option value="电子与信息">电子与信息</option>
+								<option value="石油化工">石油化工</option>
+								<option value="生物与医药">生物与医药</option>
+								<option value="交通运输">交通运输</option>
+								<option value="其他">其他</option>
+								<option value="能源">能源</option>
+								<option value="材料">材料</option>
+								<option value="轻工">轻工</option>
+								<option value="纺织">纺织</option>
+								<option value="建筑">建筑</option>
+								<option value="环境与资源">环境与资源</option>
+								<option value="冶金与建材">冶金与建材</option>
+
+							</select>
+							<script>
+										$("#YingYongChanYeLingYu").val("{$vo.YingYongChanYeLingYu}");
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td>现处阶段</td>
+						<td>
+							<select name="xianChuJieDuan" id="xianChuJieDuan">
+								<option value="">请选择...</option>
+								<option value="应用基础研究">应用基础研究</option>
+								<option value="小试">小试</option>
+								<option value="中试">中试</option>
+								<option value="工业性实验">工业性实验</option>
+								<option value="批量生产">批量生产</option>
+								<option value="科学发展战略研究">科学发展战略研究</option>
+								<option value="科技创新体系及平台建设">科技创新体系及平台建设</option>
+							</select>
+							<script>
+										$("#xianChuJieDuan").val("{$vo.xianChuJieDuan}");
+							</script>
+						</td>
+						<td>技术来源</td>
+						<td>
+							<select name="jiShuLaiYuan" id="jiShuLaiYuan">
+								<option value="">请选择...</option>
+								<option value="自有">自有</option>
+								<option value="产学研合作">产学研合作</option>
+								<option value="国外购买">国外购买</option>
+								<option value="国内购买">国内购买</option>
+								<option value="引进消化吸收">引进消化吸收</option>
+							</select>
+							<script>
+										$("#jiShuLaiYuan").val("{$vo.jiShuLaiYuan}");
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td>成果形式</td>
+						<td><select name="chengGuoXingShi" id="chengGuoXingShi">
+								<option value="">请选择...</option>
+								<option value="论文论著">论文论著</option>
+								<option value="研究（咨询）报告">研究（咨询）报告</option>
+								<option value="新产品（或农业新品种）">新产品（或农业新品种）</option>
+								<option value="新装置（装备）">新装置（装备）</option>
+								<option value="新材料">新材料</option>
+								<option value="新工艺（或新方法，新模式）">新工艺（或新方法，新模式）</option>
+								<option value="计算机软件">计算机软件</option>
+								<option value="人才培养">人才培养</option>
+								<option value="技术标准">技术标准</option>
+								<option value="基地建设">基地建设</option>
+								<option value="专利">专利</option>
+								<option value="商标">商标</option>
+								<option value="其它">其它</option>
+
+							</select>
+							<script>
+										$("#chengGuoXingShi").val("{$vo.chengGuoXingShi}");
+							</script>
+							</td>
+						<td>前期资助情况</td>
+						<td>
+							<select class="" name="qianQiZiZhuQingKuang" id="qianQiZiZhuQingKuang">
+								<option value="">请选择...</option>
+								<option value="国家科技部计划">国家科技部计划</option>
+								<option value="国家自然科学基金">国家自然科学基金</option>
+								<option value="国家其他部委科技计划">国家其他部委科技计划</option>
+								<option value="天津市科委计划">天津市科委计划</option>
+								<option value="天津市其它委办计划">天津市其它委办计划</option>
+								<option value="区县科技计划">区县科技计划</option>
+								<option value="其它">其它</option>
+								<option value="无">无</option>
+							</select>
+							<script>
+										$("#qianQiZiZhuQingKuang").val("{$vo.qianQiZiZhuQingKuang}");
+							</script>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<td>社会经济目标</td>
+						<td colspan="3">
+							<select name="shenHuiJingJiMuBiao" id="shenHuiJingJiMuBiao">
+								<option value="">请选择...</option>
+								<option value="环境保护、生态建设及污染防治">环境保护、生态建设及污染防治</option>
+								<option value="能源生产、分配和合理利用">能源生产、分配和合理利用</option>
+								<option value="卫生事业发展">卫生事业发展</option>
+								<option value="教育事业发展">教育事业发展</option>
+								<option value="基础设施以及城市和农村规划">基础设施以及城市和农村规划</option>
+								<option value="社会发展和社会服务">社会发展和社会服务</option>
+								<option value="地球和大气层的探索与利用">地球和大气层的探索与利用</option>
+								<option value="民用空间探测及开发">民用空间探测及开发</option>
+								<option value="农林牧渔业发展">农林牧渔业发展</option>
+								<option value="工商业发展">工商业发展</option>
+								<option value="非定向研究">非定向研究</option>
+								<option value="其他民用目标">其他民用目标</option>
+								<option value="国防">国防</option>
+							</select>
+							<script>
+										$("#shenHuiJingJiMuBiao").val("{$vo.shenHuiJingJiMuBiao}");
+							</script>
+						</td>
+					</tr>
+					
+				</table>
+				</fieldset>
+				<fieldset>
+				<legend>项目组成员情况</legend>
+				<table class="table table-bordered table-condensed">
+				
+					<!--{$prjtotal=0}-->
+					<!--{$prjAbord=0}-->
+					<!--{$prjzhenggao=0}-->
+					<!--{$prjgaoji=0}-->
+					<!--{$prjzhongji=0}-->
+					<!--{$prjyanjiusheng=0}-->
+					
+					<!--{$prjdoctor=0}-->
+					<!--{$prjmaster=0}-->
+					<!--{$prjbenke=0}-->
+					<!--{$prjdazhuan=0}-->
+					
+					<tr><th style="text-align:center" colspan="6">项目负责人</th></tr>
+					<tr>
+						<td>姓名</td>
+						<td><input type="text" name="fzeName" readonly value="{$vo.fzeName}" class="input-mini" id="name" placeholder="">
+							性别
+							<select class="input-mini" name="fzeSex" id="fzeSex">
+								<option value="男">男</option>
+								<option value="女">女</option>
+							</select>
+							<script>
+										$("#fzeSex").val("{$vo.fzeSex}");
+							</script>
+							</td>
+						<td>证件类别</td>
+						<td>
+							<select class="input-medium" name="fzeIDType" id="fzeIDType">
+								<option value="身份证">身份证</option>
+								<option value="护照">护照</option>
+								<option value="军官证">军官证</option>
+								<option value="其他">其他</option>
+							</select>
+							<script>
+										$("#fzeIDType").val("{$vo.fzeIDType}");
+							</script>
+							</td>
+						<td>证件号码</td>
+						<td><input type="text" name="fzeID" value="{$vo.fzeID}" class="input-medium" id="fzeID" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>学历</td>
+						<td>
+							<select class="input-mini" name="fzeXueli" id="fzeXueliTitle">
+								<option value="其他">其他</option>							
+								<option value="大专">大专</option>
+								<option value="大学">大学</option>
+								<option value="研究生">研究生</option>
+								
+								
+								
+							</select>
+							学位<select class="input-mini" name="fzeEducation" id="fzeEducationTitle">
+								<option value="无">无</option>										
+								<option value="学士">学士</option>
+								<option value="硕士">硕士</option>
+								<option value="博士">博士</option>
+								<option value="博士后">博士后</option>				
+								
+								
+								
+							</select>
+							<script>
+										$("#fzeXueliTitle").val("{$vo.fzeXueli}");
+										$("#fzeEducationTitle").val("{$vo.fzeEducation}");
+							</script>
+
+						</td>
+						<td>职称</td>
+						<td>
+						<select class="input-medium" name="fzeTitle" readonly id="fszDegreeTitle">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#fszDegreeTitle").val("{$vo.fzeTitle}");
+						</script>
+						</td>
+
+						<td>工作单位</td>
+						<td><input type="text" name="fzeCompany" value="{$vo.fzeCompany}" class="input-medium" id="fzeCompany" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>毕业院校</td>
+						<td><input type="text" name="fzeSchool" value="{$vo.fzeSchool}" class="input-medium" id="fzeSchool" placeholder=""></td>
+						<td>专业</td>
+						<td><input type="text" name="fzeMajar" value="{$vo.fzeMajar}" class="input-medium" id="fzeMajar" placeholder=""></td>
+						<td>人才种类</td>
+						<td>
+							<select name="fzeRenCaiZhongLei" id="fzeRenCaiZhongLei" class="input-medium">
+								<option value="无">无</option>
+								<option value="天津市131人才工程第三层次人选">天津市131人才工程第三层次人选</option>
+								<option value="天津市131人才工程第一、二层次人选">天津市131人才工程第一、二层次人选</option>
+								<option value="天津市市级其他人才计划人选">天津市市级其他人才计划人选</option>
+								<option value="享受国务院政府特殊津贴专家">享受国务院政府特殊津贴专家</option>
+								<option value="其他省级人才工程人选">其他省级人才工程人选</option>
+								<option value="省市千人计划">省市千人计划</option>
+								<option value="教育部新世纪人才工程人选">教育部新世纪人才工程人选</option>
+								<option value="教育部长江学者特聘教授">教育部长江学者特聘教授</option>
+								<option value="教育部长江学者讲座教授">教育部长江学者讲座教授</option>
+								<option value="国家千人计划">国家千人计划</option>
+								<option value="国家“百千万”人才工程第一二层次人选">国家“百千万”人才工程第一二层次人选</option>
+								<option value="国家其他部委级人才计划人选">国家其他部委级人才计划人选</option>
+								<option value="国家杰出青年基金获得者">国家杰出青年基金获得者</option>
+								<option value="国家有突出贡献的中青年专家">国家有突出贡献的中青年专家</option>
+								<option value="中国青年科技奖获得者">中国青年科技奖获得者</option>
+								<option value="国家973计划首席科学家">国家973计划首席科学家</option>
+								<option value="中国工程院院士">中国工程院院士</option>
+								<option value="中国科学院院士">中国科学院院士</option>
+								<option value="其他人才计划">其他人才计划</option>
+							</select>
+							<script>
+										$("#fzeRenCaiZhongLei").val("{$vo.fzeRenCaiZhongLei}");
+							</script>
+							</td>
+					</tr>
+					<tr>
+						<td>电话</td>
+						<td><input type="text" name="fzePhone" value="{$vo.fzePhone}" class="input-medium" id="fzePhone" placeholder=""></td>
+						<td>手机</td>
+						<td><input type="text" name="fzeMobile" value="{$vo.fzeMobile}" readonly class="input-medium" id="name" placeholder=""></td>
+						<td>电子邮箱</td>
+						<td><input type="text" name="fzeEmail" value="{$vo.fzeEmail}" readonly class="input-medium" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>是否留学</td>
+						<td>
+							<select name="fzeIsAboard" id="fzeIsAboard" class="input-medium"
+								onchange="$('#fzeCountry').attr('disabled',this.value=='是'?false:true);
+								$('#fzeSchoolName').attr('disabled',this.value=='是'?false:true);
+								$('#fzeAboardDate').attr('disabled',this.value=='是'?false:true);
+								$('#fzeBackDate').attr('disabled',this.value=='是'?false:true);
+								$('#fzeResult').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+							</select>
+							
+							</td>
+						<td>国别</td>
+						<td><input type="text" name="fzeCountry"    id="fzeCountry" class="input-medium"  placeholder="" disabled="disabled"></td>
+						<td>学校名称</td>
+						<td><input type="text" name="fzeSchoolName"  id="fzeSchoolName" class="input-medium"  placeholder="" disabled="disabled"></td>
+					</tr>
+					<tr>
+						<td>出国日期</td>
+						<td><input type="text" name="fzeAboardDate"  id="fzeAboardDate" class="input-medium" placeholder="" disabled="disabled"></td>
+						<td>归国日期</td>
+						<td><input type="text" name="fzeBackDate"   id="fzeBackDate" class="input-medium" placeholder="" disabled="disabled"></td>
+						<td>所获成就</td>
+						<td><input type="text" name="fzeResult"  id="fzeResult" class="input-medium" placeholder="" disabled="disabled"></td>
+					</tr>
+					<script>
+								$("#fzeIsAboard").val("{$vo.fzeIsAboard}");
+								if("{$vo.fzeIsAboard}"=="否")
+								{
+										$("#fzeCountry").val("");
+										$("#fzeCountry").val("");
+								}else if("{$vo.fzeIsAboard}"=="是")
+								{
+									//alert(1);
+										$("#fzeCountry").val("{$vo.fzeCountry}");
+										$('#fzeCountry').attr('disabled',false)
+										$("#fzeSchoolName").val("{$vo.fzeSchoolName}");
+										$('#fzeSchoolName').attr('disabled',false)
+										
+										$("#fzeAboardDate").val("{$vo.fzeAboardDate}");
+										$('#fzeAboardDate').attr('disabled',false)
+										
+										$("#fzeBackDate").val("{$vo.fzeBackDate}");
+										$('#fzeBackDate').attr('disabled',false)
+										
+										$("#fzeResult").val("{$vo.fzeResult}");
+										$('#fzeResult').attr('disabled',false)
+								}
+								
+							</script>
+
+							<!--{$prjtotal=$prjtotal+1}-->
+							<if condition='$vo.fzeIsAboard eq "是"'>
+								<!--{$prjAbord=$prjAbord+1}--> 
+							</if>
+							<if condition='$vo.fzeTitle eq "正高级"'>
+								<!--{$prjzhenggao=$prjzhenggao+1}--> 
+							</if>
+							<if condition='$vo.fzeTitle eq "高级"'>
+								<!--{$prjgaoji=$prjgaoji+1}--> 
+							</if>
+							<if condition='$vo.fzeTitle eq "中级"'>
+								<!--{$prjzhongji=$prjzhongji+1}--> 
+							</if>
+							
+							
+							<if condition='$vo.fzeXueli eq "研究生"'>
+								<!--{$prjyanjiusheng=$prjyanjiusheng+1}--> 
+							</if>
+							<if condition='$vo.fzeXueli eq "大学"'>
+								<!--{$prjbenke=$prjbenke+1}--> 
+							</if>
+							<if condition='$vo.fzeXueli eq "大专"'>
+								<!--{$prjdazhuan=$prjdazhuan+1}--> 
+							</if>		
+							<if condition='$vo.fzeEducation eq "博士"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 
+							</if>
+							<if condition='$vo.fzeEducation eq "博士后"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 
+							</if>
+							<if condition='$vo.fzeEducation eq "硕士"'>
+								<!--{$prjmaster=$prjmaster+1}--> 
+							</if>
+				</table>
+				<table id="otherP" class="table table-bordered table-condensed table-striped">
+					<tr><th style="text-align:center" colspan="8">其他主要成员</th>
+					<th><button type="button" class="btn btn-success" onclick="add();return false;">+新增成员</button></th>
+					</tr>
+					<tr>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>工作单位</th>
+						<th>证件类型</th>
+						<th>证件号码</th>
+						<th>学历</th>
+						<th>学位</th>
+						<th>职称</th>
+						<th>操作</th>
+					</tr>
+
+					<foreach name="others" item="o">
+
+							<!--{$prjtotal=$prjtotal+1}-->
+							
+							<if condition='$o.other_degree eq "正高级"'>
+								<!--{$prjzhenggao=$prjzhenggao+1}--> 
+							</if>
+							<if condition='$o.other_degree eq "高级"'>
+								<!--{$prjgaoji=$prjgaoji+1}--> 
+							</if>
+							<if condition='$o.other_degree eq "中级"'>
+								<!--{$prjzhongji=$prjzhongji+1}--> 
+							</if>
+							
+							<if condition='$o.other_xueli eq "研究生"'>
+								<!--{$prjyanjiusheng=$prjyanjiusheng+1}--> 
+							</if>
+							<if condition='$o.other_xueli eq "大学"'>
+								<!--{$prjbenke=$prjbenke+1}--> 
+							</if>
+							<if condition='$o.other_xueli eq "大专"'>
+								<!--{$prjdazhuan=$prjdazhuan+1}--> 
+							</if>		
+							<if condition='$o.other_title eq "博士"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 
+							</if>
+							<if condition='$o.other_title eq "博士后"'>
+								<!--{$prjdoctor=$prjdoctor+1}--> 
+							</if>
+							<if condition='$o.other_title eq "硕士"'>
+								<!--{$prjmaster=$prjmaster+1}--> 
+							</if>
+					
+					<tr id="otherPRow1">
+						<td><input type="text" id="other_name{$o.id}" value="{$o.other_name}" class="input-mini" placeholder=""></td>
+						<td>
+							<select class="input-mini" id="other_sex{$o.id}" >
+								<option value="男" <?php echo($o['other_sex']=="男"?"selected":"");?>>男</option>
+								<option value="女" <?php echo($o['other_sex']=="女"?"selected":"");?>>女</option>
+							</select>
+						</td>
+						<td><input type="text" id="other_company{$o.id}" value="{$o.other_company}" class="input-small" placeholder="" ></td>
+						<td>
+							<select class="input-mini" name="other_idType" id="other_idType{$o.id}">
+								<option value="身份证">身份证</option>
+								<option value="护照">护照</option>
+								<option value="军官证">军官证</option>
+								<option value="其他">其他</option>						
+							</select>
+							<script>
+										$("#other_idType<?php echo($o["id"])?>").val("{$o.other_idType}");
+							</script>
+						</td>
+						<td>
+								<input type="text" id="other_identify{$o.id}" value="{$o.other_identify}" class="input-small" placeholder="" >
+						</td>
+						<td>
+							<select class="input-mini" name="other_xueli" id="other_xueli{$o.id}">
+								<option value="其他">其他</option>								
+								<option value="大专">大专</option>
+								<option value="大学">大学</option>
+								<option value="研究生">研究生</option>							
+								
+								
+							</select>
+							
+							
+						</td>
+						<td>
+							<select class="input-mini" name="other_title" id="other_title{$o.id}">
+								<option value="无">无</option>							
+								<option value="学士">学士</option>
+								<option value="硕士">硕士</option>
+								<option value="博士">博士</option>
+								<option value="博士后">博士后</option>
+								
+								
+								
+								
+							</select>
+							<script>
+								$("#other_xueli<?php echo($o["id"])?>").val("{$o.other_xueli}");
+								$("#other_title<?php echo($o["id"])?>").val("{$o.other_title}");
+							</script>
+								
+						</td>
+						<td>
+						<select class="input-mini" name="other_degree" id="other_degree{$o.id}">					
+						<option value="无" <?php echo($o['other_degree']=="初中"?"selected":"");?>>无</option>
+						<option value="初级" <?php echo($o['other_degree']=="初级"?"selected":"");?>>初级</option>
+						<option value="中级" <?php echo($o['other_degree']=="中级"?"selected":"");?>>中级</option>
+						<option value="高级" <?php echo($o['other_degree']=="高级"?"selected":"");?>>高级</option>
+						<option value="正高级" <?php echo($o['other_degree']=="正高级"?"selected":"");?>>正高级</option>		
+						</select>
+							
+						<script>
+						$("#other_degree<?php echo($o["id"])?>").val("{$o.other_degree}");
+						</script>
+												
+						</td>
+
+						<td>
+						<if condition="($data.status eq 4) OR ($data.status eq 5) ">
+						<button name="otherbtn" type="button" class="btn btn-success" onclick="save(<?php echo($o["id"])?>);return false;" style="display:none">保存</button>
+						<button id="del" type="button" class="btn btn-danger" onclick="delinfo(<?php echo($o["id"]);?>)" >删除</button>
+						</if>
+						</td>
+					</tr>
+					</foreach>
+					<if condition="($data.status eq 4) OR ($data.status eq 5) ">
+					<tr id="otherPRow1" style="display:none">
+						<td><input type="text" id="other_name" value="" class="input-mini" placeholder=""></td>
+						<td>
+							<select class="input-mini" id="other_sex">
+								<option value="男">男</option>
+								<option value="女">女</option>
+							</select>
+						</td>
+						<td><input type="text" id="other_company" value="" class="input-small" placeholder="" ></td>
+						<td>
+							<select class="input-mini" name="other_idType" id="other_idType">
+								<option value="身份证">身份证</option>
+								<option value="护照">护照</option>
+								<option value="军官证">军官证</option>
+								<option value="其他">其他</option>						
+							</select>
+						</td>
+						<td>
+								<input type="text" id="other_identify" value="" class="input-small" placeholder="" >
+						</td>
+						<td>
+							<select class="input-mini" name="other_xueli" id="other_xueli">
+								<option value="其他">其他</option>								
+								<option value="大专">大专</option>
+								<option value="大学">大学</option>
+								<option value="研究生">研究生</option>
+								
+								
+								
+							</select>
+							
+							
+						</td>
+						<td>
+							<select class="input-mini" name="other_title" id="other_title">
+								<option value="无">无</option>							
+								<option value="学士">学士</option>
+								<option value="硕士">硕士</option>
+								<option value="博士">博士</option>
+								<option value="博士后">博士后</option>
+								
+								
+								
+								
+							</select>
+							
+								
+						</td>
+
+						<td>
+							<select class="input-mini" name="otherdegreeName" id="other_degree">					
+							<option value="无">无</option>
+							<option value="初级">初级</option>
+							<option value="中级">中级</option>
+							<option value="高级">高级</option>
+							<option value="正高级">正高级</option>		
+							</select>
+								
+						</td>
+
+						<td>							
+						
+						</td>
+
+					</tr>
+					</if>
+				</table>
+				<table id="otherP" class="table table-bordered table-condensed table-striped">
+					
+					<tr>
+						<th rowspan="2" style="text-align:center;">总人数</th>
+						<th rowspan="2" style="text-align:center;">留学回国</th>
+						<th colspan="3" style="text-align:center;">其中，按职称分</th>
+						<th colspan="3" style="text-align:center;">其中，按学历分</th>
+						<th colspan="2" style="text-align:center;">其中，按学位分</th>
+					</tr>
+					<tr>
+						
+						<th style="text-align:center;">正高级</th>
+						<th style="text-align:center;">(副)高级</th>
+						<th style="text-align:center;">中级</th>
+						<th style="text-align:center;">研究生</th>
+						<th style="text-align:center;">本科</th>
+						<th style="text-align:center;">大专</th>
+						<th style="text-align:center;">博士</th>
+						<th style="text-align:center;">硕士</th>
+					</tr>
+					<tr id="otherPRow1">
+						<td><input type="text" name="tnum" value="{$prjtotal}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tlx" value="{$prjAbord}" class="input-mini2" id="name"  readonly placeholder=""></td>
+						<td><input type="text" name="tzg" value="{$prjzhenggao}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tfg" value="{$prjgaoji}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tzj" value="{$prjzhongji}" class="input-mini2" id="name"  readonly placeholder=""></td>
+						<td><input type="text" name="tyjs" value="{$prjyanjiusheng}" class="input-mini2" id="name"  readonly placeholder=""></td>
+						<td><input type="text" name="tdx" value="{$prjbenke}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tdz" value="{$prjdazhuan}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tbs" value="{$prjdoctor}" class="input-mini2" id="name" readonly placeholder=""></td>
+						<td><input type="text" name="tss" value="{$prjmaster}" class="input-mini2" id="name" readonly placeholder=""></td>
+						
+						
+					</tr>
+				</table>
+				<if condition="($data.status eq 4) OR ($data.status eq 5) ">
+				<input type="button" class="btn btn-large btn-primary btn-block" onclick="onnext('0')"  value=" 保 存 ">
+				
+				
+				<input type="button" class="btn btn-large btn-success btn-block" onclick="onnext('1')" value=" 保 存 并 且 下一步">
+				<input type="hidden" name="isnext" id="isnext" value="0">
+				<script>
+				
+				
+				function onnext(w)
+				{
+					$('#isnext').val(w);
+					gdCnt=0;
+					action="save";
+					if($("button[name=otherbtn]").length>0)
+					{
+						$("button[name=otherbtn]").each(function(){
+							$(this).click();
+						})
+					}else
+					{
+						recall();
+					}
+				}
+				function recall()
+				{
+					if(gdCnt==$("button[name=otherbtn]").length)
+					{
+						if(action=="save")
+						{
+							if(check())
+							{
+								$('#frmall')[0].submit();
+							}
+						}else if(action!="0")
+						{
+							delinfo1(action)
+						}else
+						{
+							add1();
+						}
+					}
+				}
+				</script>
+				</if>
+				</fieldset>
+				
+				</form>
+			</div>
+	</div>
+</div>
+</block>

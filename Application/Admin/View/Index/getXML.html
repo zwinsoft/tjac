@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Company>
+  <!--企业概况-->
+  <CompanyInfo Name="{$info.qiyemingcheng}" RegisteredLocation="{$info.zhucedidian}" ID="{$info.yingyezhizhaohaoma}" Code="{$info.zuzhijigoudaima}" CreateData="{$info.qiyechengliTime|substr=0,10}" Organization="{$info.zuzhixingshi}" Area="{$info.bangongmianji}" Foreign="{$info.waizibili}"
+               RegisteredCapital="{$info.zuceziben}" RealCapital="{$info.shishouziben}" CompanyLocation="{$info.gongsidizhi}" Fax="{$info.fax}" />
+  <LegalRepresentative Name="{$info.faren_xingming}" Position="{$info.faren_zhiwei}" JobTitle="{$info.faren_zhicheng}" OfficePhone="{$info.faren_phone}" Mobile="{$info.faren_mobile}" Email="{$info.faren_email}" />
+  <EnterprisesLeader Name="{$info.qiye_xingming}" Position="{$info.qiye_zhiwei}" JobTitle="{$info.qiye_zhicheng}" OfficePhone="{$info.qiye_phone}" Mobile="{$info.qiye_mobile}" Email="{$info.qiye_email}" />
+  <ProjectLeader Name="{$info.xiangmu_xingming}" Position="{$info.xiangmu_zhiwei}" JobTitle="{$info.xiangmu_zhicheng}" OfficePhone="{$info.xiangmu_phone}" Mobile="{$info.xiangmu_mobile}" Email="{$info.xiangmu_email}" />
+  <Contact Name="{$info.lianxiren_xingming}" Position="{$info.lianxiren_zhiwei}" JobTitle="{$info.lianxiren_zhicheng}" OfficePhone="{$info.lianxiren_phone}" Mobile="{$info.lianxiren_mobile}" Email="{$info.lianxiren_email}" />
+
+  <!--企业主要股东及股权比例-->
+  <StockHoolder>
+  <?php $n = 0;?>
+  <foreach name="infoGudong" item="o">
+    <StockHoolder{$n=$n+1} Name="{$o.gudong_name}" Country="{$o.gudong_national}" InvestmentAmount="{$o.gudong_money}" ProportionShares="{$o.gudong_stocknum}" InvestedTime="{$o.gudong_paytime}" HoolderType="{$o.gudong_usertype}" />
+  </foreach>
+  </StockHoolder>
+
+  <!--企业相关数据-->
+  <BusinessRelatedData EmployeesCount="{$info.lastyear_yuangongzongshu}" CollegeNum="{$info.lastyear_dazhuanrenshu}" Researchers="{$info.lastyear_yafarenshu}" TotalAssets="{$info.lastyear_zongzichan}" NetAssets="{$info.lastyear_jingzichan}" SalesRevenue="{$info.lastyear_xiaoshoushouru}" 
+                       Totaltax="{$info.lastyear_nianjiaofeizonge}" ProfitAfterTax="{$info.lastyear_shuihoulirun}" ForeignExchange="{$info.lastyear_nianchuanghuie}"  RDFunding="{$info.lastyear_nianyafajingfei}" RDProportion="{$info.lastyear_yafanshourubili}" AssetliabilityRatio="{$info.lastyear_zichanfuzhailv}" 
+                       EnterprisesField="{$info.lastyear_hangyelingyu}"  CoreTechnologySources="{$info.lastyear_hexinjishulaiyuan}" MainBusiness="" CoreTechnologyDescribed="" />
+
+  
+  <!--专利-->
+  <Patents >
+  <?php $zlcnt=0;?>
+  <foreach name="vo.zhuanli" item="zl">
+    <Patent{$zlcnt=$zlcnt+1} ID="{$zl.id}" Type="{$zl.zhuanlileixing}" Name="{$zl.zhuanlimingcheng}" Progress="{$zl.jinzhanqingkuang}"  MadeWay="{$zl.qudefangshi}"
+	Patentee="{$zl.zhuanliquanren}" Relations="{$zl.guanxi}" />
+  
+  </foreach>
+  </Patents>
+  
+  <!--著作权-->
+  <Copyright >
+   <?php $zzqcnt=0;?>
+  <foreach name="vo.zhuzuoquan" item="zzq">
+    <Copyright{$zzqcnt=$zzqcnt+1} ID="{$zzq.id}" SoftwareName="{$zzq.ruanjianmingcheng}" Progress="{$zzq.jinzhanqingkuang}" 
+	MadeWay="{$zzq.qudefangshi}" Applicants="{$zzq.shenqingren}" Relations="{$zzq.guanxi}" />
+  </foreach>
+  </Copyright>
+  
+	<!--与主营业务相关的知识产权情况-->
+  <IntellectualProperty PatentsCount="{$zlcnt}"  SoftwareCopyrightCount="{$zzqcnt}" Patents="{$vo.zscq.famingizhuanli}" UtilityModel="{$vo.zscq.shiyongxinxing}"
+  											Appearance="{$vo.zscq.waiguan}"  PropertyAttribution="{$vo.zscq.zhishichanquanguishu}" 
+                        IsHighTech="{$vo.zscq.isgaoxinjishu}" HighCertificateNumber="{$vo.zscq.gaoqiID}" 
+                        IsNationalHighTech="{$vo.zscq.isatguojiagaoxin}" HighTechZoneName="{$vo.zscq.gaoxinName}"
+                        IsNationalIncubator="{$vo.zscq.isfuhuaqi}" IncubatorName="{$vo.zscq.fuhuaqiName}"
+                        CompanyDevStandard="" IsNationalInnovationFund="{$vo.zscq.isZhichi}"  ContractNumber="{$vo.zscq.hetongbianhao}"/>
+  
+
+
+  
+
+  <!--项目基本情况-->
+  <ProjectInfo ProjectName="{$project.name}" SpecialAreas="{$project.zhuanXiangLingYu}" TechnicalField="{$project.jiShuLingYu}" 
+				ApplicationsIndustries="{$project.YingYongChanYeLingYu}" Stage="{$project.xianChuJieDuan}" TechnologySources="{$project.jiShuLaiYuan}" 
+                ResultsForm="{$project.chengGuoXingShi}" Prefunded="{$project.qianQiZiZhuQingKuang}" SocioEconomicGoals="{$project.shenHuiJingJiMuBiao}"/>
+<!--{$prjtotal=0}-->
+<!--{$prjAbord=0}-->
+<!--{$prjzhenggao=0}-->
+<!--{$prjgaoji=0}-->
+<!--{$prjzhongji=0}-->
+<!--{$prjyanjiusheng=0}-->
+
+<!--{$prjdoctor=0}-->
+<!--{$prjmaster=0}-->
+<!--{$prjbenke=0}-->
+<!--{$prjdazhuan=0}-->
+  <!--项目负责人-->
+  <ProjectLeader Name="{$project.fzeName}" Sex="{$project.fzeSex}" ID="{$project.fzeID}" 
+                 Education="{$project.fzeEducation}"  Title="{$project.fzeTitle}" WorkDep="{$project.fzeCompany}"
+                 Graduated ="{$project.fzeSchool}" Professional="{$project.fzeMajar}"  TalentSpecies="{$project.fzeRenCaiZhongLei}"
+                 Phone="{$project.fzePhone}"  Mobile="{$project.fzeMobile}" Email="{$project.fzeEmail}" 
+                 StudyAbroad ="{$project.fzeIsAboard}" Country="{$project.fzeCountry}"  SchoolName="{$project.fzeSchoolName}"
+                 DateAbroad="{$project.fzeAboardDate}"  ReturnedDate="{$project.fzeBackDate}"  Achievements="{$project.fzeResult}" />
+<!--{$prjtotal=$prjtotal+1}-->
+<if condition='$project.fzeIsAboard eq "是"'>
+	<!--{$prjAbord=$prjAbord+1}--> 
+</if>
+<if condition='$project.fzeTitle eq "正高级"'>
+	<!--{$prjzhenggao=$prjzhenggao+1}--> 
+</if>
+<if condition='$project.fzeTitle eq "高级"'>
+	<!--{$prjgaoji=$prjgaoji+1}--> 
+</if>
+<if condition='$project.fzeTitle eq "中级"'>
+	<!--{$prjzhongji=$prjzhongji+1}--> 
+</if>
+
+<if condition='$project.fzeEducation eq "博士后"'>
+	<!--{$prjdoctor=$prjdoctor+1}--> 
+	
+</if>
+<if condition='$project.fzeEducation eq "博士"'>
+	<!--{$prjdoctor=$prjdoctor+1}--> 
+	
+</if>
+<if condition='$project.fzeEducation eq "硕士"'>
+	<!--{$prjmaster=$prjmaster+1}--> 
+</if>
+
+<if condition='$project.fzeXueli eq "研究生"'>
+	<!--{$prjyanjiusheng=$prjyanjiusheng+1}-->  
+</if>
+<if condition='$project.fzeXueli eq "大学"'>
+	<!--{$prjbenke=$prjbenke+1}--> 
+</if>		
+<if condition='$project.fzeXueli eq "专科"'>
+	<!--{$dazhuan=$dazhuan+1}--> 
+</if>
+  <!--其他主要成员-->
+  <OtherMembers>
+  <?php $otcnt=0;?>
+  <foreach name="others" item="o">
+	<!--{$prjtotal=$prjtotal+1}-->
+							
+	<if condition='$o.other_title eq "博士后"'>
+		<!--{$prjdoctor=$prjdoctor+1}--> 								
+	</if>
+	<if condition='$o.other_title eq "博士"'>
+		<!--{$prjdoctor=$prjdoctor+1}--> 								
+	</if>
+	<if condition='$o.other_title eq "硕士"'>
+		<!--{$prjmaster=$prjmaster+1}--> 
+	</if>
+	<if condition='$o.other_xueli eq "研究生"'>
+		<!--{$prjyanjiusheng=$prjyanjiusheng+1}-->
+	</if>	
+	<if condition='$o.other_xueli eq "本科"'>
+		<!--{$prjbenke=$prjbenke+1}--> 
+	</if>		
+	<if condition='$o.other_xueli eq "专科"'>
+		<!--{$dazhuan=$dazhuan+1}--> 
+	</if>
+	<if condition='$o.other_degree eq "正高级"'>
+		<!--{$prjzhenggao=$prjzhenggao+1}--> 
+	</if>
+	<if condition='$o.other_degree eq "高级"'>
+		<!--{$prjgaoji=$prjgaoji+1}--> 
+	</if>
+	<if condition='$o.other_degree eq "中级"'>
+		<!--{$prjzhongji=$prjzhongji+1}--> 
+	</if>
+    <Member{$otcnt=$otcnt+1}  Name="{$o.other_name}" Sex="$o['other_sex']" WorkDep="{$o.other_company}" ID="{$o.other_identify}" Degree="{$o.other_degree}" Title="{$o.other_title}" />
+  </foreach>
+  </OtherMembers>
+  
+  <!--总人数-->
+  <MembersTotle Count="{$prjtotal}" Count1="{$prjAbord}" Count2="{$prjzhenggao}" 
+				Count3="{$prjgaoji}" Count4="{$prjzhongji}" Count5="{$prjyanjiusheng}" 
+				Count6="{$prjbenke}" Count7="{$prjdazhuan}" Count8="{$prjdoctor}" 
+				Count9="{$prjmaster}"  />  
+</Company> 
+

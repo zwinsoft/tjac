@@ -1,0 +1,626 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+    <script>
+		var gdCnt=0;
+		var action="";
+		function save(id)
+    	{
+    		//if(confirm('确定修改？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/Save')}",
+							data:{id: id,
+								gudong_name:$("#gudong_name"+id).val(),
+								gudong_national:$("#gudong_national"+id).val(),
+								gudong_money:$("#gudong_money"+id).val(),
+								gudong_stocknum:$("#gudong_stocknum"+id).val(),
+								gudong_paytime:$("#gudong_paytime"+id).val(),
+								gudong_usertype:$("#gudong_usertype"+id).val()},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("修改成功");
+									//location.reload();
+									//$("#frmall")[0].submit();
+									gdCnt=gdCnt+1;
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								recall();
+							},
+							error: function(){
+								alert('修改发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function add()
+		{
+			gdCnt=0;
+			action=0;
+			if($("button[name=gdSave]").length>0)
+			{
+				$("button[name=gdSave]").each(function(){
+					$(this).click();
+				})
+			}else
+			{
+				add1();	
+			}
+		}
+    	function add1()
+    	{
+			if($("#lingyuSelect").val()=="其他")
+			{
+				$('#lingyu').val("其他"+$('#lingyu').val())
+			}else
+			{
+				$('#lingyu').val($("#lingyuSelect").val())
+			}
+    		if(confirm('确定添加？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/Add')}",
+							data:{
+								gudong_name:$("#gudong_name").val(),
+								gudong_national:$("#gudong_national").val(),
+								gudong_money:$("#gudong_money").val(),
+								gudong_stocknum:$("#gudong_stocknum").val(),
+								gudong_paytime:$("#gudong_paytime").val(),
+								gudong_usertype:$("#gudong_usertype").val()},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("添加成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								
+							},
+							error: function(){
+								alert('添加发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    		}
+		function delinfo(id)
+		{
+			gdCnt=0;
+			action=id;
+			$("button[name=gdSave]").each(function(){
+				$(this).click();
+			})
+		}
+    	function delinfo1(id)
+    	{
+			if($("#lingyuSelect").val()=="其他")
+			{
+				$('#lingyu').val("其他"+$('#lingyu').val())
+			}else
+			{
+				$('#lingyu').val($("#lingyuSelect").val())
+			}
+    		if(confirm('确定删除？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/Del')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									alert("删除成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+								}else
+								{
+									alert(data.status);	
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								
+							},
+							error: function(){
+								alert('删除发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+
+		function check()
+		{
+			if($("#lingyuSelect").val()=="其他")
+			{
+				$('#lingyu').val("其他"+$('#lingyu').val())
+			}else
+			{
+				$('#lingyu').val($("#lingyuSelect").val())
+			}
+
+
+			
+
+
+			var isgo=true;
+			$("input[type=text]").each(function(){
+				if($(this).val()=="" && isgo && $(this).attr("data-name") !=undefined)
+				{
+					alert($(this).attr("data-name")+" 不能为空");
+					$(this).focus();
+					isgo=false;
+					return;
+				}
+			});
+			if(!isgo)
+			{return false;}
+			
+			if($("input[name=gudong_name]").length<2)
+			{
+				isgo=false;
+				alert("投资人数不能少于1人");
+				$("input[name=gudong_name]")[0].focus();
+				return false;
+			}
+			if($("input[name=gudong_name]").length>1)
+			{
+				var gudong_stocknum=0;
+				var gudong_money=0
+				for(var i=0;i<$("input[name=gudong_name]").length-1;i++)
+				{
+					
+					gudong_stocknum = parseFloat(gudong_stocknum)+parseFloat($("input[name=gudong_stocknum]")[i].value);	
+					gudong_money = parseFloat(gudong_money)+parseFloat($("input[name=gudong_money]")[i].value);	
+					console.log(parseFloat($("input[name=gudong_stocknum]")[i].value));
+				}
+				//alert(gudong_stocknum)
+				//alert(parseFloat(100))
+				if(gudong_stocknum!=parseFloat(100))
+				{
+					alert("股东股份和必须是100%");
+					isgo=false;
+					return false;	
+				}
+				if(gudong_money != parseFloat($("#shishouziben").val()))
+				{
+					alert("股东资本和不等于企业实收资本");
+					isgo=false;
+					return false;	
+				}
+			}
+			if($("#lingyuSelect").val()=="")
+			{
+				$("#lingyuSelect")[0].focus();
+				alert("企业所属行业领域");
+				return false;
+			}			
+
+			if($("#laiyuan").val()=="")
+			{
+				$("#laiyuan")[0].focus();
+				alert("核心技术来源必填");
+				return false;
+			}
+			return isgo;
+}
+	</script>
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<div id="home" class="tab-pane fade active in">
+			<fieldset>
+				<form method="post" action="__SELF__" onsubmit="return check()" id="frmall"> 
+				<input type="hidden" name="id" value="{$Think.session.user_id}" readonly />
+				<legend>企业基本情况</legend>
+				<table class="table table-bordered table-condensed">
+					<tr>
+						<td>企业名称</td>
+						<td><input type="text" data-name="企业名称" name="qiyemingcheng" value="{$vo.qiyemingcheng}" readonly class="input-large" id="name" placeholder=""></td>
+						<td>营业执照号码</td>
+						<td><input type="text" class="input-small" data-name="营业执照号码" name="yingyezhizhaohaoma" value="{$vo.yingyezhizhaohaoma}"  readonly class="input-large" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>注册地点</td>
+						<td><input type="text" data-name="注册地点" name="zhucedidian" value="{$vo.zhucedidian}"  class="input-large" id="name" placeholder=""><span style="color:red;">(与营业执照一致)</span></td>
+						<td>组织结构代码</td>
+						<td><input type="text" class="input-small" data-name="组织结构代码" name="zuzhijigoudaima" value="{$vo.zuzhijigoudaima}"   readonly class="input-large" id="name" placeholder=""></td>
+					</tr>
+					<tr>
+						<td>企业成立时间</td>
+						<td><input type="text" class="input-small" data-name="企业成立时间" name="qiyechengliTime" value="{$vo.qiyechengliTime|substr=0,10}"  class="input-large" id="name" placeholder=""></td>
+						<td>组织形式</td>
+
+						<td><select id="zuzhixs" class="input-small" name="zuzhixingshi" >
+							<option value="有限责任公司">有限责任公司</option>
+							<option value="股份公司">股份公司</option>	
+							<option value="中外合资">中外合资</option>
+							<option value="外商独资">外商独资</option>	
+						</select>
+						<script>
+							$("#zuzhixs").val("{$vo.zuzhixingshi}");
+						</script> </td>
+						</td>
+					</tr>
+					<tr>
+						
+						<td>注册资本</td>
+						<td ><input type="text" class="input-small" data-name="注册资本" name="zuceziben" value="{$vo.zuceziben}" readonly class="input-large" id="name" placeholder="">
+						<span style="color:red;">万元</span>
+						</td>
+
+						<td>实收资本</td>
+						<td>
+							
+								<input type="text" class="input-small" data-name="实收资本"  name="shishouziben" value="{$vo.shishouziben}" readonly class="input-large" id="shishouziben" >
+								<span style="color:red;">万元</span>
+							
+							</td>
+					</tr>
+					
+					
+					<tr>
+						
+						<td>外资占股比例</td>
+						<td ><input type="text" class="input-small" data-name="外资占股比例" name="waizibili" value="{$vo.waizibili}"  class="input-large" id="name" placeholder="0" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')><span style="color:red;">%</span></td>
+						<td>办公，生产场地面积</td>
+						<td><input type="text" class="input-small" data-name="办公，生产场地面积" name="bangongmianji" value="{$vo.bangongmianji}"  class="input-large" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">平米</span>
+						</td>
+						
+					</tr>
+					<tr>
+						<td>公司地址</td>
+						<td colspan="3">
+							<input type="text" data-name="公司地址" name="gongsidizhi" value="{$vo.gongsidizhi}"  class="input-xxlarge" id="name" placeholder=""></td>
+						
+					</tr>
+
+					<tr>
+						<td>传真号码</td>
+						<td colspan="3"><input type="text" class="input-small" data-name="传真号码" name="fax" value="{$vo.fax}"  class="input-large" id="name" placeholder=""></td>
+						
+					</tr>
+				</table>
+				<table class="table table-bordered table-condensed table-striped">
+					<tr>
+						<th>人员身份</th>
+						<th>姓名</th>
+						<th>职位</th>
+						<th>职称</th>
+						<th>办公电话</th>
+						<th>移动电话</th>
+						<th>Email</th>
+					</tr>
+					<tr>
+						<td>法定代表人</td>
+						<td><input type="text" class="input-mini" data-name="法定代表人姓名" name="faren_xingming" value="{$vo.faren_xingming}"  class="input-small" id="name" placeholder="" size="3"></td>
+						<td><input type="text"  class="input-mini" data-name="法定代表人职位" name="faren_zhiwei" value="{$vo.faren_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-mini" name="faren_zhicheng" id="faren_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#faren_zhicheng_id").val("{$vo.faren_zhicheng}");
+						</script>
+
+						</td>
+
+						<td><input type="text" class="input-small" data-name="法定代表人办公电话" name="faren_phone" value="{$vo.faren_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" data-name="法定代表人移动电话" name="faren_mobile" value="{$vo.faren_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" data-name="法定代表人Email" name="faren_email" value="{$vo.faren_email}"    class="input-small" id="name" placeholder="" size="20"></td>
+					</tr>
+					<tr>
+						<td>企业负责人</td>
+						<td><input type="text" class="input-mini" data-name="企业负责人姓名" name="qiye_xingming" value="{$vo.comDirector}"  readonly class="input-small" id="name" placeholder="" size="3"></td>
+						<td><input type="text"  class="input-mini" data-name="企业负责人职位" name="qiye_zhiwei" value="{$vo.qiye_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-mini" name="qiye_zhicheng" id="qiye_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#qiye_zhicheng_id").val("{$vo.qiye_zhicheng}");
+						</script>
+						
+						</td>
+						<td><input type="text" class="input-small" data-name="企业负责人办公电话" name="qiye_phone"  value="{$vo.qiye_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" class="input-small" data-name="企业负责人移动电话" name="qiye_mobile" readonly value="{$vo.mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" class="input-small" data-name="企业负责人Email" name="qiye_email" readonly value="{$vo.email}"  id="name" placeholder="" size="20"></td>
+					</tr>
+					<tr>
+						<td>项目负责人</td>
+						<td><input type="text" class="input-mini" data-name="项目负责人姓名" name="xiangmu_xingming" value="{$vo.xiangmu_xingming}"  class="input-small" id="name" placeholder="" size="3"></td>
+						<td><input type="text" class="input-mini" data-name="项目负责人职位" name="xiangmu_zhiwei" value="{$vo.xiangmu_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-mini" name="xiangmu_zhicheng" id="xiangmu_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#xiangmu_zhicheng_id").val("{$vo.xiangmu_zhicheng}");
+						</script>
+						</td>
+						<td><input type="text" class="input-small" data-name="项目负责人办公电话" name="xiangmu_phone" value="{$vo.xiangmu_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" class="input-small" data-name="项目负责人移动电话" name="xiangmu_mobile" value="{$vo.xiangmu_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" class="input-small" data-name="项目负责人Email" name="xiangmu_email" value="{$vo.xiangmu_email}"  id="name" placeholder="" size="20"></td>
+					</tr>
+					<tr>
+						<td>联系人</td>
+						<td><input type="text" class="input-mini" data-name="联系人姓名" name="lianxiren_xingming" value="{$vo.lianxiren_xingming}"  class="input-small" id="name" placeholder="" size="3"></td>
+						<td><input type="text" class="input-mini" data-name="联系人职位" name="lianxiren_zhiwei" value="{$vo.lianxiren_zhiwei}"  class="input-small" id="name" placeholder="" size="4"></td>
+						<td>
+						<select class="input-mini" name="lianxiren_zhicheng" id="lianxiren_zhicheng_id">
+						<option value="无">无</option>			
+						<option value="初级">初级</option>
+						<option value="中级">中级</option>
+						<option value="高级">高级</option>
+						<option value="正高级">正高级</option>							
+						</select>
+						
+						<script>	
+						$("#lianxiren_zhicheng_id").val("{$vo.lianxiren_zhicheng}");
+						</script>
+						</td>
+						<td><input type="text" class="input-small" data-name="联系人办公电话" name="lianxiren_phone" value="{$vo.lianxiren_phone}"  class="input-small" id="name" placeholder="" size="10"></td>
+						<td><input type="text" class="input-small" data-name="联系人移动电话" name="lianxiren_mobile" value="{$vo.lianxiren_mobile}"  class="input-small" id="name" placeholder="" size="12"></td>
+						<td><input type="text" class="input-small" data-name="联系人Email" name="lianxiren_email" value="{$vo.lianxiren_email}"  id="name" placeholder="" size="20"></td>
+					</tr>
+				</table>
+
+				<table class="table table-bordered table-condensed table-striped">
+					<tr><th colspan="6" style="text-align:center">企业股东及股权比例</th>
+					<th><button type="button" class="btn btn-success" onclick="add();return false;">+新增股东</button></th></tr>
+					<tr>
+						<th>股东名称</th>
+						<th>国籍</th>
+						<th>投资金额<br /><span style="color:red;">（万元）</span></th>
+						<th>所占股份<br /><span style="color:red;">（%）</span></th>
+						<th>出资时间</th>
+						<th>股东类型</th>
+						<th>操作</th>
+					</tr>
+					
+					<foreach name="infoGudong" item="o">
+
+					<tr id="infoGudongRow1">
+					
+						<td><input type="text" data-name="股东名称" name="gudong_name" value="{$o.gudong_name}"  class="input-small" id="gudong_name{$o.id}" placeholder=""></td>
+						<td><input type="text" data-name="国籍" name="gudong_national" value="{$o.gudong_national}"  class="input-small" id="gudong_national{$o.id}" placeholder=""></td>
+						<td><input type="text" data-name="投资金额" name="gudong_money" value="{$o.gudong_money}"  class="input-mini" id="gudong_money{$o.id}" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')><span style="color:red;">万元</span></td>
+						<td><input type="text" data-name="所占股份" name="gudong_stocknum" value="{$o.gudong_stocknum}"  class="input-mini" id="gudong_stocknum{$o.id}" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')><span style="color:red;">%</span></td>
+						<td><input type="text" data-name="出资时间" name="gudong_paytime" value="{$o.gudong_paytime}"  class="input-small" id="gudong_paytime{$o.id}" placeholder=""></td>
+						<td> 
+						<select style="width:100%"  name="gudong_usertype" id="gudong_usertype{$o.id}">
+							<option value="自然人">自然人</option>
+							<option value="法人">法人</option>							
+						</select>
+						<script>
+							$("#gudong_usertype<?php echo($o["id"])?>").val("{$o.gudong_usertype}");
+						</script>
+						</td>
+						<td>
+						<if condition="$data.status elt 5">
+						<button name="gdSave" type="button" class="btn btn-success" onclick="save(<?php echo($o["id"])?>);return false;" style="display:none;">保存</button>
+						<button id="del" type="button" class="btn btn-danger" onclick="delinfo(<?php echo($o["id"]);?>)" >删除</button>
+						</if>
+						</td>
+					</tr>
+
+					</foreach>
+
+					<if condition="$data.status elt 5">
+					
+					<tr id="infoGudongRow1" style="display:none;">
+						<td><input type="text" name="gudong_name" value=""  class="input-small" id="gudong_name" placeholder=""></td>
+						<td><input type="text" name="gudong_national" value=""  class="input-small" id="gudong_national" placeholder=""></td>
+						<td><input type="text" name="gudong_money" value=""  class="input-mini" id="gudong_money" placeholder="" ><span style="color:red;">万元</span></td>
+						<td><input type="text" name="gudong_stocknum" value=""  class="input-mini" id="gudong_stocknum" placeholder="" ><span style="color:red;">%</span></td>
+						<td><input type="text" name="gudong_paytime" value=""  class="input-small" id="gudong_paytime" placeholder=""></td>
+						<td><select style="width:100%" id="gudong_userype" name="gudong_userype" >
+							<option value="自然人">自然人</option>
+							<option value="法人">法人</option>							
+						</select>
+						</td>
+						<td>							
+						
+						</td>
+
+					</tr>
+			
+					</if>
+					
+				</table>
+
+				<table class="table table-bordered table-condensed">
+					<tr><th style="text-align:center" colspan="4">上一年（2013）企业相关数据</th></tr>
+					<tr>
+						<td width="20%">员工总数</td>
+						<td width="30%"><input type="text" data-name="员工总数" name="lastyear_yuangongzongshu" value="{$vo.lastyear_yuangongzongshu}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')><span style="color:red;">人</span></td>
+						<td width="20%">大专以上科技人员数</td>
+						<td width="30%"><input type="text" data-name="大专以上科技人员数" name="lastyear_dazhuanrenshu" value="{$vo.lastyear_dazhuanrenshu}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')><span style="color:red;">人</span></td>
+					</tr>
+					<tr>
+						<td>直接从事研发科技人员数</td>
+						<td><input type="text" data-name="直接从事研发科技人员数" name="lastyear_yafarenshu" value="{$vo.lastyear_yafarenshu}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')><span style="color:red;">人</span></td>
+						<td>总资产</td>
+						<td><input type="text" data-name="总资产" name="lastyear_zongzichan" value="{$vo.lastyear_zongzichan}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万元</span></td>
+					</tr>
+					<tr>
+						<td>净资产</td>
+						<td><input type="text" data-name="净资产" name="lastyear_jingzichan" value="{$vo.lastyear_jingzichan}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万元</span>
+						</td>
+						<td>销售收入</td>
+						<td><input type="text" data-name="销售收入" name="lastyear_xiaoshoushouru" value="{$vo.lastyear_xiaoshoushouru}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>年缴税总额</td>
+						<td><input type="text" data-name="年缴税总额" name="lastyear_nianjiaofeizonge" value="{$vo.lastyear_nianjiaofeizonge}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万元</span>
+						</td>
+						<td>税后利润</td>
+						<td><input type="text" data-name="税后利润" name="lastyear_shuihoulirun" value="{$vo.lastyear_shuihoulirun}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					<tr>
+						<td>年创汇额</td>
+						<td ><input type="text" data-name="年创汇额" name="lastyear_nianchuanghuie" value="{$vo.lastyear_nianchuanghuie}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万美元</span>
+						</td>
+						<td>年研发经费投入</td>
+						<td ><input type="text" data-name="年研发经费投入" name="lastyear_nianyafajingfei" value="{$vo.lastyear_nianyafajingfei}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">万元</span>
+						</td>
+					</tr>
+					<tr>
+						<td>研发投入占营业总收入比例</td>
+						<td ><input type="text" data-name="研发投入占营业总收入比例" name="lastyear_yafanshourubili" value="{$vo.lastyear_yafanshourubili}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">%</span>
+						</td>
+						<td>资产负债率</td>
+						<td ><input type="text" data-name="资产负债率" name="lastyear_zichanfuzhailv" value="{$vo.lastyear_zichanfuzhailv}"  class="input-medium" id="name" placeholder="" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+						<span style="color:red;">%</span>
+						</td>
+					</tr>
+					<tr>
+						<td>企业所属行业领域</td>
+						<td ><select class="input-medium" id="lingyuSelect" name="lastyear_hangyelingyu1"  onchange="if(this.value=='其他'){$('#lingyu').show();}else{$('#lingyu').hide();$('#lingyu').val('');}">
+							<option value="">请选择...</option>
+							<option value="电子信息">电子信息</option>
+							<option value="生物">生物</option>
+							<option value="医药">医药</option>
+							<option value="新材料">新材料</option>
+							<option value="光机电一体化">光机电一体化</option>
+							<option value="资源与环境">资源与环境</option>
+							<option value="新能源与高效节能">新能源与高效节能</option>
+							<option value="高技术服务">高技术服务</option>
+							<option value="其他">其他</option>
+						</select>
+						
+						<input type="text" class="input-medium hide" name="lastyear_hangyelingyu" id="lingyu" placeholder=""></td>
+						<td>核心技术来源</td>
+						<td >
+						<select style="width:100%" id="laiyuan" name="lastyear_hexinjishulaiyuan" >
+							<option value="">请选择...</option>
+							<option value="自主开发">自主开发</option>
+							<option value="合作">合作</option>
+							<option value="授权">授权</option>
+						</select></td>
+						
+						<script>
+							if("{$vo.lastyear_hangyelingyu}".substring(0,2)=="其他")
+							{
+								$("#lingyuSelect").val("其他");
+								$('#lingyu').show();
+								$('#lingyu').val("{$vo.lastyear_hangyelingyu}".substring(2,"{$vo.lastyear_hangyelingyu}".length));
+							}else
+							{
+								$("#lingyuSelect").val("{$vo.lastyear_hangyelingyu}");
+							}
+							$("#laiyuan").val("{$vo.lastyear_hexinjishulaiyuan}");
+						</script>
+					</tr>
+					<!--
+					<tr>
+						<td>主营业务</td>
+						<td colspan="3">
+							<textarea class="input-xxlarge"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>核心技术描述</td>
+						<td colspan="3">
+							<textarea class="input-xxlarge"></textarea>
+						</td>
+						
+					</tr>
+					-->
+				</table>
+				<if condition="($data.status eq 4) OR ($data.status eq 5) ">
+				<input type="button" class="btn btn-large btn-primary btn-block" onclick="onnext('0')" value=" 保 存 ">
+				
+				<input type="button" class="btn btn-large btn-success btn-block" onclick="onnext('1')" value=" 保 存 并 且 下一步">
+				<input type="hidden" name="isnext" id="isnext" value="0">
+				<script>
+				function onnext(w)
+				{
+					$('#isnext').val(w);
+					gdCnt=0;
+					action="save";
+					if($("button[name=gdSave]").length>0)
+					{
+						$("button[name=gdSave]").each(function(){
+							$(this).click();
+						})
+					}else
+					{
+							recall();
+					}
+				}
+				function recall()
+				{
+					if(gdCnt==$("button[name=gdSave]").length)
+					{
+						if(action=="save")
+						{
+							if(check())
+							{
+								$('#frmall')[0].submit();
+							}
+						}else if(action!="0")
+						{
+							delinfo1(action)
+						}else
+						{
+							add1();
+						}
+					}
+				}
+				</script>
+					</if>
+					</form>
+					</fieldset>
+				</div>
+	</div>
+</div>
+</block>

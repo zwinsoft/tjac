@@ -1,0 +1,35 @@
+<div class="span2 mainContentLeft">
+		
+		<ul class="nav nav-pills nav-stacked">
+			<li class="nav-header">
+			    后台管理
+			</li>
+			<if condition="$Think.session.user_level neq 1">
+			
+			<li {$m1}><a href="{:U('Admin/Index/Index')}" >我的任务</a></li>
+			<li {$m14}><a href="{:U('Admin/Review/Index')}" >项目评审</a></li>	
+			<li {$m2}><a href="{:U('Admin/Project/Index')}" >项目管理</a></li>
+			</if>
+			<!--<li {$m3}><a href="{:U('Admin/Project/Search')}" >检索查询</a></li>-->
+			
+			<if condition="$Think.session.user_level neq 1">
+			<!--<li {$m5}><a href="{:U('Admin/Data/Export')}" >数据导出</a></li>-->
+			<li class="nav-header">通知公告</li>
+			<li {$m7}><a href="{:U('Admin/Notic/Manage')}" >公告管理</a></li>
+			<li {$m6}><a href="{:U('Admin/Notic/Add')}" >新增公告</a></li>
+			<li {$m12}><a href="{:U('Admin/SMS/Index')}" >短信管理</a></li>
+			<li {$m13}><a href="{:U('Admin/SMS/Send')}" >发送短信</a></li>
+			<li {$m4}><a href="{:U('Admin/Data/Statics')}" >汇总统计</a></li>
+			</if>
+
+			<li class="nav-header">账户管理</li>
+			<if condition="$Think.session.user_level neq 1">
+			<li {$m8}><a href="{:U('Admin/User/Profile')}" >修改密码</a></li>
+			<if condition="$Think.session.user_level eq 9">
+			<li {$m9}><a href="{:U('Admin/User/ManageGuest')}" >来宾用户管理</a></li>
+			<li {$m10}><a href="{:U('Admin/User/ManageAll')}" >全站用户管理</a></li>
+			</if>
+			</if>
+			<li {$m11}><a href="{:U('Home/User/Logout')}" >退出系统</a></li>
+		</ul>
+</div>

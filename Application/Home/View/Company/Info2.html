@@ -1,0 +1,801 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+    <script>
+    	var url="{:U(Company/Info2)}";
+		var gdCnt=0;
+		var action="";
+		var whichbtn=0;
+		
+		function save(id)
+    	{
+    		//if(confirm('确定修改？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/info2_mod')}",
+							data:{
+								id:id,
+								uid:$("#uid"+id).val(),
+								zhuanlihaoma:$("#zhuanlihaoma"+id).val(),
+								zhuanlileixing:$("#zhuanlileixing"+id).val(),
+								zhuanlimingcheng:$("#zhuanlimingcheng"+id).val(),
+								jinzhanqingkuang:$("#jinzhanqingkuang"+id).val(),
+								qudefangshi:$("#qudefangshi"+id).val(),
+								zhuanliquanren:$("#zhuanliquanren"+id).val(),
+								guanxi:$("#guanxi"+id).val()
+								},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("修改成功");
+									//location.reload();
+									//$("#frmall")[0].submit();
+									gdCnt=gdCnt+1;
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								recall();
+							},
+							error: function(){
+								alert('修改发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function add()
+		{
+			gdCnt=0;
+			action=0;
+			whichbtn=1;
+			if($("button[name=info2btn]").length>0)
+			{
+				$("button[name=info2btn]").each(function(){
+					$(this).click();
+				})
+			}else
+			{
+				add1();
+			}
+		}
+		function add1()
+    	{
+    		if(confirm('确定添加？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/info2_mod')}",
+							data:{
+								id:0,
+								uid:$("#uid").val(),
+								zhuanlihaoma:$("#zhuanlihaoma").val(),
+								zhuanlileixing:$("#zhuanlileixing").val(),
+								zhuanlimingcheng:$("#zhuanlimingcheng").val(),
+								jinzhanqingkuang:$("#jinzhanqingkuang").val(),
+								qudefangshi:$("#qudefangshi").val(),
+								zhuanliquanren:$("#zhuanliquanren").val(),
+								guanxi:$("#guanxi").val()
+								},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("修改成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+									//gdCnt=gdCnt+1;
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								//recall();
+							},
+							error: function(){
+								alert('添加发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function delinfo(id)
+		{
+			gdCnt=0;
+			action=id;
+			whichbtn=1;
+			$("button[name=info2btn]").each(function(){
+				$(this).click();
+			})
+		}
+		function delinfo1(id)
+    	{
+			
+    		if(confirm('确定删除？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/info2_del')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("删除成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+								}else
+								{
+									alert(data.status);	
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								
+							},
+							error: function(){
+								alert('删除发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		
+		//////
+		
+		function save2(id)
+    	{
+    		//if(confirm('确定修改？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/info2_mod2')}",
+							data:{
+								id:id,
+								uid:$("#uid"+id).val(),
+								dengjihao:$("#dengjihao"+id).val(),
+								ruanjianmingcheng:$("#ruanjianmingcheng"+id).val(),
+								jinzhanqingkuang:$("#jinzhanqingkuang"+id).val(),
+								qudefangshi:$("#qudefangshi"+id).val(),
+								shenqingren:$("#shenqingren"+id).val(),
+								guanxi:$("#guanxi"+id).val()
+								},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("修改成功");
+									//location.reload();
+									//$("#frmall")[0].submit();
+									gdCnt=gdCnt+1;
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								recall();
+							},
+							error: function(){
+								alert('修改发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function add2()
+		{
+			gdCnt=0;
+			action=0;
+			whichbtn=2;
+			if($("button[name=info2btn]").length>0)
+			{
+				$("button[name=info2btn]").each(function(){
+					$(this).click();
+				})
+			}else
+			{
+				add21();	
+			}
+		}
+		function add21()
+    	{
+    		if(confirm('确定添加？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/info2_mod2')}",
+							data:{
+								id:0,
+								uid:$("#uid").val(),
+								dengjihao:$("#dengjihao").val(),
+								ruanjianmingcheng:$("#ruanjianmingcheng").val(),
+								jinzhanqingkuang:$("#jinzhanqingkuang").val(),
+								qudefangshi:$("#qudefangshi").val(),
+								shenqingren:$("#shenqingren").val(),
+								guanxi:$("#guanxi").val()
+								},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("修改成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+									//gdCnt=gdCnt+1;
+								}else
+								{
+									alert(data.status);
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								//recall();
+							},
+							error: function(){
+								alert('添加发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+		function delinfo2(id)
+		{
+			gdCnt=0;
+			action=id;
+			whichbtn=2;
+			$("button[name=info2btn]").each(function(){
+				$(this).click();
+			})
+		}
+		function delinfo21(id)
+    	{
+			
+    		if(confirm('确定删除？'))
+    		{
+    				$.ajax({
+							type: "post",
+							url: "{:U('Company/info2_del2')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+								
+							},
+							success: function(data, textStatus){
+								if(data.status=="OK")
+								{
+									//alert("删除成功");
+									//location.reload();
+									$("#frmall")[0].submit();
+								}else
+								{
+									alert(data.status);	
+								}
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								
+							},
+							error: function(){
+								alert('删除发生错误，请刷新页面之后重试');
+							}
+						});
+    		}
+    	}
+    </script>
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<div id="current" class="tab-pane fade active in">
+			<script type="text/javascript">var i=1</script>
+				<fieldset>
+				<legend>专利</legend>
+				<button type="button" class="btn btn-success" onclick="add()">+新增专利项</button>
+				<table id="zhuanli" class="table table-bordered table-condensed table-striped">
+					
+					
+					<!--{$zlcnt=0}-->
+					<!--{$zlfmcnt=0}-->
+					<!--{$zlsyxxcnt=0}-->
+					<!--{$zlwgcnt=0}-->
+					<foreach name="vo.zhuanli" item="zl">
+					<!--{$zlcnt=$zlcnt+1}-->
+					<if condition='$zl.zhuanlileixing eq "发明"'>
+						<!--{$zlfmcnt=$zlfmcnt+1}-->
+					</if>
+					<if condition='$zl.zhuanlileixing eq "实用新型"'>
+						<!--{$zlsyxxcnt=$zlsyxxcnt+1}-->
+					</if>
+					<if condition='$zl.zhuanlileixing eq "外观"'>
+						<!--{$zlwgcnt=$zlwgcnt+1}-->
+					</if>
+					
+					
+						<form action="{:U(Compan/Info2)}&act=mod" method="post">
+							<tbody style="border:1px dashed #336699;">
+							<tr>
+								<th>专利号码</th>
+								<th>专利类型</th>
+								<th>专利名称</th>
+								<th>进展情况</th>
+								
+							</tr>
+							<tr id="zhuanliRow1">
+								<td>
+									<input type="hidden" name="id" value="{$zl.id}" id="id{$zl.id}">
+									<input type="hidden" name="uid" value="{$zl.uid}" id="uid{$zl.id}">
+									<input type="text" name="zhuanlihaoma" value="{$zl.zhuanlihaoma}" class="input-small" id="zhuanlihaoma{$zl.id}" placeholder="" data-name="专利号码"></td>
+								<td>
+									<select class="input-small" id="zhuanlileixing{$zl.id}"  name="zhuanlileixing" data-name="专利类型">
+										<option value="发明">发明</option>
+										<option value="实用新型">实用新型</option>
+										<option value="外观">外观</option>
+									</select>
+									<script>
+										$("#zhuanlileixing{$zl.id}").val("{$zl.zhuanlileixing}");
+									</script>
+								</td>
+								<td><input type="text" name="zhuanlimingcheng" data-name="专利名称" value="{$zl.zhuanlimingcheng}" class="input-small" id="zhuanlimingcheng{$zl.id}" placeholder="" ></td>
+								<td>
+									<select class="input-small" id="jinzhanqingkuang{$zl.id}" name="jinzhanqingkuang" data-name="进展情况">
+										<option value="递交申请">递交申请</option>
+										<option value="已受理">已受理</option>
+										<option value="已授权">已授权</option>
+									</select>
+									<script>
+										$("#jinzhanqingkuang{$zl.id}").val("{$zl.jinzhanqingkuang}");
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<th>取得方式</th>
+								<th>专利权人</th>
+								<th>专利权人与项目单位关系</th>
+								<th>操作</th>
+							</tr>
+							<tr id="zhuanliRow1">
+		
+								<td style="border-bottom:1px dashed #336699;">
+									<select class="input-small" id="qudefangshi{$zl.id}" name="qudefangshi" data-name="取得方式">
+										<option value="自主开发">自主开发</option>
+										<option value="转让">转让</option>
+										<option value="授权">授权</option>
+										<option value="共享">共享</option>
+									</select>
+									<script>
+										$("#qudefangshi{$zl.id}").val("{$zl.qudefangshi}");
+									</script>
+								</td>
+								<td style="border-bottom:1px dashed #336699;"><input type="text"  data-name="专利权人" name="zhuanliquanren" id="zhuanliquanren{$zl.id}" value="{$zl.zhuanliquanren}" class="input-small" id="name" placeholder="" ></td>
+								<td style="border-bottom:1px dashed #336699;"><select  class="input-medium"  name="guanxi" id="guanxi{$zl.id}" data-name="专利权人与项目单位关系">
+										<option value="同一单位">同一单位</option>
+										<option value="是申报单位的主管单位">是申报单位的主管单位</option>
+										<option value="存在股权关系">存在股权关系</option>
+										<option value="不存在股权及主管关系">不存在股权及主管关系</option>
+										<option value="合作关系">合作关系</option>
+									</select>
+									<script>
+										$("#guanxi{$zl.id}").val("{$zl.guanxi}");
+									</script>
+								</td>
+								<td style="border-bottom:1px dashed #336699;">
+								<if condition="$data.status elt 5">
+									<!--onclick="var newrow=$('#zhuanli tbody')[1].outerHTML;newrow.id='zhuanlirow'+(i++);$('#zhuanli').append(newrow);"-->
+								<button name="info2btn" type="button" class="btn btn-success" onclick="save({$zl.id})" style="display:none">保存</button>
+									<!--$(this).parent().parent().parent().remove()-->
+								<button id="del" onclick="delinfo(<?php echo($zl["id"]);?>)" type="button" class="btn btn-danger">删除</button>
+								</if>
+								</td>
+							</tr>
+							</tbody>
+							</form>
+					</foreach>
+					<form action="{:U(Company/Info2)}&act=add" method="post">
+					<if condition="$data.status elt 5">
+					<tbody style="display:none">
+					<tr id="zhuanliRow1">
+						
+							<th>专利号码</th>
+							<th>专利类型</th>
+							<th>专利名称</th>
+							<th>进展情况</th>
+							
+						</tr>
+						<tr>
+						<td>
+							<input type="hidden" name="id" value="">
+							<input type="hidden" name="uid" value="{$Think.session.user_id}">
+							<input type="text" name="zhuanlihaoma" class="input-small" id="name" placeholder=""></td>
+						<td>
+							<select class="input-small"  name="zhuanlileixing">
+								<option>发明</option>
+								<option>实用新型</option>
+								<option>外观</option>
+							</select>
+						</td>
+						<td><input type="text" name="zhuanlimingcheng" class="input-small" id="name" placeholder="" ></td>
+						<td>
+							<select class="input-small"  name="jinzhanqingkuang">
+								<option>递交申请</option>
+								<option>已受理</option>
+								<option>已授权</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>取得方式</th>
+						<th>专利权人</th>
+						<th>专利权人与项目单位关系</th>
+						<th>操作</th>
+					</tr>
+					<tr id="zhuanliRow1">
+
+						<td>
+							<select class="input-small" name="qudefangshi">
+								<option>自主开发</option>
+								<option>转让</option>
+								<option>授权</option>
+								<option>共享</option>
+							</select>
+						</td>
+						<td><input type="text"  name="zhuanliquanren" class="input-small" id="name" placeholder="" ></td>
+						<td><select  class="input-medium"  name="guanxi">
+								<option>同一单位</option>
+								<option>是申报单位的主管单位</option>
+								<option>存在股权关系</option>
+								<option>不存在股权及主管关系</option>
+								<option>合作关系</option>
+							</select></td>
+						<td>
+						<button type="submit" class="btn btn-success" >新增</button>
+						</td>
+					</tr>
+					</tbody>
+					</form>
+					</tbody>
+					</if>
+				</table>
+				</fieldset>
+				<fieldset>
+				<legend>著作权<a name="zzq"></a></legend>
+				<button type="button" class="btn btn-success" onclick="add2()">+新增著作权项</button>
+				
+				<script type="text/javascript">var i=1</script>
+				<table id="zhuzuoquan" class="table table-bordered table-condensed table-striped">
+					
+					<tr>
+						<th>登记号</th>
+						<th>软件名称</th>
+						<th>进展情况</th>
+						<th>取得方式</th>
+						<th>申请人</th>
+						<th>申请人与项目单位关系</th>
+						<th>操作</th>
+					</tr>
+					<!--{$zzqcnt=0}-->
+					<foreach name="vo.zhuzuoquan" item="zzq">
+						<form action="{:U(Company/Info2)}&act=mod2#zzq" method="post">
+						<tr>
+						<td>
+							<input type="hidden" name="uid" value="{$zzq.uid}" id="uid{$zzq.id}">
+							<input type="hidden" name="id" value="{$zzq.id}" id="id{$zzq.id}">
+							<input type="text" name="dengjihao" value="{$zzq.dengjihao}" class="input-small" id="dengjihao{$zzq.id}" placeholder=""  data-name="登记号"></td>
+						<td><input type="text" name="ruanjianmingcheng" value="{$zzq.ruanjianmingcheng}"  data-name="软件名称" class="input-small" id="ruanjianmingcheng{$zzq.id}" placeholder="" ></td>
+						<td>
+							<select id="jinzhanqingkuang{$zzq.id}" name="jinzhanqingkuang" class="input-small"  data-name="进展情况">
+								<option value="递交申请">递交申请</option>
+								<option value="已受理">已受理</option>
+								<option value="已授权">已授权</option>
+							</select>
+							<script>
+								$("#jinzhanqingkuang{$zzq.id}").val("{$zzq.jinzhanqingkuang}");
+							</script>
+						</td>
+						<td>
+							<select name="qudefangshi" id="qudefangshi{$zzq.id}" class="input-small"  data-name="取得方式">
+								<option value="原始取得">原始取得</option>
+								<option value="继受取得">继受取得</option>
+							</select>
+							<script>
+								$("#qudefangshi{$zzq.id}").val("{$zzq.qudefangshi}");
+							</script>
+						</td>
+						<td><input type="text" value="{$zzq.shenqingren}" name="shenqingren" class="input-small" id="shenqingren{$zzq.id}" placeholder=""  data-name="申请人"></td>
+						<td>
+							<select  class="input-small"  name="guanxi" id="guanxi{$zzq.id}"  data-name="申请人与项目单位关系">
+										<option value="同一单位">同一单位</option>
+										<option value="是申报单位的主管单位">是申报单位的主管单位</option>
+										<option value="存在股权关系">存在股权关系</option>
+										<option value="不存在股权及主管关系">不存在股权及主管关系</option>
+										<option value="合作关系">合作关系</option>
+									</select>
+									<script>
+										$("#guanxi{$zzq.id}").val("{$zzq.guanxi}");
+									</script>
+									
+						</td>
+						<td>
+							<if condition="$data.status elt 5">
+						<button name="info2btn" type="button" class="btn btn-success" onclick="save2(<?php echo($zzq["id"]);?>)" style="display:none">保存</button>
+						<button id="del" onclick="delinfo2(<?php echo($zzq["id"]);?>)" type="button" class="btn btn-danger">删除</button>
+						</if>
+						</td>
+					</tr>
+					</form>
+					<!--{$zzqcnt=$zzqcnt+1}-->
+					</foreach>
+					<form action="{:U(Company/Info2)}&act=add2#zzq" method="post">
+					<if condition="$data.status elt 5">
+						<tr id="zhuzuoquanRow1" style="display:none">
+							<td>
+								<input type="hidden" name="uid" value="{$Think.session.user_id}">
+								<input type="text" name="dengjihao" class="input-small" id="name" placeholder=""></td>
+							<td><input type="text" name="ruanjianmingcheng" class="input-small" id="name" placeholder="" ></td>
+							<td>
+								<select name="jinzhanqingkuang" class="input-small">
+									<option value="递交申请">递交申请</option>
+									<option value="已受理">已受理</option>
+									<option value="已授权">已授权</option>
+								</select>
+								
+							</td>
+							<td>
+								<select name="qudefanshi" class="input-small">
+									<option value="原始取得">原始取得</option>
+									<option value="继受取得">继受取得</option>
+								</select>
+							</td>
+							<td><input type="text" name="shenqingren" class="input-small" id="name" placeholder="" ></td>
+							<td>
+								<select  class="input-small"  name="guanxi" >
+										<option value="同一单位">同一单位</option>
+										<option value="是申报单位的主管单位">是申报单位的主管单位</option>
+										<option value="存在股权关系">存在股权关系</option>
+										<option value="不存在股权及主管关系">不存在股权及主管关系</option>
+										<option value="合作关系">合作关系</option>
+									</select>
+									
+							</td>
+							<td>
+							
+							
+							</td>
+						</tr>
+						</if>
+					</form>
+				</table>
+				
+				<form action="{:U(Company/Info2)}" method="post" id="frmall">
+					<input type="hidden" name="id" value="{$Think.session.user_id}">
+					<input type="hidden" name="uid" value="{$Think.session.user_id}">
+				<table class="table table-bordered table-condensed">
+					<tr><th style="text-align:center" colspan="4">与主营业务相关的知识产权情况</th></tr>
+					<tr>
+						<td>专利总数</td>
+						<td><input type="text" name="" value="{$zlcnt}" class="input-small" id="name" readonly placeholder=""><span style="color:red;">项</span></td>
+						<td>软件著作权总数</td>
+						<td><input type="text" name="" value="{$zzqcnt}" class="input-small" id="name" readonly placeholder=""><span style="color:red;">项</span></td>
+					</tr>
+					<tr>
+						
+						<td>发明专利</td>
+						<td><input type="text" name="famingizhuanli" value="{$zlfmcnt}" readonly class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+						<td>实用新型</td>
+						<td><input type="text" name="shiyongxinxing" value="{$zlsyxxcnt}" readonly class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+					</tr>
+					<tr>
+						<td>外观</td>
+						<td><input type="text" name="waiguan" value="{$zlwgcnt}" readonly class="input-small" id="name" placeholder=""><span style="color:red;">项</span></td>
+						<td>知识产权归属说明</td>
+						<td>
+							<select class="input-small" id="zhishichanquanguishu" name="zhishichanquanguishu" >
+								<option value="自主">自主</option>
+								<option value="合作">合作</option>
+								<option value="授权">授权</option>
+							</select>
+							<script>
+								$("#zhishichanquanguishu").val("{$vo.zscq.zhishichanquanguishu}");
+							</script>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>是否国家高新技术企业</td>
+						<td><select name="isgaoxinjishu" id="isgaoxinjishu" class="input-small"
+							 onchange="$('#gaoqiID').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+
+							</select>
+							
+							</td>
+						<td>高新证书编号</td>
+						<td><input name="gaoqiID"  type="text" class="input-large" id="gaoqiID" placeholder="" disabled="disabled">
+							<script>
+								$("#isgaoxinjishu").val("{$vo.zscq.isgaoxinjishu}");
+								if("{$vo.zscq.isgaoxinjishu}"=="否")
+								{
+										$("#gaoqiID").val("");
+								}else if("{$vo.zscq.isgaoxinjishu}"=="是")
+								{
+										$("#gaoqiID").val("{$vo.zscq.gaoqiID}");
+										$('#gaoqiID').attr('disabled',false)
+								}
+								
+							</script>
+							</td>
+					</tr>
+					<tr>
+						<td>是否在国家高新区</td>
+						<td ><select name="isatguojiagaoxin" id="isatguojiagaoxin"  class="input-small"
+							onchange="$('#gaoxinName').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+								
+							</select>
+							
+							</td>
+						<td>高新区名称</td>
+						<td ><input name="gaoxinName" id="gaoxinName" type="text" class="input-large" id="gaoxinqumingcheng" placeholder="" disabled="disabled">
+							<script>
+								$("#isatguojiagaoxin").val("{$vo.zscq.isatguojiagaoxin}");
+								if("{$vo.zscq.isatguojiagaoxin}"=="否")
+								{
+										$("#gaoxinName").val("");
+								}else if("{$vo.zscq.isatguojiagaoxin}"=="是")
+								{
+										$("#gaoxinName").val("{$vo.zscq.gaoxinName}");
+										$('#gaoxinName').attr('disabled',false)
+								}
+								
+							</script>
+							</td>
+					</tr>
+					<tr>
+						<td>是否曾在国家级孵化器</td>
+						<td ><select name="isfuhuaqi" id="isfuhuaqi"  class="input-small"
+							onchange="$('#fuhuaqiName').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+								
+							</select>
+							
+							</td>
+						<td>孵化器名称</td>
+						<td >
+							<input name="fuhuaqiName" id="fuhuaqiName" type="text" class="input-large" id="fuhuaqimingcheng" placeholder="" disabled="disabled">
+							<script>
+								$("#isfuhuaqi").val("{$vo.zscq.isfuhuaqi}");
+								if("{$vo.zscq.isfuhuaqi}"=="否")
+								{
+										$("#fuhuaqiName").val("");
+								}else if("{$vo.zscq.isfuhuaqi}"=="是")
+								{
+										$("#fuhuaqiName").val("{$vo.zscq.fuhuaqiName}");
+										$('#fuhuaqiName').attr('disabled',false)
+								}
+								
+							</script>
+							</td>
+					</tr>
+					
+					
+					<tr>
+						<td>企业是否获得过国家创新基金的支持</td>
+						<td>
+							<select name="isZhichi" id="isZhichi" class="input-small"
+								onchange="$('#hetongbianhao').attr('disabled',this.value=='是'?false:true)">
+								<option value="否">否</option>
+								<option value="是">是</option>
+							</select>
+							
+						</td>
+						<td>合同编号</td>
+						<td>
+							<input  name="hetongbianhao"  type="text" class="input-large" id="hetongbianhao" disabled="disabled">
+						<script>
+								$("#isZhichi").val("{$vo.zscq.isZhichi}");
+								if("{$vo.zscq.isZhichi}"=="否")
+								{
+										$("#hetongbianhao").val("");
+								}else if("{$vo.zscq.isZhichi}"=="是")
+								{
+										$("#hetongbianhao").val("{$vo.zscq.hetongbianhao}");
+										$('#hetongbianhao').attr('disabled',false)
+								}
+								
+							</script>
+						</td>
+					</tr>
+				</table>
+				<if condition="($data.status eq 4) OR ($data.status eq 5) ">
+				<input type="button" class="btn btn-large btn-primary btn-block"  onclick="onnext('0')" value=" 保 存 ">
+				
+				<input type="button" class="btn btn-large btn-success btn-block" onclick="onnext('1')" value=" 保 存 并 且 下一步">
+				<input type="hidden" name="isnext" id="isnext" value="0">
+				<script>
+				function onnext(w)
+				{
+					$('#isnext').val(w);
+					gdCnt=0;
+					action="save";
+					whichbtn=1;
+					if($("button[name=info2btn]").length>0)
+					{
+						$("button[name=info2btn]").each(function(){
+							$(this).click();
+						})
+					}else
+					{
+						recall();
+					}
+				}
+				function check()
+				{
+					var isgo=true;
+					$("input[type=text]").each(function(){
+						if($(this).val()=="" && isgo && $(this).attr("data-name") !=undefined)
+						{
+							alert($(this).attr("data-name")+" 必填");
+							$(this).focus();
+							isgo=false;
+							return;
+						}
+					});
+					return isgo;
+				}
+				function recall()
+				{
+					if(gdCnt==$("button[name=info2btn]").length)
+					{
+						if(whichbtn==1)
+						{
+							if(action=="save")
+							{
+								if(check())
+								{
+									$('#frmall')[0].submit();
+								}
+							}else if(action!="0")
+							{
+								delinfo1(action)
+							}else
+							{
+								add1();
+							}
+						}else if(whichbtn==2)
+						{
+							if(action=="save")
+							{
+								if(check())
+								{
+									$('#frmall')[0].submit();
+								}
+							}else if(action!="0")
+							{
+								delinfo21(action)
+							}else
+							{
+								add21();
+							}
+						}
+					}
+				}
+				
+				</script>
+				</if>
+				</form>
+				</fieldset>
+			</div>
+	</div>
+</div>
+</block>

@@ -1,0 +1,167 @@
+<extend name="Base/common"/>
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/jsAddress.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+
+	function check()
+	{
+		if( checkItem('company','公司') 
+				&& checkItem('bLicence','营业执照号码')
+				&& checkItem('orgID','组织机构代码证号码')
+								
+		  )
+		  {
+				return true;
+			}else
+		  {
+				return false
+		  }
+			
+	}
+	
+	
+
+	function checkemail()
+	{
+			var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+			var email_val = $("#email").val();
+			if(!search_str.test(email_val)){        
+				 alert("email 格式不正确 !");
+				 $('#email')[0].focus();
+				 return false;
+			}
+			return true;
+	}
+	function checkoorgID()
+	{
+			if(!isValidEntpCode($("#orgID").val()))
+			{
+				 alert("组织机构代码证号码 格式不正确 应该为:00000000-0 !");
+				 $('#orgID')[0].focus();
+				 return false;
+			}
+			return true;
+	}
+
+	
+	
+	function isValidEntpCode(code, has){
+		var ws = [3, 7, 9, 10, 5, 8, 4, 2];
+		var str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var reg = /^([0-9A-Z]){8}-[0-9|X]$/;// /^[A-Za-z0-9]{8}-[A-Za-z0-9]{1}$/
+		if (!reg.test(code)) {
+			return false;
+		}
+		return true;
+		var sum = 0;
+		for (var i = 0; i < 8; i++) {
+		   sum += str.indexOf(code.charAt(i)) * ws[i];
+		}
+		var c9 = 11 - (sum % 11);
+		c9 = c9 == 10 ? 'X' : c9
+		return c9 == code.charAt(9);
+	}
+	function checkItem(id,str)
+	{
+		if($("#"+id).val()=="")
+		{
+			$("#"+id)[0].focus();
+			alert(str+"必填");
+
+			return false;
+			
+		}
+		return true;
+	}
+	
+	function validatePwd(str) {
+		// 计算密码强度
+		var level = 0;
+		// 大写字母
+		if (/.*[A-Z].*/.test(str)) {
+			level++;
+		}
+		// 小写字母
+		if (/.*[a-z].*/.test(str)) {
+			level++;
+		}
+		// 数字
+		if (/.*[0-9].*/.test(str)) {
+			level++;
+		}
+		// 特殊字符
+		if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\\];\\:\\'\\"\\,<\\.>\\/\\?].*/.test(str)) {
+		//if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\];\:\'\"\,<\.>\/\?].*/.test(str)) {
+			level++;
+		}
+		if (str.length>8)
+		{
+			level++;
+		}
+		$("#pwd1").attr("class","pwdStrong");
+		$("#pwd2").attr("class","pwdStrong");
+		$("#pwd3").attr("class","pwdStrong");
+		if(level>0){
+			$("#pwd1").attr("class","pwdStrong pwdActive");
+		}
+		if (level>3) {
+			$("#pwd2").attr("class","pwdStrong pwdActive");
+		}
+		if(level>=5){
+			$("#pwd3").attr("class","pwdStrong pwdActive");
+		};
+	}
+	</script>
+
+
+</block>
+<block name="body">
+<div class="container table-bordered reg" style="width:951px;">
+	<div class="regTitle">
+		<h3 class="regTitleContent">找回用户名/密码</h3>
+	</div>
+	<div class="regContent table">
+	<form class="well form-horizontal" method="post" action="{:U('Home/User/Findpwd')}" onsubmit="return check()">
+		<fieldset>
+			<legend>公司基本信息:</legend>
+			
+			<div class="control-group">
+	            <label class="control-label" for="company">企业全称</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="company" name="company" maxlength="200" placeholder="请填写公司企业全称(3到50位中英文字符或数字)">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        	        
+	        <div class="control-group">
+	            <label class="control-label" for="bLicence">营业执照号码</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="bLicence" name="bLicence" maxlength="100" placeholder="请填写营业执照号码">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label" for="orgID">组织机构代码证号码</label>
+	            <div class="controls">
+	            	<input type="text" class="input-xlarge" id="orgID" name="orgID" maxlength="100" placeholder="请填写组织机构代码证号码">
+	            	<font color="red">* 必须填入项目</font>
+	            </div>
+	        </div>
+	        
+	                
+	        </fieldset>
+        <fieldset><div class="control-group"></div>
+	    </fieldset>
+	    <h3>
+	    	* 找回密码，只有以上必须输入内容中两项正确，用户名和密码就会短信发送到您原来登记的手机号码。
+
+	    </h3>
+
+	</div>
+	<div class="regBtn">
+    	<input type="submit" class="btn btn-large btn-primary btn-block" value=" 找回密码 ">
+    </div>
+</div>
+</block>

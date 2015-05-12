@@ -1,0 +1,662 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/jsAddress.js" charset="UTF-8"></script>
+	<script>
+	$(function(){
+		$('.form_date').datetimepicker({
+			language:  'zh-CN',
+			weekStart: 1,
+			todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			forceParse: 0
+			});
+			var city="{$Think.get.cmbProvince}"==""?"天津":"{$Think.get.cmbProvince}";
+			var city2="{$Think.get.cmbCity}"==""?"天津市":"{$Think.get.cmbCity}";
+			var dis= "{$Think.get.cmbArea}"==""?"":"{$Think.get.cmbArea}";
+
+			addressInit('cmbProvince', 'cmbCity', 'cmbArea', city, city2, dis);
+
+			if(dis=="滨海新区")
+			{
+				$('#subWhere').show();
+				alert(dis);
+				$("#subWhere").val("{$Think.get.subWhere}");
+			}
+			else
+			{
+				$('#subWhere').hide();
+				alert(dis);
+				$("#subWhere").val('');
+			}
+
+			var where = "[where]";
+			var items = where.split('-');
+			if(items.length>0)
+			{
+			//	addressInit('cmbProvince', 'cmbCity', 'cmbArea', items[0], items[1], items[2]);
+				
+			}
+			
+	 });
+			
+	function getDate(id)
+	{
+		$.ajax({
+				type: "get",
+				url: "{:U('Index/Project')}",
+				data:{uid: id},
+				beforeSend: function(XMLHttpRequest){
+					$('#pctn').html("正在生产PDF文档中...... 请稍候.....");
+				},
+				success: function(data, textStatus){
+					$('#pctn').html(data);
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					
+				},
+				error: function(){
+					alert('错误，请刷新页面之后重试');
+				}
+			});
+	}
+    function saveassign(id)
+    {
+    		if(confirm('确定指派？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Index/saveassign')}",
+							data:{id: id,uid:$('#admin'+id).val()},
+							beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+							success: function(data, textStatus){
+								$('#assignBtn'+id).html('已经分配给['+data.username+']');
+								$('#assignBtn'+id).attr('disabled',true);
+								alert("分配成功");
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+							},
+							error: function(){
+								alert('分配错误，请刷新页面之后重试');
+							}
+						});
+
+    		}
+    }
+    function pass(id)
+    {
+    	if(confirm('确定审核通过？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Index/pass')}",
+							data:{id: id},
+							beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+							success: function(data, textStatus){
+								
+								alert("审核通过成功");
+								location.reload();
+								
+								
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+							},
+							error: function(){
+								alert('审核通过错误，请刷新页面之后重试');
+							}
+						});
+
+
+
+				$.ajax({
+					type: "post",
+					url: "{:U('Index/pdfdo')}",
+					data:{id: id},
+					beforeSend: function(XMLHttpRequest){
+						$("#prg").modal({
+							backdrop:true,
+							keyboard:true,
+							show:true
+						});
+					},
+					success: function(data, textStatus){
+						alert(data);
+						location.reload();
+					},
+					complete: function(XMLHttpRequest, textStatus){
+						$("#prg").modal('hide');
+					},
+					error: function(){
+						alert('生成PDF文档错误，请刷新页面之后重试');
+					}
+				});
+
+
+    		}
+
+			
+    	
+    	}
+    function refuse(id)
+    {
+    	if(confirm('确定审核不通过？'))
+    		{
+    				$.ajax({
+							type: "get",
+							url: "{:U('Index/refuse')}",
+							data:{id: id,title:encodeURI($('#rtitle'+id).val()),content:encodeURI($('#rcontent'+id).val())},
+							beforeSend: function(XMLHttpRequest){
+								$("#prg").modal({
+								    backdrop:true,
+								    keyboard:true,
+								    show:true
+								});
+							},
+							success: function(data, textStatus){
+								
+								alert("审核不通过");
+								location.reload();
+							},
+							complete: function(XMLHttpRequest, textStatus){
+								$("#prg").modal('hide');
+							},
+							error: function(){
+								alert('审核不通过错误，请刷新页面之后重试');
+							}
+						});
+
+    		}
+    	}
+
+    function pdfdo(id)
+    {
+    	if(confirm('确定生成PDF文档？'))
+    	{
+			$.ajax({
+				type: "post",
+				url: "{:U('Index/pdfdo')}",
+				data:{id: id},
+				beforeSend: function(XMLHttpRequest){
+					$("#prg").modal({
+						backdrop:true,
+						keyboard:true,
+						show:true
+					});
+				},
+				success: function(data, textStatus){
+					alert(data);
+					location.reload();
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					$("#prg").modal('hide');
+				},
+				error: function(){
+					alert('生成PDF文档错误，请刷新页面之后重试');
+				}
+			});
+			
+    	}
+	}
+	function pdfdo2(id)
+    {
+    	if(confirm('确定生成新PDF文档？'))
+    	{
+			$.ajax({
+				type: "post",
+				url: "{:U('Index/pdfdo2')}",
+				data:{id: id},
+				beforeSend: function(XMLHttpRequest){
+					$("#prg").modal({
+						backdrop:true,
+						keyboard:true,
+						show:true
+					});
+				},
+				success: function(data, textStatus){
+					alert(data);
+					location.reload();
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					$("#prg").modal('hide');
+				},
+				error: function(){
+					alert('生成PDF文档错误，请刷新页面之后重试');
+				}
+			});
+			
+    	}
+	}
+	function EditToMyTask(user,id)
+	{
+			if(confirm('确定修改？'))
+			{
+					$("#admin"+id).val(user);
+					$("#assign"+id).modal('show');
+			}
+	}
+    </script>
+    <script>
+    	function imgShow(outerdiv, innerdiv, bigimg, _this){
+				var src = _this.attr("src");//获取当前点击的pimg元素中的src属性
+				$(bigimg).attr("src", src);//设置#bigimg元素的src属性
+			
+			   /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+				$("<img/>").attr("src", src).load(function(){
+					var windowW = $(window).width();//获取当前窗口宽度
+					var windowH = $(window).height();//获取当前窗口高度
+					var realWidth = this.width;//
+					var realHeight = this.height;//
+					var imgWidth, imgHeight;
+					var scale = 0.8;//
+					
+					if(realHeight>windowH*scale) {
+						imgHeight = windowH*scale;
+						imgWidth = imgHeight/realHeight*realWidth;
+						if(imgWidth>windowW*scale) {
+							imgWidth = windowW*scale;
+						}
+					} else if(realWidth>windowW*scale) {
+						imgWidth = windowW*scale;
+			      imgHeight = imgWidth/realWidth*realHeight;
+					} else {
+						imgWidth = realWidth;
+						imgHeight = realHeight;
+					}
+			    $(bigimg).css("width",imgWidth);
+					
+					var w = (windowW-imgWidth)/2;
+					var h = (windowH-imgHeight)/2;
+					$(innerdiv).css({"top":h, "left":w});
+					$(outerdiv).fadeIn("fast");
+				});
+				
+				$(outerdiv).click(function(){
+					$(this).fadeOut("fast");
+				});
+			}
+    </script>
+</block>
+
+
+<block name="body">
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:9999;width:100%;height:100%;display:none;">
+	<div id="innerdiv" style="position:absolute;">
+	<img id="bigimg" style="border:5px solid #fff;" src="" />
+	</div>
+</div>
+<div class="modal hide fade" id='prg'>
+	<div class="modal-body">
+		加载中... 请稍候...
+	</div>
+</div>
+<div id="popupproject" class="modal hide fade" style="display:none;width:800px;left:40%;">
+	<div class="modal-header">
+	  <a class="close" data-dismiss="modal">×</a>
+	  <h3>项目资料</h3>
+	</div>
+	<div class="modal-body" id="pctn">
+	加载中... 请稍候...
+	</div>
+	<div class="modal-footer">
+	  <a href="#" class="btn" data-dismiss="modal">关闭</a>
+	</div>
+</div>
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<!--start-->
+		<fieldset>
+			<legend>我的任务</legend>
+		<form class="well  form-inline" method="get" action="?"/>
+				<input type="hidden" name="m" value="Admin">
+				<input type="hidden" name="c" value="Index">
+				<input type="hidden" name="a" value="Index">
+		<div class="control-group">
+            <label class="control-label" for="input01"></label>
+            
+            <div class="controls">
+            	<div class="controls input-append date form_date " data-date="" data-date-format="yyyy-mm-dd" data-link-field="startTime" data-link-format="yyyy-mm-dd">
+	                    申报起始时间: <input size="16"  type="text" value="{$Think.get.st}" placeholder="申报起始时间" readonly>
+	                    <span class="add-on"><i class="icon-remove"></i></span>
+						<span class="add-on"><i class="icon-th"></i></span>
+						
+	                </div>
+					<input type="hidden" id="startTime" name="st" value="{$Think.get.st}" />
+				-
+				<div class="controls input-append date form_date " data-date="" data-date-format="yyyy-mm-dd" data-link-field="endTime" data-link-format="yyyy-mm-dd">
+	                    申报结束时间: <input size="16"  type="text" value="{$Think.get.et}" placeholder="申报结束时间"  readonly>
+	                    <span class="add-on"><i class="icon-remove"></i></span>
+						<span class="add-on"><i class="icon-th"></i></span>
+						
+	                </div>
+					<input type="hidden" id="endTime" name='et' value="{$Think.get.et}" />
+            	
+            </div>
+        </div>
+
+		<div class="control-group">
+					<div class="controls">
+		            <label class="control-label" for="where">所在区县:</label>
+		            
+		            	<select id="cmbProvince" name="cmbProvince"   style="display:none" ></select>
+									<select id="cmbCity" name="cmbCity"  style="display:none"></select>
+									<select class="input-large" id="cmbArea" name="cmbArea" style="width:210px;" 
+										 onchange="if(this.value=='滨海新区'){$('#subWhere').show();}else{$('#subWhere').val('');$('#subWhere').hide();}"></select>
+									
+
+						<select id="subWhere" class="input-large" style="visible:hidden;width:280px;" name="subWhere" >
+							<option value="开发区">开发区</option>	
+							<option value="保税区">保税区</option>	
+							<option value="高新区">高新区</option>
+							<option value="塘沽">塘沽</option>	
+							<option value="汉沽">汉沽</option>							
+							<option value="大港">大港</option>	
+							<option value="其它">其它</option>
+						</select>
+						
+						<notempty name="Think.get.subWhere">
+						<script>
+
+						</script> 	
+						</notempty>
+									
+		            </div>	
+
+        </div>
+
+		<div class="control-group">
+				<div class="controls">
+	            <label class="control-label" for="paidUpCapital">实收资本:</label>
+	            
+	            	<input type="text" class="input-large" id="paidUpCapital" name="paidUpCapital" maxlength="100" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	
+	            
+				<label class="control-label" for="paidUpCapital">至</label>
+	            
+	            	<input type="text" class="input-large" id="paidUpCapitalMax" name="paidUpCapitalMax"  maxlength="100" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	<font color="red">万元</font>
+	            </div>
+	    </div>
+
+		<div class="control-group">
+	            <div class="controls">
+				<label class="control-label" for="salesIncome">销售收入:</label>
+	            
+	            	<input type="text" class="input-large" id="salesIncome" name="salesIncome"  maxlength="20" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	
+	            
+				<label class="control-label" for="salesIncome">至</label>
+	            
+	            	<input type="text" class="input-large" id="salesIncomeMax" name="salesIncomeMax"  maxlength="20" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')">
+	            	<font color="red">万元</font>
+	            </div>
+	    </div>
+
+
+        <div class="control-group">
+            
+            <div class="controls">
+            	企业名称: <input type="text" class="input-large" placeholder="企业名称" id="name" name='comp' value="{$Think.get.comp}">
+        
+            	<select name='status' id="status">
+            		<option value="">－请选择申报状态－</option>
+            		<option value="0">新注册</option>
+								<option value="1">资质审核未通过</option>	
+								<option value="3">提交资质待审核</option>														
+								<option value="4">资质审核通过</option>
+								<option value="5">项目审核未通过</option>
+								<option value="6">提交项目待审核</option>	
+								<option value="7">项目审核通过</option>
+								
+								
+            	</select>
+            	<notempty name="Think.get.status">
+            	<script>
+            		$("#status").val('{$Think.get.status}');
+            	</script>
+            	</notempty>
+            	<button  class="btn btn-primary btn-block"><i class="icon-search"></i> 查 找 </button>
+            </div>
+        </div>
+    </form>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td>编号</td>
+				<td>企业名称</td>
+				<td>项目名称</td>
+				<td>联系人</td>
+				<td>申报时间</td>				
+				<td>申报状态</td>
+				<td>操作</td>
+			</tr>
+			
+			<?php $n=0;?>
+			<foreach name="data" item="vo" >
+			<?php $n=$n+1;?>
+			<tr>
+				<td>{$all-$n-(($page-1)*$pagenumber)+1}</td>
+				<td><a href="{:U('Admin/Index/Company')}&id={$vo.id}" >{$vo.company}</a>
+					<!--<a href="#popupcompany{$vo.id}" data-toggle="modal">{$vo.company}</a>-->
+					<div id="popupcompany{$vo.id}" class="modal hide fade" style="display:none;width:800px;left:40%">
+							<div class="modal-header">
+					      <a class="close" data-dismiss="modal">×</a>
+					      <h3>公司基本资料</h3>
+					    </div>
+					    <div class="modal-body">
+						<include file="./Application/Home/View/Company/Base2.html"
+						user="{$vo.user.username}"
+						word="{$vo.word.password}"
+						id="{$vo.id}"
+								where="{$vo.where}" 
+								district="{$vo.subWhere}" 
+								company="{$vo.company}" 
+								licence="{$vo.bLicence}" 
+								organization="{$vo.orgID}" 
+								build="{$vo.buildTime|substr=0,10}" 
+								capital="{$vo.regCapital}" 
+								paid="{$vo.paidUpCapital}" 
+								director="{$vo.comDirector}" 
+								mobile="{$vo.mobile}" 
+								email="{$vo.email}" 
+								business="{$vo.mainBusiness}" 
+								regconition="{$vo.passRegconition}" 
+								all="{$vo.allCapital}" 
+								assets="{$vo.netAssets}" 
+								income="{$vo.salesIncome}" 
+								profit="{$vo.netProfit}" />
+						</div>
+						<div class="modal-footer">
+					      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+					    </div>
+					</div>
+				</td>
+			
+				<td><a href="#popupproject" onclick="getDate({$vo.id});" data-toggle="modal">{$vo.project.name}</a>
+					
+				</td>
+				<td>{$vo.comDirector}</td>
+				<td>{$vo.sbTime}</td>
+				
+				<td><span class="label {$vo.status|companyStatusCss}">{$vo.status|companyStatus}</span>
+
+				<if condition="$vo.projectNum neq null">
+				<br>受理号：{$vo.projectNum}
+				</if>
+				<?php if(isset($vo["pdfUrl"]["pdfUrl"])){?>
+				<br><a target="_blank" href="/Public/<?php  $pfdDownUrl="".$vo["pdfUrl"]["pdfUrl"]; echo($pfdDownUrl);?>">PDF文档</a>
+				<?php }?>
+				<?php if(isset($vo["pdfUrl"]["pdfUrlxml"])){?>
+				<br><a target="_blank" href="/Public/<?php  $pfdDownUrl="".$vo["pdfUrl"]["pdfUrlxml"]; echo($pfdDownUrl);?>">PDF文档详细</a>
+				<?php }?>
+				</td>
+
+				<td>
+					
+					<empty name="vo['assignUser']['username']">
+						<if condition="$Think.session.user_level eq 9">
+							<a id="assignBtn{$vo.id}" data-toggle="modal" title="用户未提交审核" href="#assign{$vo.id}" class="btn btn-small btn-primary btn-block">分配审核</a>
+						<else />
+						<a id="assignBtn{$vo.id}" disabled title="用户未提交审核" href="#" class="btn btn-small btn-primary btn-block">分配审核</a>
+						</if>
+					<else /> 
+						<if condition="$Think.session.user_level eq 9">
+							<a href="#assign" id="assignBtn{$vo.id}" onclick="EditToMyTask('{$vo.assignUid}',{$vo.id})" class="btn btn-small btn-primary btn-block" disabled>已分配给[{$vo.assignUser.username}]</a>
+						<else />
+							<a href="#" id="assignBtn{$vo.id}"  class="btn btn-small btn-primary btn-block" disabled>已分配给[{$vo.assignUser.username}]</a>
+						</if>
+
+					</empty>
+						<div id="assign{$vo.id}" class="modal hide fade" style="display:none;">
+							<div class="modal-header">
+						      <a class="close" data-dismiss="modal">×</a>
+						      <h3>请将此任务分配给</h3>
+						    </div>
+						    <div class="modal-body">
+								<select id="admin{$vo.id}">
+									<foreach name="admin" item="a">
+									<option value="{$a.id}">{$a.username}</option>
+									</foreach>
+									
+								</select><br />
+	
+	
+							</div>
+							<div class="modal-footer">
+	
+						      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+						      <a href="#" class="btn btn-primary" onclick="saveassign({$vo.id})"  data-dismiss="modal">保存</a>
+						    </div>
+						</div>
+					<if condition="$vo.status eq 3" >
+						
+						<input type="button" onclick="pass({$vo.id})" class="btn btn-small btn-success btn-block" value="资质审核通过">
+						<a href="#failed{$vo.id}" data-toggle="modal" class="btn btn-small btn-danger" >资质审核不过</a>
+					</if>
+
+					<if condition="$vo.status eq 6" >
+						
+						<input type="button" onclick="pass({$vo.id})" class="btn btn-small btn-success btn-block" value="项目审核通过">
+						<a href="#failed{$vo.id}" data-toggle="modal" class="btn btn-small btn-danger" >项目审核不过</a>
+					</if>
+
+
+					<div id="failed{$vo.id}" class="modal hide fade" style="display:none;">
+						<div class="modal-header">
+					      <a class="close" data-dismiss="modal">×</a>
+					      <h3>审核失败</h3>
+					    </div>
+					    <div class="modal-body">
+							<form class="form-horizontal">
+								<div class="control-group">
+									<div class="control-group">
+							            <label class="control-label" for="input01">失败原因</label>
+							            <div class="controls">
+							            	<select id="rtitle{$vo.id}">
+							            		<option value="需补充材料">需补充材料</option>
+							            		<option value="不符合投资条件">不符合投资条件</option>
+							            		<option value="已投资">已投资</option>
+							            	</select>
+							            	
+							            </div>
+							        </div>
+						            <label class="control-label" for="input01">详细描述(限200字内)</label>
+						            <div class="controls">
+						            	<textarea id="rcontent{$vo.id}" onKeyup="if(this.value.length>200){this.value=this.value.substr(0,200);}">
+						            	</textarea>
+						            </div>
+						        </div>
+							</form>
+						</div>
+						<div class="modal-footer">
+					      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+					      <a href="#" class="btn btn-primary" onclick="refuse({$vo.id})"  data-dismiss="modal">保存</a>
+					    </div>
+					</div>
+					
+					
+					<a href="#review{$vo.id}" data-toggle="modal" class="btn btn-small btn-success btn-block" >项目审核</a>
+					<a href="#history{$vo.id}" data-toggle="modal" class="btn btn-small btn-warning" >查看历史</a>
+					
+					<div id="history{$vo.id}" class="modal hide fade" style="display:none;">
+						<div class="modal-header">
+					      <a class="close" data-dismiss="modal">×</a>
+					      <h3>操作历史记录</h3>
+					    </div>
+					    <div class="modal-body">
+							<ul>
+								<foreach name="vo.history" item="history">
+								<li>{$history.createTime} {$history.message}</li>
+								</foreach>
+							</ul>
+						</div>
+						<div class="modal-footer">
+					      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+					      
+					   </div>
+					</div> 
+
+
+					<if condition="$Think.session.user_level eq 9">
+						<if condition="$vo.status eq 7" >
+						<input type="button" onclick="pdfdo({$vo.id})" class="btn btn-small btn-success btn-block" value="生成PDF文档">
+						<input type="button" onclick="pdfdo2({$vo.id})" class="btn btn-small btn-success btn-block" value="生成PDF文档带详细信息">
+						</if>
+					</if>
+
+
+				</td>
+			</tr>
+			</foreach>
+			
+			
+		</table>
+		<div style="width:100%;text-align:right;">
+		<?php?>
+		<div class="pagination pagination-right">
+            <ul>
+                <li><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page=1"><i class="icon-fast-backward"></i></a></li>
+                <li class="<?php echo ($page==1 || !isset($page))?"disabled":"";?>"><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page={$page-1}">前一页</a></li>
+				
+                
+                <li class="<?php echo $page==($maxpage-1)?"disabled":"";?>"><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page={$page+1}">下一页</a></li>
+                <li><a href="__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page={$maxpage-1}"><i class="icon-fast-forward"></i></a></li>
+                <li>
+					<select class="input-small" style="line-height:34px;height:36px;" onchange="location.href='__SELF__&st={$Think.get.st}&et={$Think.get.et}&comp={$Think.get.comp}&status={$Think.get.status}&page='+this.value">
+					<for start="1" end="$maxpage" step="1" name="n">
+						<if condition="$page eq $n ">
+							<option value="{$n}" selected>第{$n}页</option>
+						<else />
+						  <option value="{$n}" >第{$n}页</option>
+						</if>
+					
+					</for>
+					</select>
+				</li>
+            </ul>
+        </div>
+			
+		</div>
+		<!--end-->
+	</div>
+</div>
+</block>
+

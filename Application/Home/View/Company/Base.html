@@ -1,0 +1,365 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/jsAddress.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+    	$(function(){
+			 	/*$('.form_date').datetimepicker({
+	        language:  'zh-CN',
+	        weekStart: 1,
+	        todayBtn:  1,
+					autoclose: 1,
+					todayHighlight: 1,
+					startView: 2,
+					minView: 2,
+					forceParse: 0
+		    		});
+		    		*/
+			 		addressInit('cmbProvince', 'cmbCity', 'cmbArea', '天津', '天津市', '南开区');
+			 		var where = "{$data.where}";
+			 		var items = where.split('-');
+			 		if(items.length>0)
+			 		{
+			 			addressInit('cmbProvince', 'cmbCity', 'cmbArea', items[0], items[1], items[2]);
+			 			
+			 		}
+					if(items[2]=='滨海新区')
+					{
+						$('#subWhere').show();
+					}
+					else
+					{
+						$('#subWhere').hide();$('#subWhere').val('');
+					}
+
+			 });
+			function validatePwd(str) {
+				// 计算密码强度
+				var level = 0;
+				// 大写字母
+				if (/.*[A-Z].*/.test(str)) {
+					level++;
+				}
+				// 小写字母
+				if (/.*[a-z].*/.test(str)) {
+					level++;
+				}
+				// 数字
+				if (/.*[0-9].*/.test(str)) {
+					level++;
+				}
+				// 特殊字符
+				if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\\];\\:\\'\\"\\,<\\.>\\/\\?].*/.test(str)) {
+				//if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\];\:\'\"\,<\.>\/\?].*/.test(str)) {
+					level++;
+				}
+				if (str.length>8)
+				{
+					level++;
+				}
+				$("#pwd1").attr("class","pwdStrong");
+				$("#pwd2").attr("class","pwdStrong");
+				$("#pwd3").attr("class","pwdStrong");
+				if(level>0){
+					$("#pwd1").attr("class","pwdStrong pwdActive");
+				}
+				if (level>3) {
+					$("#pwd2").attr("class","pwdStrong pwdActive");
+				}
+				if(level>=5){
+					$("#pwd3").attr("class","pwdStrong pwdActive");
+				};
+			}
+			function check()
+			{
+					if( checkItem('username','用户名') 
+					 			&& checkItem('company','公司') 
+								&& checkItem('password','密码')
+							  && checkItem('bLicence','营业执照号码')
+							  && checkItem('orgID','组织机构代码证号码')
+							  && checkItem('createTime','成立时间')
+							  && checkItem('regCapital','注册资本')
+							  && checkItem('paidUpCapital','实收资本')
+							  && checkItem('comDirector','企业负责人')
+							  && checkItem('mobile','手机号码')
+							  && checkItem('email','联系邮箱')
+							  && checkItem('allCapital','总资产')
+								&& checkItem('netAssets','净资产')
+								&& checkItem('salesIncome','销售收入')
+								&& checkItem('netProfit','净利润')
+								&& checkItem('mainBusiness','主营业务')
+					  )
+					  {
+					  	if($("#password").val()!=$("#password2").val())
+					  	{
+					  		$("#password2").focus();
+					  		alert("两次密码不一致");
+					  		return false;
+					  	}
+					  	var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+							var email_val = $("#email").val();
+							if(!search_str.test(email_val)){        
+								 alert("email 格式不正确 !");
+								 $('#email')[0].focus();
+								 return false;
+							}
+							
+							 
+							if(!isValidEntpCode($("#orgID").val()))
+							{
+								 alert("组织机构代码证号码 格式不正确 应该为:00000000-0 !");
+								 $('#orgID')[0].focus();
+								 return false;
+							}
+							
+
+							if($('#regCapital').val()<30 || $('#regCapital').val()>3000)
+							{
+								 alert("注册资本在30万元到3000万元之间!");
+								 $('#regCapital')[0].focus();
+								 return false;
+							}
+							if($('#paidUpCapital').val()<30 || $('#paidUpCapital').val()>1000)
+							{
+								 alert("实收资本在30万元到1000万元之间!");
+								 $('#paidUpCapital')[0].focus();
+								 return false;
+							}
+					  }else
+					  {
+					  	return false
+					  }
+					  return true;
+					
+			}
+			function isValidEntpCode(code, has){
+				var ws = [3, 7, 9, 10, 5, 8, 4, 2];
+				var str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				var reg = /^([0-9A-Z]){8}-[0-9|X]$/;// /^[A-Za-z0-9]{8}-[A-Za-z0-9]{1}$/
+				if (!reg.test(code)) {
+					return false;
+				}
+
+				return true;  /*不进行组织机构代码证正确性检验*/
+
+				var sum = 0;
+				for (var i = 0; i < 8; i++) {
+				   sum += str.indexOf(code.charAt(i)) * ws[i];
+				}
+				var c9 = 11 - (sum % 11);
+				c9 = c9 == 10 ? 'X' : c9
+				return c9 == code.charAt(9);
+			}
+			function checkItem(id,str)
+			{
+				if($("#"+id).val()=="")
+				{
+					$("#"+id)[0].focus();
+					alert(str+"必填");
+					if(id=="createTime")
+					{
+						$("#buildTime")[0].focus();
+					}
+					return false;
+					
+				}
+				return true;
+			}
+	</script>
+	<style>
+
+	</style>
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		
+		<form class=" form-horizontal" action="__SELF__" method="post" onsubmit="return check()" id="frm">
+			<div class="regContent table">
+			<fieldset>
+				<legend>企业注册信息</legend>
+				<div class="control-group">
+		            <label class="control-label" for="input01">用户名</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="username" value="{$Think.session.user_name}" readonly />
+		            	<input type="hidden" id="id" value="{$data.id}" name="id" />
+		            </div>
+		        </div>
+				<div class="control-group">
+		            <label class="control-label" for="company">公司名称</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="company" name="company" value="{$data.company}" placeholder="请填写公司信息(3到50位中英文字符或数字)">
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="where">所在区县</label>
+		            <div class="controls">
+		            	<select id="cmbProvince" name="cmbProvince"   style="display:none" ></select>
+						<select id="cmbCity" name="cmbCity"  style="display:none"></select>
+									<select class="input-xlarge" id="cmbArea" name="cmbArea" style="width:280px;"  onchange="if(this.value=='滨海新区'){$('#subWhere').show();}else{$('#subWhere').hide();$('#subWhere').val('');}"></select>
+									<font color="red">* 必须填入项目</font><br />
+
+						<select id="subWhere" class="input-xlarge" style="display:none;width:280px;" name="subWhere" >
+							<option value="开发区">开发区</option>	
+							<option value="保税区">保税区</option>	
+							<option value="高新区">高新区</option>
+							<option value="塘沽">塘沽</option>	
+							<option value="汉沽">汉沽</option>							
+							<option value="大港">大港</option>	
+							<option value="其它">其它</option>
+						</select>
+
+						<script>
+							$("#subWhere").val("{$data.subWhere}");
+						</script> 	
+		            
+									
+		            </div>
+					
+
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="bLicence">营业执照号码</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="bLicence" name="bLicence" value="{$data.bLicence}" placeholder="请填写营业执照号码">
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="orgID">组织机构代码证号码</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="orgID" name="orgID" value="{$data.orgID}">
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="buildTime">成立时间</label>
+
+	                <div class="controls input-append date form_date createTime" data-date="" data-date-format="yyyy-mm-dd" data-link-field="createTime" data-link-format="yyyy-mm-dd">
+	                    <input size="16" type="text" value="{$data.buildTime|substr=0,10}" readonly>
+	                    <span class="add-on"><i class="icon-remove"></i></span>
+											<span class="add-on"><i class="icon-th"></i></span>
+											<font color="red">* 必须填入项目</font>
+	                </div>
+					<input type="hidden" id="createTime" value="{$data.buildTime}" name="buildTime"/>
+		            
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="regCapital">注册资本</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="regCapital" name="regCapital" value="{$data.regCapital}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* (30-3000）单位万元 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="paidUpCapital">实收资本</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="paidUpCapital" name="paidUpCapital" value="{$data.paidUpCapital}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* (30-1000）单位万元 必须填入项目</font>
+		            </div>
+		        </div>
+				<div class="control-group">
+		            <label class="control-label" for="comDirector">企业负责人</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="comDirector" name="comDirector" value="{$data.comDirector}">
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="mobile">手机号码</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="mobile" name="mobile" value="{$data.mobile}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="email">联系邮箱</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="email" name="email" value="{$data.email}">
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="mainBusiness">主营业务</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="mainBusiness" name="mainBusiness" value="{$data.mainBusiness}">
+		            	<font color="red">* 必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="passRegconition">
+		            是否通过天津市科技型中小企业认定
+		            </label>
+		            <div class="controls">
+		            	
+
+		            	<input type="checkbox" <if condition="$data.passRegconition eq 1 ">checked</if> name="passRegconition" value="1">
+		            </div>
+		        </div>
+	        </fieldset>
+	        <fieldset>
+				<legend>截止上年底(2013年)财务数据</legend>
+		        <div class="control-group">
+		            <label class="control-label" for="allCapital">总资产</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="allCapital" name="allCapital" value="{$data.allCapital}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* （单位万元）必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="netAssets">净资产</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="netAssets" name="netAssets" value="{$data.netAssets}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* （单位万元）必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="salesIncome">销售收入</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="salesIncome" name="salesIncome" value="{$data.salesIncome}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* （单位万元）必须填入项目</font>
+		            </div>
+		        </div>
+		        <div class="control-group">
+		            <label class="control-label" for="netProfit">净利润</label>
+		            <div class="controls">
+		            	<input type="text" class="input-xlarge" id="netProfit" name="netProfit" value="{$data.netProfit}" onkeyup="this.value=this.value.replace(/[^0-9.-]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.-]/g,'')>
+		            	<font color="red">* （单位万元）必须填入项目</font>
+		            </div>
+		        </div>
+		    </fieldset>
+		    <h3>
+		    	
+		    </h3>
+		 		
+		</div>
+		<div class="regBtn">
+			<if condition="$data.status elt 1">
+  		<input type="button" class="btn btn-large btn-primary btn-block" onclick="onnext('0')" value=" 保 存 " />
+  		
+  		<input type="button" class="btn btn-large btn-success btn-block" onclick="onnext('1')" value=" 保 存 并 且 下 一 步 " />
+  		<input type="hidden" name="isnext" id="isnext" value="0">
+  		<script>
+  			function onnext(w)
+  			{
+  				
+  				$('#isnext').val(w);
+  				if(check())
+  				{
+	  				$('#frm')[0].submit();
+	  			}
+  			}
+  			
+  		</script>
+  		</if>
+  	</div>
+  	</form>
+	</div>
+</div>
+</block>

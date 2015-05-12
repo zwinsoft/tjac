@@ -1,0 +1,88 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+    <script>
+    	function del(id)
+    	{
+    		if(confirm('确定删除')){
+    			location.href="{:U('Notic/Delete')}&id="+id
+    		}	
+    		return false;
+    	}
+    </script>
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<fieldset>
+				<legend>通知管理</legend>
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th style="width:20%">
+								通知发布时间
+							</th>
+							<th style="width:40%">
+								通知标题
+							</th>
+							<th style="width:10%">
+								是否置顶
+							</th>
+							<th style="width:20%">
+								操作
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<foreach name="data" item="vo">
+						<tr>
+							<td>{$vo.creatTime}</td>
+							<td>
+								<a href="#c{$vo.id}" data-toggle="modal">{$vo.title}</a>
+								<div id="c{$vo.id}" class="modal hide fade" style="display:none;">
+									<div class="modal-header">
+								      <a class="close" data-dismiss="modal">×</a>
+								      <h3>通知内容</h3>
+								    </div>
+								    <div class="modal-body">
+											{$vo.content}
+										</div>
+										<div class="modal-footer">
+									      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+									  </div>
+								</div>
+							</td>
+							<td><if condition="$vo.important eq 1">是<else/>否</if></td>
+							<td>
+								<script>
+									var editurl= ;
+									var delurl= ;
+								</script>
+								<input type="button" value="修改" class="btn btn-success" onclick="location.href='{:U('Notic/Edit')}&id={$vo.id}'" >
+								
+								<input type="button" value="删除" onclick="return del({$vo.id})"  class="btn btn-danger"/>
+								
+								<a href="{:U('Admin/Notic/Add')}" class="btn btn-block btn-large">新增</a>
+								</td>
+						</tr>
+						</foreach>
+					</tbody>
+				</table>
+				<div style="width:100%;text-align:right;">
+					<select onchange="location.href='__SELF__&page='+this.value">
+					<for start="1" end="$maxpage" step="1" name="n">
+						<if condition="$page eq $n ">
+							<option value="{$n}" selected>第{$n}页</option>
+						<else />
+						  <option value="{$n}" >第{$n}页</option>
+						</if>
+					
+					</for>
+					</select>
+				</div>
+		</fieldset>
+	</div>
+</div>
+</block>

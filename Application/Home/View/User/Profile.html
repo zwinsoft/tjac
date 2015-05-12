@@ -1,0 +1,121 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+    
+    	
+    <script type="text/javascript">
+    function check()
+    {
+    	if($("#oldPwd").val()=="")
+    	{
+    		alert("请填写老密码");
+    		$("#oldPwd")[0].focus()
+    		return false;
+    	}	
+    	if($("#newpwd").val()=="")
+    	{
+    		alert("请填写新密码");
+    		$("#newpwd")[0].focus()
+    		return false;
+    	}	
+    	if($("#newpwd2").val()=="")
+    	{
+    		alert("请填写重复新密码");
+    		$("#newpwd2")[0].focus()
+    		return false;
+    	}	
+    	if($("#newpwd2").val()!=$("#newpwd").val())
+    	{
+    		alert("两次密码不一样");
+    		$("#newpwd2")[0].focus()
+    		return false;
+    	}
+    	return true;
+    	
+    }
+		function validatePwd(str) {
+			// 计算密码强度
+			var level = 0;
+			// 大写字母
+			if (/.*[A-Z].*/.test(str)) {
+				level++;
+			}
+			// 小写字母
+			if (/.*[a-z].*/.test(str)) {
+				level++;
+			}
+			// 数字
+			if (/.*[0-9].*/.test(str)) {
+				level++;
+			}
+			// 特殊字符
+			if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\\];\\:\\'\\"\\,<\\.>\\/\\?].*/.test(str)) {
+			//if (/.*[\`\~\!\@\#\$\%\^\&\*\(\)-_=+\\\|\[\{\}\];\:\'\"\,<\.>\/\?].*/.test(str)) {
+				level++;
+			}
+			if (str.length>8)
+			{
+				level++;
+			}
+			$("#pwd1").attr("class","pwdStrong");
+			$("#pwd2").attr("class","pwdStrong");
+			$("#pwd3").attr("class","pwdStrong");
+			if(level>0){
+				$("#pwd1").attr("class","pwdStrong pwdActive");
+			}
+			if (level>3) {
+				$("#pwd2").attr("class","pwdStrong pwdActive");
+			}
+			if(level>=5){
+				$("#pwd3").attr("class","pwdStrong pwdActive");
+			};
+		}
+		</script>
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<fieldset>
+			<legend>修改密码</legend>
+		<form class="form-horizontal" action="__SELF__" method="post" onsubmit="return check()">
+
+		<div class="control-group">
+	            <label class="control-label" for="oldPwd">原密码</label>
+	            <div class="controls">
+	            	<input type="password" class="input-xlarge" id="oldPwd" name="password" placeholder="请输入老密码" >
+	            	
+	            </div>
+	    </div>
+	    <div class="control-group">
+	            <label class="control-label" for="newpwd">新密码</label>
+	            <div class="controls">
+	            	<input type="password" class="input-xlarge" id="newpwd" name="newpwd" placeholder="请输入新密码" onkeyup="validatePwd(this.value)">
+	            	
+	            	<div>
+	            		<span>密码强度</span>
+	            		<span class="pwdStrong" id="pwd1">弱</span>
+	            		<span class="pwdStrong" id="pwd2">中</span>
+	            		<span class="pwdStrong" id="pwd3">强</span>
+	            	</div>
+
+	            </div>
+	    </div>
+
+	    <div class="control-group">
+	            <label class="control-label" for="newpwd">确认密码</label>
+	            <div class="controls">
+					<input type="password" class="input-xlarge" id="newpwd2" name="newpwd2" placeholder="请重新输入上面的密码">
+					<font color="red">* 必须填入项目</font>
+				</div>
+	    </div>
+
+	    <div class="regBtn">
+	    	<input type="submit" class="btn btn-large btn-primary btn-block" value=" 保 存 修 改 ">
+	    </div>
+	    </form>
+	    </fieldset>
+	</div>
+</div>
+</block>

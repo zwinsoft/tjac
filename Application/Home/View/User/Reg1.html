@@ -1,0 +1,84 @@
+<extend name="Base/common"/>
+<block name="HeaderScript">
+	<script>
+		$(function(){
+			docheckTime();
+			});
+			var regi=11;
+			function docheckTime()
+			{
+				if(regi-- >0)
+				{
+					$("#btnnext").html('请阅读条款，'+regi+'秒');
+				
+					setTimeout(docheckTime,1000);
+				}else
+				{
+					$("#btnnext").html('下一步');
+					$("#btnnext").attr('disabled',false);
+				}
+			}
+	</script>
+</block>
+
+<block name="body">
+<div class="table-bordered reg" style="min-height:600px;">
+	<div class="regTitle">
+		<h3 class="regTitleContent">企业注册</h3>
+
+	</div>
+	<div class="regContent" style="min-height:400px;">
+	<p style="padding:10px;line-height:30px;font-size:18px;">
+		尊敬的朋友，欢迎注册天使投资项目申报系统！<br />	
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请如实填写所有资料，以作为贵公司传达融资意愿的初始记录。填写本申请资料后，贵公司即被纳入天津科创天使投资有限公司（以下均称“我公司”）项目库，申请资料可以作为我公司按投资标准和原则对贵公司进行初审的依据。要求贵公司做到以下几点：<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、公司实收注册资本不低于30万元且不超过1000万元，成立时间不超过3年，销售收入不超过2000万，净资产不超过1000万元。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、项目一旦进入申请流程均不可撤销，由于各种外力不可抗拒原因除外。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、以下填报相关材料均为企业独立编写，无委托其他机构代编写行为。其纸质版材料和网络工作系统提交的电子版材料一致。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4、企业所提交的申报材料及附件内容、财务数据完整、真实、准确，无欺瞒和作假行为。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5、企业使用的相关技术系合法使用，有关知识产权权属清晰，无知识产权纠纷，更无侵占他人技术成果等违法行为。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6、在项目申报或实施过程中，企业保证接受我公司的监督并积极配合相关调查。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若违反上述承诺，我公司立即终止与贵公司的合作并收回全部投资，贵公司承担由此带来的一切后果及相关法律责任。<br />
+
+
+	</p>
+	</div>
+	<div class="regFoot">
+		<div class="row">
+			<div class="span4">&nbsp;</div>
+			<div class="span4 agree">
+				<label class="checkbox" style="font-size:18px;">
+                <input type="checkbox" id="optionsCheckbox" value="1" class="checkbox">
+		我已阅读并接受上述条款
+              	</label>
+			</div>
+			<div class="span4">&nbsp;</div>
+		</div>
+		<div class="row">
+			<form method="post" action="{:U('Home/User/Register')}"/>
+			<div class="span3">&nbsp;</div>
+			<div class="span3" style="border:0px solid">
+				<button id="btnnext" class="btn btn-large btn-primary input-medium" type="submit" onclick="return check();" disabled="true">下一步</button>
+			</div>
+			<div class="span3">
+				<a class="btn btn-large input-medium" href="{:U('Home/User/Login')}">取消</a>
+				<br/><br/>
+			</div>
+			</form>
+		</div>
+		
+	</div>
+</div>
+<script type="text/javascript">
+	function check()
+	{
+		if($("#optionsCheckbox").attr("checked"))
+		{
+			return true;
+		}else
+		{
+			alert("请阅读并接收上述条款")
+			return false;
+		}
+	}
+</script>
+</block>

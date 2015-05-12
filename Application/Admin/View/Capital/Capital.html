@@ -1,0 +1,287 @@
+<extend name="Base/common"/>
+
+<block name="HeaderScript">
+	<script type="text/javascript" src="__STATIC__/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="__STATIC__/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
+<style>
+	.input-mini3{
+		width:30px;
+		text-align:right;
+		}
+</style>
+</block>
+
+
+<block name="body">
+
+<div class="modal hide fade" id='prg'>
+	<div class="modal-body">
+		加载中... 请稍候...
+	</div>
+</div>
+
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<!--start-->
+		<fieldset>
+			<legend>项目评审</legend>
+			
+		            <label class="control-label" for="company"><h3>企业名称: {$company[0]['company']}</h3></label>   		         
+		            <label class="control-label" for="project"><h3>项目名称: {$project[0]['name']}</h3>	</label> 	            	
+  		       
+			<br>
+
+		<legend>1、项目材料“态度”评分值 <span id="score1"></span></legend>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[0].itemmemo}" >翔实与否</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[1].itemmemo}" >缺项</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[2].itemmemo}" >排版</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[3].itemmemo}" >错别字</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[4].itemmemo}" >充分性</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[5].itemmemo}" >逻辑性</a></td>				
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[6].itemmemo}" >可靠性</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$taiduitem[7].itemmemo}" >加分项</a></td>
+				<td><a href="#" data-toggle="tooltip" title="对进行加分的内容进行说明" >加分项说明</a></td>
+				<td><a href="#" data-toggle="tooltip" title="总分数" >总分</a></td>
+				<td><a href="#" data-toggle="tooltip" title="总分数" >评审人</a></td>
+			</tr>			
+			<foreach name="review1" item="r" >
+			<tr>
+				<td>
+					<input type="text" class="input-mini3"  name="value1" value="{$r.value1}"  class="input-small" id="value1" placeholder="">		
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value2" value="{$r.value2}"  class="input-small" id="value2" placeholder="">
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value3" value="{$r.value3}"  class="input-small" id="value3" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value4" value="{$r.value4}"  class="input-small" id="value4" placeholder="">				
+				<td>
+					<input type="text" class="input-mini3"  name="value5" value="{$r.value5}"  class="input-small" id="value5" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3" name="value6" value="{$r.value6}"  class="input-small" id="value6" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value7" value="{$r.value7}"  class="input-small" id="value7" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value8" value="{$r.value8}"  class="input-small" id="value8" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini"  name="memo1" value="{$r.memo1}"  class="input-small" id="memo1" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="sum" value="{$r.sum}"  class="input-small"  readonly id="sum" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini2"  name="reviewer" value="{$r.reviewweight.username}"  class="input-small"  readonly id="reviewer" placeholder="">	
+					<input type="hidden" value="{$r.reviewweight.weight}" data-value="{$r.sum}" name="reiview1score"/>
+				</td>
+			</tr>
+		</foreach>
+			<script>
+				var alls=0;
+				$("input[name=reiview1score]").each(function(){
+					alls += $(this).val()/100 * $(this).attr("data-value");
+					})
+				$("#score1").html(Math.round(alls*100)/100);
+			</script>
+		</table>
+		<legend>2、项目材料"水平"评分值 <span id="score2"></span></legend>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[0].itemmemo}" >{$shuipingitem[0].itemname}</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[1].itemmemo}" >行业</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[2].itemmemo}" >产品</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[3].itemmemo}" >模式</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[4].itemmemo}" >财务</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[5].itemmemo}" >竞争</a></td>				
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[6].itemmemo}" >计划</a></td>
+				<td><a href="#" data-toggle="tooltip" title="{$shuipingitem[7].itemmemo}" >加分项</a></td>
+				<td><a href="#" data-toggle="tooltip" title="对进行加分的内容进行说明" >加分项说明</a></td>
+				<td><a href="#" data-toggle="tooltip" title="总分数" >总分</a></td>
+				<td><a href="#" data-toggle="tooltip" title="总分数" >评审人</a></td>
+			</tr>			
+<foreach name="review2" item="r" >
+			<tr>
+				<td>
+					<input type="text" class="input-mini3"  name="value1" value="{$r.value1}"  class="input-small" id="value1" placeholder="">		
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value2" value="{$r.value2}"  class="input-small" id="value4" placeholder="">
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value3" value="{$r.value3}"  class="input-small" id="value4" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value4" value="{$r.value4}"  class="input-small" id="value4" placeholder="">				
+				<td>
+					<input type="text" class="input-mini3"  name="value5" value="{$r.value5}"  class="input-small" id="value5" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3" name="value6" value="{$r.value6}"  class="input-small" id="value6" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value7" value="{$r.value7}"  class="input-small" id="value7" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value8" value="{$r.value8}"  class="input-small" id="value8" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini"  name="memo1" value="{$r.memo1}"  class="input-small" id="memo1" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="sum" value="{$r.sum}"  class="input-small"  readonly id="sum" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini2"  name="reviewer" value="{$r.reviewweight.username}"  class="input-small"  readonly id="reviewer" placeholder="">	
+					<input type="hidden" value="{$r.reviewweight.weight}" data-value="{$r.sum}" name="reiview2score"/>
+				</td>
+			</tr>
+</foreach>	
+		<script>
+				var alls=0;
+				$("input[name=reiview2score]").each(function(){
+					alls += $(this).val()/100 * $(this).attr("data-value");
+					})
+				$("#score2").html(Math.round(alls*100)/100);
+			</script>		
+		</table>
+
+		<legend>3、项目答辩“态度”评分值 <span id="score3"></span></legend>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td>翔实与否</td>
+				<td>缺项</td>
+				<td>排版</td>
+				<td>错别字</td>
+				<td>充分性</td>
+				<td>逻辑性</td>				
+				<td>可靠性</td>
+				<td>加分项</td>
+				<td>加分项说明</td>
+				<td>总分</td>
+				<td><a href="#" data-toggle="tooltip" title="总分数" >评审人</a></td>
+			</tr>			
+			<foreach name="review3" item="r" >
+			<tr>
+				<td>
+					<input type="text" class="input-mini3"  name="value1" value="{$r.value1}"  class="input-small" id="value1" placeholder="">		
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value2" value="{$r.value2}"  class="input-small" id="value2" placeholder="">
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value3" value="{$r.value3}"  class="input-small" id="value3" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value4" value="{$r.value4}"  class="input-small" id="value4" placeholder="">				
+				<td>
+					<input type="text" class="input-mini3"  name="value5" value="{$r.value5}"  class="input-small" id="value5" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3" name="value6" value="{$r.value6}"  class="input-small" id="value6" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value7" value="{$r.value7}"  class="input-small" id="value7" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value8" value="{$r.value8}"  class="input-small" id="value8" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini"  name="memo1" value="{$r.memo1}"  class="input-small" id="memo1" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="sum" value="{$r.sum}"  class="input-small"  readonly id="sum" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini2"  name="reviewer" value="{$r.reviewweight.username}"  class="input-small"  readonly id="reviewer" placeholder="">	
+					<input type="hidden" value="{$r.reviewweight.weight}" data-value="{$r.sum}" name="reiview3score"/>
+				</td>
+			</tr>
+			</foreach>
+			<script>
+				var alls=0;
+				$("input[name=reiview3score]").each(function(){
+					alls += $(this).val()/100 * $(this).attr("data-value");
+					})
+				$("#score3").html(Math.round(alls*100)/100);
+			</script>		
+		</table>
+
+		<legend>4、项目答辩“水平”评分值 <span id="score4"></span></legend>
+		<table class="table table-bordered table-striped ">
+			<tr>
+				<td>团队</td>
+				<td>行业</td>
+				<td>产品</td>
+				<td>模式</td>
+				<td>财务</td>
+				<td>竞争</td>				
+				<td>计划</td>
+				<td>表达能力</td>
+				<td>加分项</td>
+				<td>加分项说明</td>
+				<td>总分</td>
+				<td><a href="#" data-toggle="tooltip" title="总分数" >评审人</a></td>
+			</tr>			
+			<foreach name="review4" item="r" >
+			<tr>
+				<td>
+					<input type="text" class="input-mini3"  name="value1" value="{$r.value1}"  class="input-small" id="value1" placeholder="">		
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value2" value="{$r.value2}"  class="input-small" id="value2" placeholder="">
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value3" value="{$r.value3}"  class="input-small" id="value3" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value4" value="{$r.value4}"  class="input-small" id="value4" placeholder="">				
+				<td>
+					<input type="text" class="input-mini3"  name="value5" value="{$r.value5}"  class="input-small" id="value5" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3" name="value6" value="{$r.value6}"  class="input-small" id="value6" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value7" value="{$r.value7}"  class="input-small" id="value7" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value8" value="{$r.value8}"  class="input-small" id="value8" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="value9" value="{$r.value9}"  class="input-small" id="value9" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini"  name="memo1" value="{$r.memo1}"  class="input-small" id="memo1" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini3"  name="sum" value="{$r.sum}"  class="input-small"  readonly id="sum" placeholder="">	
+				</td>
+				<td>
+					<input type="text" class="input-mini2"  name="reviewer" value="{$r.reviewweight.username}"  class="input-small"  readonly id="reviewer" placeholder="">	
+					<input type="hidden" value="{$r.reviewweight.weight}" data-value="{$r.sum}" name="reiview4score"/>
+				</td>
+			</tr>
+			</foreach>
+			<script>
+				var alls=0;
+				$("input[name=reiview4score]").each(function(){
+					alls += $(this).val()/100 * $(this).attr("data-value");
+					})
+				$("#score4").html(Math.round(alls*100)/100);
+			</script>
+		</table>
+		</fieldset>
+		<!--end-->
+	</div>
+</div>
+</block>
+

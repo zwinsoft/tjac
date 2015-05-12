@@ -1,0 +1,27 @@
+<extend name="Base/common"/>
+
+<block name="header">
+    
+</block>
+
+<block name="body">
+<div class="row mainContent">
+	<include file="Public/left"/>
+	<div class="span7">
+		<fieldset>
+				<legend>上传项目计划书</legend>
+		
+			<div id="other" class="tab-pane fade  active in">
+				<div class="control-group">
+		            <label class="control-label" for="input01"></label>
+		            <div class="controls">
+		            	<input class="input-file" id="fileInput" type="file">
+		            </div>
+		        </div>
+				<input type="submit" class="btn btn-large btn-success btn-block" value="提交项目申请" onclick="return confirm('请确定项目申报所必填项目准确\n企业基本资料 填写完成Ok \n企业知识产权 填写完成OK \n项目基本情况 填写完成OK \n项目计划书上传 OK \n 点击［确定］提交等待审核，点击［取消］继续修改资料信息')">
+
+			</div>
+		</fieldset>
+	</div>
+</div>
+</block>
